@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="456cf2b4-842e-4121-b361-2444a94ee69f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/backend_private/.gitignore" beforeDir="false" />
-    </list>
+    <list default="true" id="456cf2b4-842e-4121-b361-2444a94ee69f" name="Changes" comment="Changes" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,7 +19,8 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/backend_private" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -33,6 +32,7 @@
       <updated>1639738841729</updated>
       <workItem from="1639738844932" duration="36000" />
       <workItem from="1639739049073" duration="41000" />
+      <workItem from="1641674070453" duration="23000" />
     </task>
     <servers />
   </component>
