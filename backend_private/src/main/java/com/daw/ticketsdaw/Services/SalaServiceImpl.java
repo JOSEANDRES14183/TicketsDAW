@@ -15,7 +15,7 @@ public class SalaServiceImpl implements SalaService{
     private SalaRepository salaRepository;
 
     @Override
-    public void create() {}
+    public void create(){}
 
     @Override
     public List<Sala> read() {
@@ -28,12 +28,8 @@ public class SalaServiceImpl implements SalaService{
     }
 
     @Override
-    public void update() {
-
-    }
+    public void update(){}
 
     @Override
-    public void delete() {
-
-    }
+    public void delete(){}
 }

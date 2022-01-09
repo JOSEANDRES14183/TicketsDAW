@@ -14,13 +14,13 @@ public class Sala implements Serializable {
     private int id;
     private String nombre;
     private String direccion;
-
-    @Column(name = "ciudad")
-    private int id_ciudad;
-
     private int aforo_max;
     private boolean esta_oculto;
     private int id_propietario;
+
+    @ManyToOne
+    private Ciudad ciudad;
+
 
 
 }

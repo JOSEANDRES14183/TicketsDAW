@@ -1,5 +1,6 @@
 package com.daw.ticketsdaw.Controllers;
 
+import com.daw.ticketsdaw.Entities.Sala;
 import com.daw.ticketsdaw.Repositories.SalaRepository;
 import com.daw.ticketsdaw.Services.SalaService;
 import org.springframework.beans.factory.annotation.Autowired;
