@@ -5,15 +5,15 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.1</version>
+        <version>2.6.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.daw</groupId>
-    <artifactId>backend_private</artifactId>
+    <artifactId>TicketsDAW</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
-    <name>backend_private</name>
-    <description>backend_private</description>
+    <name>TicketsDAW</name>
+    <description>TicketsDAW</description>
     <properties>
         <java.version>11</java.version>
     </properties>
@@ -67,11 +67,6 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19.1</version>
-            </plugin>
-            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
@@ -83,7 +78,6 @@
                     </excludes>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
@@ -118,7 +112,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>gulp compila</id>
+                        <id>gulp build</id>
                         <goals>
                             <goal>gulp</goal>
                         </goals>
@@ -129,7 +123,7 @@
                         <configuration>
                             <!-- optional: if not specified, it will run gulp's default
                             task (and you can remove this whole <configuration> section.) -->
-                            <arguments>compila</arguments>
+                            <arguments>build</arguments>
                         </configuration>
                     </execution>
                 </executions>
@@ -140,10 +134,9 @@
                     <npmVersion>6.14.15</npmVersion>
 
                     <!-- optional: where to download node and npm from. Defaults to https://nodejs.org/dist/ -->
-                    <!-- <downloadRoot>http://myproxy.example.org/nodejs/</downloadRoot> -->
+                    <!-- downloadRoot>http://myproxy.example.org/nodejs/</downloadRoot -->
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 

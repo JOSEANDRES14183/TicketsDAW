@@ -32,6 +32,11 @@ build/
 ### VS Code ###
 .vscode/
 
+/src/main/resources/static/js/bootstrap.bundle.min.js
+/src/main/resources/static/css/customBootstrap.css
+
+/src/main/resources/application.properties
+
 /node
 /node_modules
 .mvn

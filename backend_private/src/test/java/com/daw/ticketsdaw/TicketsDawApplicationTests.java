@@ -1,10 +1,10 @@
-package com.daw.backend_private;
+package com.daw.ticketsdaw;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BackendPrivateApplicationTests {
+class TicketsDawApplicationTests {
 
     @Test
     void contextLoads() {
