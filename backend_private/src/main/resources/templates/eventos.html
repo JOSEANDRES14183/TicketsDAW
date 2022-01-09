@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Salas</title>
+    <link rel="stylesheet" th:href="@{/css/customBootstrap.css}">
+</head>
+<body>
+
+<header class="container-md mb-4 py-4">
+    <h1>Eventos</h1>
+</header>
+
+<main>
+
+    <section class="container-md">
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>Título</th>
+                <th>Descripción</th>
+                <th>Edad mínima</th>
+                <th>Oculto</th>
+                <th>Es nominativo</th>
+                <th>Duración estándar</th>
+                <th>Organizador</th>
+                <th>Foto perfil</th>
+                <th>Documento normas</th>
+            </tr>
+            <tr th:each="evento: ${eventos}">
+                <td th:text="${evento.titulo}" />
+                <td th:text="${evento.descripcion}" />
+                <td th:text="${evento.edadMinima}" />
+                <td th:text="${evento.estaOculto}" />
+                <td th:text="${evento.esNominativo}" />
+                <td th:text="${evento.duracionEstandar}" />
+                <td th:text="${evento.idOrganizador}" />
+                <td th:text="${evento.fotoPerfil}" />
+                <td th:text="${evento.documentoNormas}" />
+            </tr>
+        </table>
+    </section>
+
+</main>
+
+<footer></footer>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
