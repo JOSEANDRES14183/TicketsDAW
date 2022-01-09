@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario</title>
+    <link rel="stylesheet" th:href="@{/css/customBootstrap.css}">
+</head>
+<body>
+
+<header class="container-md mb-4 py-4">
+    <h1>Salas</h1>
+</header>
+
+<main>
+    <section class="container-md">
+        <form method="POST" action="#">
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" aria-describedby="NombreField">
+            </div>
+            <div class="mb-3">
+                <label for="direccion" class="form-label">Dirección</label>
+                <input type="password" class="form-control" id="direccion" name="direccion">
+            </div>
+            <div class="mb-3">
+                <label for="ciudad" class="form-label">Ciudad</label>
+                <select class="form-control" id="ciudad" name="ciudad">
+                    <option value="0">Selecciona...</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="aforo" class="form-label">Aforo máximo</label>
+                <input type="number" class="form-control w-25" id="aforo" name="afor">
+            </div>
+            <button type="submit" class="btn btn-primary">Crea</button>
+        </form>
+    </section>
+</main>
+
+<footer></footer>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
