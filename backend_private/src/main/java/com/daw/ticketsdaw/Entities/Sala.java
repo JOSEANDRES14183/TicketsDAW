@@ -14,9 +14,15 @@ public class Sala implements Serializable {
     private int id;
     private String nombre;
     private String direccion;
-    private int aforo_max;
-    private boolean esta_oculto;
-    private int id_propietario;
+
+    @Column(name = "aforo_max")
+    private int aforoMax;
+
+    @Column(name = "esta_oculto")
+    private boolean estaOculto;
+
+    @Column(name = "id_propietario")
+    private int idPropietario;
 
     @ManyToOne
     private Ciudad ciudad;
