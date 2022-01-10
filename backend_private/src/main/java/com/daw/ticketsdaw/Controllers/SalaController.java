@@ -17,14 +17,14 @@ public class SalaController {
     @Autowired
     protected SalaService salaService;
 
-    @GetMapping({"/"})
-    public String show(ModelMap modelMap){
+    @GetMapping({"/",""})
+    public String index(ModelMap modelMap){
         modelMap.addAttribute("salas",salaService.read());
         return "salas";
     }
 
     @GetMapping({"crea"})
-    public String upate(ModelMap modelMap){
+    public String store(){
         return "salas-form";
     }
 
