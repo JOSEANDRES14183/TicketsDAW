@@ -21,10 +21,12 @@ public class Sala implements Serializable {
     @Column(name = "esta_oculto")
     private boolean estaOculto;
 
-    @Column(name = "id_propietario")
-    private int idPropietario;
+    @ManyToOne
+    @JoinColumn(name = "id_propietario", referencedColumnName = "id")
+    private PropietarioSala propietarioSala;
 
     @ManyToOne
+    @JoinColumn(name="ciudad", referencedColumnName = "id")
     private Ciudad ciudad;
 
 

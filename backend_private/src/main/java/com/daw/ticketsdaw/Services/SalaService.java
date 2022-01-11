@@ -13,7 +13,7 @@ public interface SalaService{
 
     public List<Sala> read();
 
-    public Optional<Sala> read(int id);
+    public Sala read(int id);
 
     public void update();
 
