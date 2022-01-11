@@ -26,7 +26,10 @@
                 <th>Propietario</th>
             </tr>
             <tr th:each="sala: ${salas}">
-                <td th:text="${sala.nombre}" />
+                <td>
+                    <a th:text="${sala.nombre}"
+                       th:href="@{'/salas/' + ${sala.id}}"/>
+                </td>
                 <td th:text="${sala.direccion}" />
                 <td th:text="${sala.ciudad.nombre}" />
                 <td th:text="${sala.aforoMax}" />
