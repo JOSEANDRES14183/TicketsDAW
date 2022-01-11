@@ -14,6 +14,7 @@
 <main>
     <section class="container-md">
         <form method="POST" action="#">
+            <input type="hidden" value="1">
             <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre</label>
                 <input type="text" class="form-control" id="nombre" name="nombre" aria-describedby="NombreField">
@@ -24,16 +25,18 @@
             </div>
             <div class="mb-3">
                 <label for="ciudad" class="form-label">Ciudad</label>
-                <select class="form-control" id="ciudad" name="ciudad">
-                    <option value="0">Selecciona...</option>
+                <select th:each="ciudad: ${ciudades}" class="form-control" id="ciudad" name="ciudad">
+                    <option th:value="${ciudad.id}" th:text="${ciudad.nombre}"/>
                 </select>
             </div>
             <div class="mb-3">
                 <label for="aforo" class="form-label">Aforo máximo</label>
-                <input type="number" class="form-control w-25" id="aforo" name="afor">
+                <input type="number" class="form-control w-25" id="aforo" name="aforo">
             </div>
             <button type="submit" class="btn btn-primary">Crea</button>
         </form>
+
+        <a href="/salas" class="btn btn-secondary mt-3">Volver</a>
     </section>
 </main>
 

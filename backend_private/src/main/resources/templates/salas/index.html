@@ -7,8 +7,10 @@
 </head>
 <body>
 
-<header class="container-md mb-4 py-4">
-    <h1>Salas</h1>
+<header class="mb-4 py-4 border-bottom">
+    <div class="container-md">
+        <h1>Salas</h1>
+    </div>
 </header>
 
 <main>
@@ -24,14 +26,20 @@
                 <th>Propietario</th>
             </tr>
             <tr th:each="sala: ${salas}">
-                <td th:text="${sala.nombre}" />
+                <td>
+                    <a th:text="${sala.nombre}"
+                       th:href="@{'/salas/' + ${sala.id}}"/>
+                </td>
                 <td th:text="${sala.direccion}" />
-                <td th:text="${sala.id_ciudad}" />
-                <td th:text="${sala.aforo_max}" />
-                <td th:text="${sala.esta_oculto}" />
-                <td th:text="${sala.id_propietario}" />
+                <td th:text="${sala.ciudad.nombre}" />
+                <td th:text="${sala.aforoMax}" />
+                <td th:text="${sala.estaOculto}" />
+                <td th:text="${sala.propietarioSala.nombreUsuario}" />
             </tr>
         </table>
+
+        <a href="/salas/crea" class="btn btn-primary">Crear sala</a>
+
     </section>
 
 </main>

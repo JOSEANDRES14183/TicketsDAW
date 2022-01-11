@@ -15,7 +15,7 @@ public class SalaServiceImpl implements SalaService{
     private SalaRepository salaRepository;
 
     @Override
-    public void create() {}
+    public void create(){}
 
     @Override
     public List<Sala> read() {
@@ -23,17 +23,13 @@ public class SalaServiceImpl implements SalaService{
     }
 
     @Override
-    public Optional<Sala> read(int id) {
-        return salaRepository.findById(id);
+    public Sala read(int id) {
+        return salaRepository.findById(id).get();
     }
 
     @Override
-    public void update() {
-
-    }
+    public void update(){}
 
     @Override
-    public void delete() {
-
-    }
+    public void delete(){}
 }

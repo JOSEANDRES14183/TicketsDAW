@@ -15,12 +15,20 @@ public class Sala implements Serializable {
     private String nombre;
     private String direccion;
 
-    @Column(name = "ciudad")
-    private int id_ciudad;
+    @Column(name = "aforo_max")
+    private int aforoMax;
 
-    private int aforo_max;
-    private boolean esta_oculto;
-    private int id_propietario;
+    @Column(name = "esta_oculto")
+    private boolean estaOculto;
+
+    @ManyToOne
+    @JoinColumn(name = "id_propietario", referencedColumnName = "id")
+    private PropietarioSala propietarioSala;
+
+    @ManyToOne
+    @JoinColumn(name="ciudad", referencedColumnName = "id")
+    private Ciudad ciudad;
+
 
 
 }
