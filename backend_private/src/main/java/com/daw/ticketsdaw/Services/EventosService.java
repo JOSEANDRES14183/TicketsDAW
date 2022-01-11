@@ -19,4 +19,16 @@ public class EventosService {
     public Evento read(int id){
         return eventosRepository.findById(id).get();
     }
+
+    public void create(Evento evento){
+        eventosRepository.save(evento);
+    }
+
+    public void update(Evento evento){
+        eventosRepository.save(evento);
+    }
+
+    public void remove(Evento evento){
+        eventosRepository.delete(evento);
+    }
 }

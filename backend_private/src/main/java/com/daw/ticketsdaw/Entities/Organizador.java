@@ -27,4 +27,6 @@ public class Organizador extends Usuario{
     @ManyToOne
     @JoinColumn(name = "foto_perfil")
     private RecursoMedia fotoPerfil;
+
+
 }

@@ -16,6 +16,7 @@
     <section class="container-md">
         <table class="table table-bordered table-striped">
             <tr>
+                <th>Id</th>
                 <th>Título</th>
                 <th>Descripción</th>
                 <th>Edad mínima</th>
@@ -25,8 +26,10 @@
                 <th>Organizador</th>
                 <th>Foto perfil</th>
                 <th>Documento normas</th>
+                <th>Acciones</th>
             </tr>
             <tr th:each="evento: ${eventos}">
+                <td th:text="${evento.id}"></td>
                 <td th:text="${evento.titulo}"></td>
                 <td th:text="${evento.descripcion}"></td>
                 <td th:text="${evento.edadMinima}"></td>
@@ -36,6 +39,7 @@
                 <td th:text="${evento.idOrganizador}"></td>
                 <td th:text="${evento.fotoPerfil}"></td>
                 <td th:text="${evento.documentoNormas}"></td>
+                <td><a th:text="${'Borrar'}" th:href="'/eventos/borrar?id=' + ${evento.id}"></a></td>
             </tr>
         </table>
     </section>
