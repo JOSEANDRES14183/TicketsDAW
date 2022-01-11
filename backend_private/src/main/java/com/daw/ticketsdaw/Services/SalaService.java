@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface SalaService{
 
-    public void create();
+    public void create(Sala sala);
 
     public List<Sala> read();
 

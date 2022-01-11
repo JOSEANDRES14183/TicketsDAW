@@ -13,25 +13,28 @@
 
 <main>
     <section class="container-md">
-        <form method="POST" action="#">
-            <input type="hidden" value="1">
+        <form th:object="${sala}" method="POST" action="/salas/crea">
+            <input type="hidden" th:field="*{propietarioSala}" value="1" name="idPropietario">
+            <input type="hidden" th:field="*{estaOculto}" value="true" name="estaOculto">
             <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre</label>
-                <input type="text" class="form-control" id="nombre" name="nombre" aria-describedby="NombreField">
+                <input type="text" th:field="*{nombre}" class="form-control" id="nombre" name="nombre" aria-describedby="NombreField">
             </div>
             <div class="mb-3">
                 <label for="direccion" class="form-label">Dirección</label>
-                <input type="password" class="form-control" id="direccion" name="direccion">
+                <input type="text" th:field="*{direccion}" class="form-control" id="direccion" name="direccion">
             </div>
             <div class="mb-3">
                 <label for="ciudad" class="form-label">Ciudad</label>
-                <select th:each="ciudad: ${ciudades}" class="form-control" id="ciudad" name="ciudad">
-                    <option th:value="${ciudad.id}" th:text="${ciudad.nombre}"/>
+                <select class="form-control" th:field="*{ciudad}" id="ciudad" name="ciudad">
+                    <option th:each="ciudad: ${ciudades}"
+                            th:value="${ciudad.id}"
+                            th:text="${ciudad.nombre}"/>
                 </select>
             </div>
             <div class="mb-3">
-                <label for="aforo" class="form-label">Aforo máximo</label>
-                <input type="number" class="form-control w-25" id="aforo" name="aforo">
+                <label for="aforoMax" class="form-label">Aforo máximo</label>
+                <input type="number" th:field="*{aforoMax}" class="form-control w-25" id="aforoMax" name="aforoMax">
             </div>
             <button type="submit" class="btn btn-primary">Crea</button>
         </form>

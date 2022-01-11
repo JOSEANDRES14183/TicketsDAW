@@ -15,7 +15,9 @@ public class SalaServiceImpl implements SalaService{
     private SalaRepository salaRepository;
 
     @Override
-    public void create(){}
+    public void create(Sala sala){
+        salaRepository.save(sala);
+    }
 
     @Override
     public List<Sala> read() {

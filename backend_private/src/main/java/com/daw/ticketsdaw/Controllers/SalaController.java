@@ -6,10 +6,7 @@ import com.daw.ticketsdaw.Services.SalaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,13 +34,15 @@ public class SalaController {
 
     @GetMapping({"crea"})
     public String create(ModelMap modelMap){
+        modelMap.addAttribute("sala", new Sala());
         modelMap.addAttribute("ciudades", ciudadService.read());
         return "salas/create";
     }
 
-    @PostMapping({"/"})
-    public String store(ModelMap modelMap){
-        return "salas/index";
+    @PostMapping({"crea"})
+    public String store(ModelMap modelMap, @ModelAttribute Sala sala){
+        salaService.create(sala);
+        return "redirect:/salas";
     }
 
 }
