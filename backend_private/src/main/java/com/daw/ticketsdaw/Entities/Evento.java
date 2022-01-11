@@ -25,10 +25,15 @@ public class Evento {
     private int duracionEstandar;
 
     //Foreign keys
-    @Column(name = "id_organizador", nullable = false)
-    private int idOrganizador;
-    @Column(name = "foto_perfil", nullable = false)
-    private int fotoPerfil;
-    @Column(name = "documento_normas")
-    private int documentoNormas;
+    @ManyToOne
+    @JoinColumn(name = "id_organizador", nullable = false)
+    private Organizador idOrganizador;
+
+    @ManyToOne
+    @JoinColumn(name = "foto_perfil", nullable = false)
+    private RecursoMedia fotoPerfil;
+
+    @ManyToOne
+    @JoinColumn(name = "documento_normas")
+    private NormasEvento documentoNormas;
 }
