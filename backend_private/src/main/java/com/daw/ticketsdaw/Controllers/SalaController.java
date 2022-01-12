@@ -55,6 +55,7 @@ public class SalaController {
     public String update(ModelMap modelMap, @PathVariable("id") int salaId){
         modelMap.addAttribute("sala", salaService.read(salaId));
         modelMap.addAttribute("ciudades",ciudadService.read());
+        modelMap.addAttribute("accion","update");
         return "salas/create";
     }
 

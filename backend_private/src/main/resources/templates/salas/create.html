@@ -7,21 +7,26 @@
 </head>
 <body>
 
-<header class="container-md mb-4 py-4">
-    <h1>Salas</h1>
+<header class="mb-4 py-4 border-bottom">
+    <div class="container-md">
+        <h1>Salas</h1>
+    </div>
 </header>
 
 <main>
     <section class="container-md">
         <form method="POST" th:object="${sala}">
-            <input type="hidden" value="1" id="propietarioSala" name="propietarioSala">
-            <input type="hidden" value="true" id="estaOculto" name="estaOculto">
-<!--            <select th:field="*{propietarioSala}">-->
-<!--                <option value="1">1</option>-->
-<!--            </select>-->
-<!--            <select th:field="*{estaOculto}">-->
-<!--                <option value="true">true</option>-->
-<!--            </select>-->
+
+            <div th:if="${accion} == 'update'">
+                <input type="hidden" th:field="*{propietarioSala}">
+                <input type="hidden" th:field="*{estaOculto}">
+            </div>
+
+            <div th:unless="${accion} == 'update'">
+                <input type="hidden" value="1" id="propietarioSala" name="propietarioSala">
+                <input type="hidden" value="true" id="estaOculto" name="estaOculto">
+            </div>
+
             <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre</label>
                 <input type="text" th:field="*{nombre}" class="form-control" id="nombre" name="nombre" aria-describedby="NombreField">
@@ -42,7 +47,7 @@
                 <label for="aforoMax" class="form-label">Aforo máximo</label>
                 <input type="number" th:field="*{aforoMax}" class="form-control w-25" id="aforoMax" name="aforoMax">
             </div>
-            <button type="submit" class="btn btn-primary">Crea</button>
+            <button th:text="${accion} ? 'Modifica' : 'Crea'" type="submit" class="btn btn-primary"/>
         </form>
 
         <a href="/salas" class="btn btn-secondary mt-3">Volver</a>
