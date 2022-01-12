@@ -13,13 +13,15 @@
 
 <main>
     <section class="container-md">
-        <form method="POST" th:action="@{/salas/crea}" th:object="${sala}">
-            <select th:field="*{propietarioSala}">
-                <option value="1">1</option>
-            </select>
-            <select th:field="*{estaOculto}">
-                <option value="true">true</option>
-            </select>
+        <form method="POST" th:object="${sala}">
+            <input type="hidden" value="1" id="propietarioSala" name="propietarioSala">
+            <input type="hidden" value="true" id="estaOculto" name="estaOculto">
+<!--            <select th:field="*{propietarioSala}">-->
+<!--                <option value="1">1</option>-->
+<!--            </select>-->
+<!--            <select th:field="*{estaOculto}">-->
+<!--                <option value="true">true</option>-->
+<!--            </select>-->
             <div class="mb-3">
                 <label for="nombre" class="form-label">Nombre</label>
                 <input type="text" th:field="*{nombre}" class="form-control" id="nombre" name="nombre" aria-describedby="NombreField">

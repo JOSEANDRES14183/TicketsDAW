@@ -30,7 +30,9 @@ public class SalaServiceImpl implements SalaService{
     }
 
     @Override
-    public void update(){}
+    public void update(Sala sala){
+        salaRepository.save(sala);
+    }
 
     @Override
     public void delete(Sala sala){

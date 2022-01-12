@@ -38,16 +38,29 @@ public class SalaController {
         return "redirect:/salas";
     }
 
-    @GetMapping({"crea"})
+    @GetMapping({"crear"})
     public String create(ModelMap modelMap){
         modelMap.addAttribute("sala", new Sala());
         modelMap.addAttribute("ciudades", ciudadService.read());
         return "salas/create";
     }
 
-    @PostMapping({"crea"})
+    @PostMapping({"crear"})
     public String store(@ModelAttribute Sala sala){
         salaService.create(sala);
+        return "redirect:/salas";
+    }
+
+    @GetMapping({"{id}/update"})
+    public String update(ModelMap modelMap, @PathVariable("id") int salaId){
+        modelMap.addAttribute("sala", salaService.read(salaId));
+        modelMap.addAttribute("ciudades",ciudadService.read());
+        return "salas/create";
+    }
+
+    @PostMapping({"{id}/update"})
+    public String put(@ModelAttribute Sala sala){
+        salaService.update(sala);
         return "redirect:/salas";
     }
 
