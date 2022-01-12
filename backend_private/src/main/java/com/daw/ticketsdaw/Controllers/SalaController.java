@@ -40,12 +40,14 @@ public class SalaController {
 
     @GetMapping({"crea"})
     public String create(ModelMap modelMap){
+        modelMap.addAttribute("sala", new Sala());
         modelMap.addAttribute("ciudades", ciudadService.read());
         return "salas/create";
     }
 
     @PostMapping({"crea"})
-    public String store(ModelMap modelMap){
+    public String store(ModelMap modelMap, @ModelAttribute("sala") Sala sala){
+        salaService.create(sala);
         return "redirect:/salas";
     }
 

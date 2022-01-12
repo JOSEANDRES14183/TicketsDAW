@@ -29,5 +29,4 @@ public class Sala implements Serializable {
     @JoinColumn(name="ciudad", referencedColumnName = "id")
     private Ciudad ciudad;
 
-
 }
