@@ -7,6 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @RequestMapping("/eventos")
 public class EventoController {
@@ -20,6 +23,15 @@ public class EventoController {
         return "eventos/show";
     }
 
+    @GetMapping({"/{id}"})
+    public String showOne(ModelMap modelMap, @PathVariable(name="id") Integer eventoId){
+        Evento evento = eventosService.read(eventoId);
+        List<Evento> eventoList = new ArrayList<>();
+        eventoList.add(evento);
+        modelMap.addAttribute("eventos", eventoList);
+        return "eventos/show";
+    }
+
     @GetMapping({"crear"})
     public String showForm(ModelMap model){
         model.addAttribute("evento", new Evento());
@@ -27,9 +39,16 @@ public class EventoController {
         return "eventos/create";
     }
 
-    @GetMapping({"actualizar"})
-    public String showUpdateForm(ModelMap model){
-        model.addAttribute("evento", new Evento());
+    @GetMapping({"actualizar", "actualizar/{id}"})
+    public String showUpdateForm(ModelMap model, @PathVariable(name="id", required = false) Integer eventoId){
+        Evento evento;
+        if(eventoId != null){
+            evento = eventosService.read(eventoId);
+        }
+        else{
+            evento = new Evento();
+        }
+        model.addAttribute("evento", evento);
         model.addAttribute("action", "actualizar");
         return "eventos/create";
     }

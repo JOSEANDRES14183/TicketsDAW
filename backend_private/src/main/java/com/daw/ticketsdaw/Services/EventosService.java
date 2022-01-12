@@ -25,6 +25,7 @@ public class EventosService {
     }
 
     public void update(Evento evento){
+        //Check if event exists before saving
         eventosRepository.save(evento);
     }
 
