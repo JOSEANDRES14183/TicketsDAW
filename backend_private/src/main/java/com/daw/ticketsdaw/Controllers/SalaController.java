@@ -32,16 +32,20 @@ public class SalaController {
         return "salas/show";
     }
 
+    @GetMapping("{id}/delete")
+    public String delete(ModelMap modelMap, @PathVariable("id") int salaId){
+        salaService.delete(salaService.read(salaId));
+        return "redirect:/salas";
+    }
+
     @GetMapping({"crea"})
     public String create(ModelMap modelMap){
-        modelMap.addAttribute("sala", new Sala());
         modelMap.addAttribute("ciudades", ciudadService.read());
         return "salas/create";
     }
 
     @PostMapping({"crea"})
-    public String store(ModelMap modelMap, @ModelAttribute Sala sala){
-        salaService.create(sala);
+    public String store(ModelMap modelMap){
         return "redirect:/salas";
     }
 

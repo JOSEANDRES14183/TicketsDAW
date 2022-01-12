@@ -24,6 +24,7 @@
                 <th>Aforo máximo</th>
                 <th>Oculto</th>
                 <th>Propietario</th>
+                <th>Acciones</th>
             </tr>
             <tr th:each="sala: ${salas}">
                 <td>
@@ -35,6 +36,14 @@
                 <td th:text="${sala.aforoMax}" />
                 <td th:text="${sala.estaOculto}" />
                 <td th:text="${sala.propietarioSala.nombreUsuario}" />
+                <td>
+                    <a th:href="@{'/salas/' + ${sala.id} + '/update'}">
+                        Editar
+                    </a>
+                    <a th:href="@{'/salas/' + ${sala.id} + '/delete'}">
+                        Eliminar
+                    </a>
+                </td>
             </tr>
         </table>
 

@@ -17,6 +17,6 @@ public interface SalaService{
 
     public void update();
 
-    public void delete();
+    public void delete(Sala sala);
 
 }
