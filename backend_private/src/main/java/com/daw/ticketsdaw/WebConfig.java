@@ -9,6 +9,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry){
-        registry.addConverter(new StringToOrganitzadorConverter());
+        //registry.addConverter(new StringToOrganitzadorConverter());
     }
 }
