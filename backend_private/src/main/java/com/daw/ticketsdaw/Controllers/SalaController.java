@@ -46,7 +46,7 @@ public class SalaController {
     }
 
     @PostMapping({"crea"})
-    public String store(ModelMap modelMap, @ModelAttribute("sala") Sala sala){
+    public String store(@ModelAttribute Sala sala){
         salaService.create(sala);
         return "redirect:/salas";
     }
