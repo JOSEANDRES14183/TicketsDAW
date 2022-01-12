@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Salas</title>
+    <link rel="stylesheet" th:href="@{/css/customBootstrap.css}">
+</head>
+<body>
+
+<header class="container-md mb-4 py-4">
+    <h1>Eventos</h1>
+</header>
+
+<main>
+
+    <section class="container-md">
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>Id</th>
+                <th>Título</th>
+                <th>Descripción</th>
+                <th>Edad mínima</th>
+                <th>Oculto</th>
+                <th>Es nominativo</th>
+                <th>Duración estándar</th>
+                <th>Organizador</th>
+                <th>Foto perfil</th>
+                <th>Documento normas</th>
+                <th>Acciones</th>
+            </tr>
+            <tr th:each="evento: ${eventos}">
+                <td th:text="${evento.id}"></td>
+                <td th:text="${evento.titulo}"></td>
+                <td th:text="${evento.descripcion}"></td>
+                <td th:text="${evento.edadMinima}"></td>
+                <td th:text="${evento.estaOculto}"></td>
+                <td th:text="${evento.esNominativo}"></td>
+                <td th:text="${evento.duracionEstandar}"></td>
+                <td th:text="${evento.idOrganizador}"></td>
+                <td th:text="${evento.fotoPerfil}"></td>
+                <td th:text="${evento.documentoNormas}"></td>
+                <td><a th:text="${'Borrar'}" th:href="'/eventos/borrar?id=' + ${evento.id}"></a></td>
+            </tr>
+        </table>
+    </section>
+
+</main>
+
+<footer></footer>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario eventos</title>
+    <link rel="stylesheet" th:href="@{/css/customBootstrap.css}">
+</head>
+<body>
+
+<header class="container-md mb-4 py-4">
+    <h1 th:text="'Eventos ' + ${action}"></h1>
+</header>
+
+<main>
+    <section class="container-md">
+        <form method="POST" th:action="'/eventos/' + ${action}" th:object="${evento}">
+            <div class="mb-3" th:if="${action == 'actualizar'}">
+                <label  for="id" class="form-label">Identificador</label>
+                <input type="number" class="form-control" th:field="*{id}">
+            </div>
+            <div class="mb-3">
+                <label  for="titulo" class="form-label">Título</label>
+                <input type="text" class="form-control" th:field="*{titulo}">
+            </div>
+            <div class="mb-3">
+                <label for="descripcion" class="form-label">Descripción</label>
+                <input type="text" class="form-control" th:field="*{descripcion}">
+            </div>
+            <div class="mb-3">
+                <label for="estaOculto" class="form-label">Esta oculto</label>
+                <select class="form-control w-25" th:field="*{estaOculto}">
+                    <option value="true">Oculto</option>
+                    <option value="false">No oculto</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="esNominativo" class="form-label">Es nominativo</label>
+                <select class="form-control w-25" th:field="*{esNominativo}">
+                    <option value="true">Nominativo</option>
+                    <option value="false">No nominativo</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="idOrganizador" class="form-label">Organizador</label>
+                <select class="form-control w-25" th:field="*{idOrganizador}">
+                    <option value="2">2</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="fotoPerfil" class="form-label">Foto de perfil</label>
+                <select class="form-control w-25" th:field="*{fotoPerfil}">
+                    <option value="1">1</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="documentoNormas" class="form-label">Foto de perfil</label>
+                <select class="form-control w-25" th:field="*{documentoNormas}">
+                    <option value="1">1</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="edadMinima" class="form-label">Edad mínima</label>
+                <input type="number" class="form-control w-25" th:field="*{edadMinima}">
+            </div>
+            <div class="mb-3">
+                <label for="duracionEstandar" class="form-label">Duración estándar</label>
+                <input type="number" class="form-control w-25" th:field="*{duracionEstandar}">
+            </div>
+            <button type="submit" class="btn btn-primary" th:text="${action}"></button>
+        </form>
+    </section>
+</main>
+
+<footer></footer>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
