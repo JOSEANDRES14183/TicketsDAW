@@ -9,7 +9,7 @@ function buildStyles() {
 }
 
 function copyBootstrapFiles(){
-    return gulp.src('node_modules/bootstrap/dist/js/bootstrap.bundle.min.js')
+    return gulp.src('node_modules/bootstrap/dist/js/bootstrap.bundle.min.js*')
         .pipe(gulp.dest('src/main/resources/static/js'));
 }
 
