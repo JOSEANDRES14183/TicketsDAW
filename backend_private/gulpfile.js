@@ -13,6 +13,16 @@ function copyBootstrapFiles(){
         .pipe(gulp.dest('src/main/resources/static/js'));
 }
 
+function copyBootstrapIconsCss(){
+    return gulp.src('node_modules/bootstrap-icons/font/bootstrap-icons.css')
+        .pipe(gulp.dest('src/main/resources/static/font'));
+}
+
+function copyBootstrapIconsFonts(){
+    return gulp.src('node_modules/bootstrap-icons/font/fonts/*')
+        .pipe(gulp.dest('src/main/resources/static/font/fonts'));
+}
+
 exports.compilaSass = buildStyles;
 exports.copy = copyBootstrapFiles;
-exports.build = parallel(buildStyles, copyBootstrapFiles);
+exports.build = parallel(buildStyles, copyBootstrapFiles, copyBootstrapIconsCss, copyBootstrapIconsFonts);
