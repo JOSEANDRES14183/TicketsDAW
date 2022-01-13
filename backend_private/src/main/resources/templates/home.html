@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" th:href="@{/css/customBootstrap.css}">
-</head>
+<head th:replace="fragments/layout :: head('Home')"></head>
 <body>
+
+<header th:replace="fragments/layout :: header('Home')"></header>
+
 <h1>Hello World</h1>
 <button type="button" class="btn btn-primary">Hello!</button>
 <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+<footer th:replace="fragments/layout :: footer"></footer>
+
 </body>
 </html>
