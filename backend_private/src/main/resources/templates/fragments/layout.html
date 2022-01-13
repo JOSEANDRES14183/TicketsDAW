@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <title th:text="${title}">Placeholder</title>
+    <link rel="stylesheet" th:href="@{/css/customBootstrap.css}">
+</head>
+<body>
+
+<header th:fragment="header(name)" class="mb-4 py-4 border-bottom">
+    <div class="container-md">
+        <h1 th:text="${name}"></h1>
+    </div>
+</header>
+
+<footer th:fragment="footer"></footer>
+
+</body>
+</html>
