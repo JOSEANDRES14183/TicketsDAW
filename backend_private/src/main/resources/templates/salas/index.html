@@ -31,17 +31,17 @@
                 <td th:text="${sala.estaOculto}" />
                 <td th:text="${sala.propietarioSala.nombreUsuario}" />
                 <td>
-                    <a th:href="@{'/salas/' + ${sala.id} + '/update'}">
-                        Editar
+                    <a class="btn btn-light" th:href="@{'/salas/' + ${sala.id} + '/update'}">
+                        <i class="bi bi-pencil-square"></i>
                     </a>
-                    <a th:href="@{'/salas/' + ${sala.id} + '/delete'}">
-                        Eliminar
+                    <a class="btn btn-light" th:href="@{'/salas/' + ${sala.id} + '/delete'}">
+                        <i class="bi bi-trash-fill"></i>
                     </a>
                 </td>
             </tr>
         </table>
 
-        <a href="/salas/crear" class="btn btn-primary">Crear sala</a>
+        <a href="/salas/create" class="btn btn-primary">Crear sala</a>
 
     </section>
 
