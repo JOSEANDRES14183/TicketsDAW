@@ -1,17 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Salas</title>
-    <link rel="stylesheet" th:href="@{/css/customBootstrap.css}">
-</head>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/layout :: head('Salas')"></head>
+
 <body>
 
-<header class="mb-4 py-4 border-bottom">
-    <div class="container-md">
-        <h1>Salas</h1>
-    </div>
-</header>
+<header th:replace="fragments/layout :: header('Salas')"></header>
 
 <main>
 
@@ -24,6 +18,7 @@
                 <th>Aforo máximo</th>
                 <th>Oculto</th>
                 <th>Propietario</th>
+                <th>Acciones</th>
             </tr>
             <tr th:each="sala: ${salas}">
                 <td>
@@ -35,16 +30,24 @@
                 <td th:text="${sala.aforoMax}" />
                 <td th:text="${sala.estaOculto}" />
                 <td th:text="${sala.propietarioSala.nombreUsuario}" />
+                <td>
+                    <a class="btn btn-light" th:href="@{'/salas/' + ${sala.id} + '/update'}">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <a class="btn btn-light" th:href="@{'/salas/' + ${sala.id} + '/delete'}">
+                        <i class="bi bi-trash-fill"></i>
+                    </a>
+                </td>
             </tr>
         </table>
 
-        <a href="/salas/crea" class="btn btn-primary">Crear sala</a>
+        <a href="/salas/create" class="btn btn-primary">Crear sala</a>
 
     </section>
 
 </main>
 
-<footer></footer>
+<footer th:replace="fragments/layout :: footer"></footer>
 
 <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 </body>
