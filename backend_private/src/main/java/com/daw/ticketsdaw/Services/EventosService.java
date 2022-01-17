@@ -25,8 +25,8 @@ public class EventosService {
     }
 
     public void update(Evento evento){
-        //Check if event exists before saving
-        eventosRepository.save(evento);
+        if(eventosRepository.existsById(evento.getId()))
+            eventosRepository.save(evento);
     }
 
     public void remove(Evento evento){

@@ -14,9 +14,9 @@
 <main>
     <section class="container-md">
         <form method="POST" th:action="'/eventos/' + ${action}" th:object="${evento}">
-            <div class="mb-3" th:if="${action == 'actualizar'}">
-                <label  for="id" class="form-label">Identificador</label>
-                <input type="number" class="form-control" th:field="*{id}">
+            <div class="mb-3" th:if="${action == 'update'}">
+                <label for="id" class="form-label">Identificador</label>
+                <input type="number" class="form-control" disabled th:field="*{id}">
             </div>
             <div class="mb-3">
                 <label  for="titulo" class="form-label">Título</label>
