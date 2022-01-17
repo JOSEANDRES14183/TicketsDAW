@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Entity
@@ -15,5 +16,8 @@ public class Ciudad implements Serializable {
     private int id;
 
     private String nombre;
+
+    @OneToMany(mappedBy = "ciudad")
+    private List<Sala> salas;
 
 }
