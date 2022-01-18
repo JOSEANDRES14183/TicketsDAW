@@ -1,4 +1,4 @@
-package com.daw.ticketsdaw.Controller;
+package com.daw.ticketsdaw.Controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

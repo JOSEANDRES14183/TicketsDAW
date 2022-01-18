@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/layout :: head('Formulario')"></head>
+
+<body>
+
+<header th:replace="fragments/layout :: header('Salas')"></header>
+
+<main>
+    <section class="container-md">
+        <form method="POST" th:object="${sala}">
+
+            <div th:if="${accion} == 'update'">
+                <input type="hidden" th:field="*{propietarioSala}">
+                <input type="hidden" th:field="*{estaOculto}">
+            </div>
+
+            <div th:unless="${accion} == 'update'">
+                <input type="hidden" value="1" id="propietarioSala" name="propietarioSala">
+                <input type="hidden" value="true" id="estaOculto" name="estaOculto">
+            </div>
+
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input type="text" th:field="*{nombre}" class="form-control" id="nombre" name="nombre" aria-describedby="NombreField">
+            </div>
+            <div class="mb-3">
+                <label for="direccion" class="form-label">Dirección</label>
+                <input type="text" th:field="*{direccion}" class="form-control" id="direccion" name="direccion">
+            </div>
+            <div class="mb-3">
+                <label for="ciudad" class="form-label">Ciudad</label>
+                <select class="form-control" th:field="*{ciudad}" id="ciudad" name="ciudad">
+                    <option th:each="ciudad: ${ciudades}"
+                            th:value="${ciudad.id}"
+                            th:text="${ciudad.nombre}"/>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="aforoMax" class="form-label">Aforo máximo</label>
+                <input type="number" th:field="*{aforoMax}" class="form-control w-25" id="aforoMax" name="aforoMax">
+            </div>
+            <button th:text="${accion} ? 'Modifica' : 'Crea'" type="submit" class="btn btn-primary"/>
+        </form>
+
+        <a href="/salas" class="btn btn-secondary mt-3">Volver</a>
+    </section>
+</main>
+
+<footer th:replace="fragments/layout :: footer"></footer>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

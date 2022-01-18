@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/layout :: head(${sala.nombre})"></head>
+
+<body>
+
+<header th:replace="fragments/layout :: header('Salas')"></header>
+
+<main>
+
+    <section class="container-md">
+        <div class="mb-4 d-flex flex-column">
+            <h3 th:text="${sala.nombre}"></h3>
+            <span th:text="${sala.direccion}"></span>
+            <span th:text="${sala.ciudad.nombre}"></span>
+            <span>
+                Aforo máximo: <span th:text="${sala.aforoMax}"></span>
+            </span>
+        </div>
+        <div class="mb-4">
+            <h3>Distribución</h3></div>
+        <div class="mb-4">
+            <h3 class="mb-3">Restricciones</h3>
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th>Estas</th>
+                    <th>son</th>
+                    <th>las</th>
+                    <th>restricciones</th>
+                </tr>
+                <tr>
+                    <td>Estos</td>
+                    <td>son</td>
+                    <td>los</td>
+                    <td>datos</td>
+                </tr>
+            </table>
+        </div>
+
+        <a href="/salas" class="btn btn-primary">Volver</a>
+
+    </section>
+
+</main>
+
+<footer th:replace="fragments/layout :: footer"></footer>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
