@@ -1,6 +1,8 @@
 package com.daw.ticketsdaw.Entities;
 
 import lombok.Data;
+import lombok.ToString;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import javax.validation.constraints.*;
@@ -29,10 +31,12 @@ public class Sala implements Serializable {
     @Column(name = "esta_oculto")
     private boolean estaOculto;
 
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "id_propietario", referencedColumnName = "id")
     private PropietarioSala propietarioSala;
 
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name="ciudad", referencedColumnName = "id")
     private Ciudad ciudad;

@@ -31,7 +31,7 @@
                 <td th:text="${sala.estaOculto}" />
                 <td th:text="${sala.propietarioSala.nombreUsuario}" />
                 <td>
-                    <a class="btn btn-light" th:href="@{'/salas/' + ${sala.id} + '/update'}">
+                    <a class="btn btn-light" th:href="@{'/salas/form?id=' + ${sala.id}}">
                         <i class="bi bi-pencil-square"></i>
                     </a>
                     <a class="btn btn-light" th:href="@{'/salas/' + ${sala.id} + '/delete'}">
@@ -41,7 +41,7 @@
             </tr>
         </table>
 
-        <a href="/salas/create" class="btn btn-primary">Crear sala</a>
+        <a href="/salas/form" class="btn btn-primary">Crear sala</a>
 
     </section>
 </main>

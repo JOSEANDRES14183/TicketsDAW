@@ -5,19 +5,19 @@ import com.daw.ticketsdaw.Repositories.SalaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class SalaServiceImpl implements SalaService{
 
     @Autowired
     private SalaRepository salaRepository;
 
     @Override
-    public void create(Sala sala){
-        salaRepository.save(sala);
-    }
+    public void create(Sala sala){ salaRepository.save(sala); }
 
     @Override
     public List<Sala> read() {
@@ -30,12 +30,12 @@ public class SalaServiceImpl implements SalaService{
     }
 
     @Override
-    public void update(Sala sala){
-        salaRepository.save(sala);
+    public void delete(Sala sala){
+        salaRepository.delete(sala);
     }
 
     @Override
-    public void delete(Sala sala){
-        salaRepository.delete(sala);
+    public boolean checkById(int id) {
+        return salaRepository.existsById(id);
     }
 }
