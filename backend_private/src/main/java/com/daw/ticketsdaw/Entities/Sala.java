@@ -14,7 +14,7 @@ public class Sala implements Serializable {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @NotNull
     @Size(min = 3, max = 20)
@@ -34,11 +34,13 @@ public class Sala implements Serializable {
     @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "id_propietario", referencedColumnName = "id")
+    @NotNull
     private PropietarioSala propietarioSala;
 
     @ToString.Exclude
     @ManyToOne
     @JoinColumn(name="ciudad", referencedColumnName = "id")
+    @NotNull
     private Ciudad ciudad;
 
 }

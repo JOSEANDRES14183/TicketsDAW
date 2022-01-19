@@ -39,21 +39,26 @@ public class SalaController {
         return "redirect:/salas";
     }
 
-    @GetMapping({"form"})
-    public String showForm(ModelMap modelMap, @RequestParam(required = false, name = "id") int id){
-        modelMap.addAttribute("ciudades",ciudadService.read());
+    @GetMapping({"create"})
+    public String create(ModelMap modelMap){
         Sala sala = new Sala();
-        if(salaService.checkById(id)){
-            sala = salaService.read(id);
-        }
+        sala.setAforoMax(1);
         modelMap.addAttribute("sala",sala);
+        modelMap.addAttribute("ciudades",ciudadService.read());
         return "salas/form";
     }
 
-    @PostMapping({"form"})
-    public String processForm(@ModelAttribute @Valid Sala sala, BindingResult bindingResult){
+    @GetMapping({"{id}/update"})
+        public String update(@PathVariable("id") Integer id, ModelMap modelMap){
+        modelMap.addAttribute("sala",salaService.read(id));
+        modelMap.addAttribute("ciudades",ciudadService.read());
+        return "salas/form";
+    }
+
+    @PostMapping({"/",""})
+    public String saveSala(@ModelAttribute @Valid Sala sala, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            return "redirect:/salas/form";
+            return "redirect:/salas/create";
         }
         salaService.create(sala);
         return "redirect:/salas";
