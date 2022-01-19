@@ -1,5 +1,6 @@
 package com.daw.ticketsdaw.Controllers;
 
+import com.daw.ticketsdaw.Entities.Ciudad;
 import com.daw.ticketsdaw.Entities.Sala;
 import com.daw.ticketsdaw.Services.CiudadService;
 import com.daw.ticketsdaw.Services.SalaService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/salas")
