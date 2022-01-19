@@ -10,28 +10,33 @@
 <main>
 
     <section class="container-md">
-        <div class="mb-4 d-flex flex-column">
-            <h3 th:text="${evento.titulo}"></h3>
-            <span th:text="${evento.descripcion}"></span>
-            <span>
-                Edad mínima: <span th:text="${evento.edadMinima}"></span>
-            </span>
-            <span>
-                Esta oculto: <span th:text="${evento.estaOculto}"></span>
-            </span>
-            <span>
-                Es nominativo: <span th:text="${evento.esNominativo}"></span>
-            </span>
-            <span>
-                Duración estándar: <span th:text="${evento.duracionEstandar}"></span>
-            </span>
-            <span>
-                Imagen de perfil: <span th:text="${evento.fotoPerfil.nombreArchivo}"></span>
-            </span>
-            <span>
-                Normas del evento: <span th:text="${evento.documentoNormas.nombrePdf}"></span>
-            </span>
+        <div class="row">
+            <div class="col">
+                <div class="mb-4 d-flex flex-column">
+                    <h3 th:text="${evento.titulo}"></h3>
+                    <span th:text="${evento.descripcion}"></span>
+                    <span>
+                        Edad mínima: <span th:text="${evento.edadMinima}"></span>
+                    </span>
+                            <span>
+                        Esta oculto: <span th:text="${evento.estaOculto}"></span>
+                    </span>
+                            <span>
+                        Es nominativo: <span th:text="${evento.esNominativo}"></span>
+                    </span>
+                            <span>
+                        Duración estándar: <span th:text="${evento.duracionEstandar}"></span>
+                    </span>
+                            <span>
+                        Imagen de perfil: <span th:text="${evento.fotoPerfil.nombreArchivo}"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="col" style="height: 350px">
+                <img th:src="'/img/' + ${evento.fotoPerfil.nombreArchivo}" th:alt="${evento.fotoPerfil.nombreArchivo}" style="height: 100%">
+            </div>
         </div>
+
 
         <div class="mb-4">
             <h3 class="mb-3">Sesiones</h3>
@@ -49,6 +54,12 @@
                     <td>datos</td>
                 </tr>
             </table>
+        </div>
+
+        <div class="mb-4">
+            <h3 class="mb-3">Normas del evento</h3>
+            <p th:if="${evento.getDocumentoNormas() == null}">No hay ningún documento asignado</p>
+            <p th:unless="${evento.getDocumentoNormas() == null}" th:text="${evento.getDocumentoNormas().getNombrePdf()}"></p>
         </div>
 
         <a href="/eventos" class="btn btn-primary">Volver</a>
