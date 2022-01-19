@@ -3,10 +3,8 @@ package com.daw.ticketsdaw.Entities;
 import com.sun.istack.NotNull;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -28,5 +26,8 @@ public class Organizador extends Usuario{
     @JoinColumn(name = "foto_perfil")
     private RecursoMedia fotoPerfil;
 
+    @OneToMany(mappedBy = "organizador") //Hace referencia al nombre de la propiedad (Java)
+    //@JoinColumn(name = "id_organizador") //Hace referencia al nombre de la columna (MySQL)
+    private List<Evento> eventos;
 
 }
