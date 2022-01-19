@@ -1,6 +1,8 @@
 package com.daw.ticketsdaw.Entities;
 
 import lombok.Data;
+import lombok.ToString;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import javax.validation.constraints.*;
@@ -12,7 +14,7 @@ public class Sala implements Serializable {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @NotNull
     @Size(min = 3, max = 20)
@@ -29,12 +31,16 @@ public class Sala implements Serializable {
     @Column(name = "esta_oculto")
     private boolean estaOculto;
 
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "id_propietario", referencedColumnName = "id")
+    @NotNull
     private PropietarioSala propietarioSala;
 
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name="ciudad", referencedColumnName = "id")
+    @NotNull
     private Ciudad ciudad;
 
 }

@@ -1,9 +1,12 @@
 package com.daw.ticketsdaw.Entities;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -18,6 +21,6 @@ public class Ciudad implements Serializable {
     private String nombre;
 
     @OneToMany(mappedBy = "ciudad")
-    private List<Sala> salas;
+    private List<Sala> salas = new ArrayList<>();
 
 }

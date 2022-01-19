@@ -9,16 +9,17 @@
 
 <main>
     <section class="container-md">
-        <form method="POST" th:object="${sala}">
+        <form method="POST" th:action="'/salas'" th:object="${sala}">
 
-            <div th:if="${accion} == 'update'">
-                <input type="hidden" th:field="*{propietarioSala}">
-                <input type="hidden" th:field="*{estaOculto}">
-            </div>
-
-            <div th:unless="${accion} == 'update'">
+            <div th:if="${sala.id == null}">
                 <input type="hidden" value="1" id="propietarioSala" name="propietarioSala">
                 <input type="hidden" value="true" id="estaOculto" name="estaOculto">
+            </div>
+
+            <div th:unless="${sala.id == null}">
+                <input type="hidden" th:field="*{propietarioSala}">
+                <input type="hidden" th:field="*{estaOculto}">
+                <input type="hidden" th:field="*{id}">
             </div>
 
             <div class="mb-3">
@@ -41,7 +42,7 @@
                 <label for="aforoMax" class="form-label">Aforo máximo</label>
                 <input type="number" th:field="*{aforoMax}" class="form-control w-25" id="aforoMax" name="aforoMax">
             </div>
-            <button th:text="${accion} ? 'Modifica' : 'Crea'" type="submit" class="btn btn-primary"/>
+            <button th:text="Submit" type="submit" class="btn btn-primary"/>
         </form>
 
         <a href="/salas" class="btn btn-secondary mt-3">Volver</a>
