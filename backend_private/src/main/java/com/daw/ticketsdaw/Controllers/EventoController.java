@@ -5,8 +5,10 @@ import com.daw.ticketsdaw.Services.EventosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +45,10 @@ public class EventoController {
     }
 
     @PostMapping({"/", ""})
-    public String saveEvento(@ModelAttribute Evento evento){
+    public String saveEvento(@ModelAttribute @Valid Evento evento, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return "redirect:/eventos/create";
+        }
         eventosService.save(evento);
         return "redirect:/eventos";
     }

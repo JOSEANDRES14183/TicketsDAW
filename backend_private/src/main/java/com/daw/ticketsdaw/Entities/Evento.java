@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @Data
 @Entity
@@ -14,7 +15,9 @@ public class Evento {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
     @NotNull
+    @Size(min = 3, max = 20)
     private String titulo;
+    @Size(max = 300)
     private String descripcion;
     @Column(name = "edad_minima", nullable = false)
     private byte edadMinima;
