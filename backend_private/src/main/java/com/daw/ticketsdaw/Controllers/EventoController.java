@@ -32,7 +32,6 @@ public class EventoController {
     @GetMapping({"create"})
     public String showForm(ModelMap model){
         model.addAttribute("evento", new Evento());
-        model.addAttribute("action", "create");
         return "eventos/create";
     }
 
@@ -40,19 +39,12 @@ public class EventoController {
     public String showUpdateForm(ModelMap model, @PathVariable(name="id") Integer eventoId){
         Evento evento = eventosService.read(eventoId);
         model.addAttribute("evento", evento);
-        model.addAttribute("action", "update");
         return "eventos/create";
     }
 
-    @PostMapping({"create"})
-    public String insertEvento(@ModelAttribute Evento evento){
-        eventosService.create(evento);
-        return "redirect:/eventos";
-    }
-
-    @PostMapping({"update"})
-    public String updateEvento(@ModelAttribute Evento evento){
-        eventosService.update(evento);
+    @PostMapping({"/", ""})
+    public String saveEvento(@ModelAttribute Evento evento){
+        eventosService.save(evento);
         return "redirect:/eventos";
     }
 

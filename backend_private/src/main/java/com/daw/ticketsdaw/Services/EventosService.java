@@ -20,13 +20,8 @@ public class EventosService {
         return eventosRepository.findById(id).get();
     }
 
-    public void create(Evento evento){
+    public void save(Evento evento){
         eventosRepository.save(evento);
-    }
-
-    public void update(Evento evento){
-        if(eventosRepository.existsById(evento.getId()))
-            eventosRepository.save(evento);
     }
 
     public void remove(Evento evento){
