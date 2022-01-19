@@ -4,11 +4,13 @@ import com.daw.ticketsdaw.Entities.Evento;
 import com.daw.ticketsdaw.Repositories.EventosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class EventosService {
     @Autowired
     EventosRepository eventosRepository;
@@ -21,11 +23,7 @@ public class EventosService {
         return eventosRepository.findById(id).get();
     }
 
-    public void create(Evento evento){
-        eventosRepository.save(evento);
-    }
-
-    public void update(Evento evento){
+    public void save(Evento evento){
         eventosRepository.save(evento);
     }
 

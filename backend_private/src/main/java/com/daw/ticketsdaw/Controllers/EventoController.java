@@ -5,7 +5,12 @@ import com.daw.ticketsdaw.Services.EventosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/eventos")
@@ -17,39 +22,41 @@ public class EventoController {
     @GetMapping({"/", ""})
     public String show(ModelMap modelMap){
         modelMap.addAttribute("eventos", eventosService.read());
+        return "eventos/index";
+    }
+
+    @GetMapping({"/{id}"})
+    public String showOne(ModelMap modelMap, @PathVariable(name="id") Integer eventoId){
+        modelMap.addAttribute("evento", eventosService.read(eventoId));
         return "eventos/show";
     }
 
-    @GetMapping({"crear"})
+    @GetMapping({"create"})
     public String showForm(ModelMap model){
         model.addAttribute("evento", new Evento());
-        model.addAttribute("action", "crear");
         return "eventos/create";
     }
 
-    @GetMapping({"actualizar"})
-    public String showUpdateForm(ModelMap model){
-        model.addAttribute("evento", new Evento());
-        model.addAttribute("action", "actualizar");
+    @GetMapping({"/{id}/update"})
+    public String showUpdateForm(ModelMap model, @PathVariable(name="id") Integer eventoId){
+        Evento evento = eventosService.read(eventoId);
+        model.addAttribute("evento", evento);
         return "eventos/create";
     }
 
-    @PostMapping({"crear"})
-    public String insertEvento(@ModelAttribute Evento evento){
-        eventosService.create(evento);
+    @PostMapping({"/", ""})
+    public String saveEvento(@ModelAttribute @Valid Evento evento, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return "redirect:/eventos/create";
+        }
+        eventosService.save(evento);
         return "redirect:/eventos";
     }
 
-    @PostMapping({"actualizar"})
-    public String updateEvento(@ModelAttribute Evento evento){
-        eventosService.update(evento);
-        return "redirect:/eventos";
-    }
-
-    @GetMapping({"borrar"})
-    public String deleteEvento(ModelMap map, @RequestParam String id){
+    @GetMapping({"/{id}/delete"})
+    public String deleteEvento(ModelMap map, @PathVariable(name="id") Integer eventoId){
         Evento evento = new Evento();
-        evento.setId(Integer.parseInt(id));
+        evento.setId(eventoId);
         eventosService.remove(evento);
         return "redirect:/eventos";
     }

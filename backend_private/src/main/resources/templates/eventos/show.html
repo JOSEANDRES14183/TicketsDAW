@@ -1,53 +1,72 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Salas</title>
-    <link rel="stylesheet" th:href="@{/css/customBootstrap.css}">
-</head>
+
+<head th:replace="fragments/layout :: head(${evento.titulo})"></head>
+
 <body>
 
-<header class="container-md mb-4 py-4">
-    <h1>Eventos</h1>
-</header>
+<header th:replace="fragments/layout :: header('Eventos')"></header>
 
 <main>
 
     <section class="container-md">
-        <table class="table table-bordered table-striped">
-            <tr>
-                <th>Id</th>
-                <th>Título</th>
-                <th>Descripción</th>
-                <th>Edad mínima</th>
-                <th>Oculto</th>
-                <th>Es nominativo</th>
-                <th>Duración estándar</th>
-                <th>Organizador</th>
-                <th>Foto perfil</th>
-                <th>Documento normas</th>
-                <th>Acciones</th>
-            </tr>
-            <tr th:each="evento: ${eventos}">
-                <td th:text="${evento.id}"></td>
-                <td th:text="${evento.titulo}"></td>
-                <td th:text="${evento.descripcion}"></td>
-                <td th:text="${evento.edadMinima}"></td>
-                <td th:text="${evento.estaOculto}"></td>
-                <td th:text="${evento.esNominativo}"></td>
-                <td th:text="${evento.duracionEstandar}"></td>
-                <td th:text="${evento.idOrganizador}"></td>
-                <td th:text="${evento.fotoPerfil}"></td>
-                <td th:text="${evento.documentoNormas}"></td>
-                <td><a th:text="${'Borrar'}" th:href="'/eventos/borrar?id=' + ${evento.id}"></a></td>
-            </tr>
-        </table>
+        <div class="row">
+            <div class="col">
+                <div class="mb-4 d-flex flex-column">
+                    <h3 th:text="${evento.titulo}"></h3>
+                    <span th:text="${evento.descripcion}"></span>
+                    <span>
+                        Edad mínima: <span th:text="${evento.edadMinima}"></span>
+                    </span>
+                            <span>
+                        Esta oculto: <span th:text="${evento.estaOculto}"></span>
+                    </span>
+                            <span>
+                        Es nominativo: <span th:text="${evento.esNominativo}"></span>
+                    </span>
+                            <span>
+                        Duración estándar: <span th:text="${evento.duracionEstandar}"></span>
+                    </span>
+                            <span>
+                        Imagen de perfil: <span th:text="${evento.fotoPerfil.nombreArchivo}"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="col" style="height: 350px">
+                <img th:src="'/img/' + ${evento.fotoPerfil.nombreArchivo}" th:alt="${evento.fotoPerfil.nombreArchivo}" style="height: 100%">
+            </div>
+        </div>
+
+
+        <div class="mb-4">
+            <h3 class="mb-3">Sesiones</h3>
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th>Estas</th>
+                    <th>son</th>
+                    <th>las</th>
+                    <th>sesiones</th>
+                </tr>
+                <tr>
+                    <td>Estos</td>
+                    <td>son</td>
+                    <td>los</td>
+                    <td>datos</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="mb-4">
+            <h3 class="mb-3">Normas del evento</h3>
+            <p th:if="${evento.getDocumentoNormas() == null}">No hay ningún documento asignado</p>
+            <p th:unless="${evento.getDocumentoNormas() == null}" th:text="${evento.getDocumentoNormas().getNombrePdf()}"></p>
+        </div>
+
+        <a href="/eventos" class="btn btn-primary">Volver</a>
     </section>
 
 </main>
 
-<footer></footer>
-
-<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<footer th:replace="fragments/layout :: footer"></footer>
 </body>
 </html>
