@@ -45,6 +45,6 @@ public class Sala implements Serializable {
     @NotNull
     private Ciudad ciudad;
 
-//    @OneToMany(mappedBy = "sala")
-//    private List<Butaca> butacas = new ArrayList<>();
+    @OneToMany(mappedBy = "sala")
+    private List<Butaca> butacas = new ArrayList<>();
 }

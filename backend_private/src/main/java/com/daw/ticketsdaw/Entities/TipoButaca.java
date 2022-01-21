@@ -17,6 +17,6 @@ public class TipoButaca {
 
     private String nombre;
 
-    @Column(name = "preico_extra")
+    @Column(name = "precio_extra")
     private float precioExtra;
 }
