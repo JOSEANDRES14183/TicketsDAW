@@ -5,6 +5,8 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.validation.constraints.*;
 
 @Data
@@ -43,4 +45,6 @@ public class Sala implements Serializable {
     @NotNull
     private Ciudad ciudad;
 
+//    @OneToMany(mappedBy = "sala")
+//    private List<Butaca> butacas = new ArrayList<>();
 }
