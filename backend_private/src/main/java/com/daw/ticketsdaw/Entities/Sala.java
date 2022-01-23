@@ -1,5 +1,6 @@
 package com.daw.ticketsdaw.Entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.ToString;
 
@@ -46,5 +47,6 @@ public class Sala implements Serializable {
     private Ciudad ciudad;
 
     @OneToMany(mappedBy = "sala")
+    @JsonManagedReference
     private List<Butaca> butacas = new ArrayList<>();
 }

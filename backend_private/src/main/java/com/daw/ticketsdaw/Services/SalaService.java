@@ -19,4 +19,6 @@ public interface SalaService{
 
     public boolean checkById(int id);
 
+    public String getButacasJson(Sala sala);
+
 }

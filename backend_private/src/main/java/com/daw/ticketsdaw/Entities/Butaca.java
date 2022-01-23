@@ -1,5 +1,6 @@
 package com.daw.ticketsdaw.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.ToString;
 
@@ -15,6 +16,7 @@ public class Butaca {
     @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "id_sala", referencedColumnName = "id")
+    @JsonBackReference
     private Sala sala;
 
     @Id

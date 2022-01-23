@@ -29,7 +29,9 @@ public class SalaController {
 
     @GetMapping("{id}")
     public String show(ModelMap modelMap, @PathVariable("id") int salaId){
-        modelMap.addAttribute("sala",salaService.read(salaId));
+        Sala sala = salaService.read(salaId);
+        modelMap.addAttribute("sala",sala);
+        modelMap.addAttribute("butacas",salaService.getButacasJson(sala));
         return "salas/show";
     }
 

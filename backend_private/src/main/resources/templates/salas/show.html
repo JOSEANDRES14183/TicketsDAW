@@ -18,8 +18,12 @@
                 Aforo máximo: <span th:text="${sala.aforoMax}"></span>
             </span>
         </div>
+
         <div class="mb-4">
-            <h3>Distribución</h3></div>
+            <h3>Distribución</h3>
+                <table id="layout"></table>
+        </div>
+
         <div class="mb-4">
             <h3 class="mb-3">Restricciones</h3>
             <table class="table table-bordered table-striped">
@@ -42,9 +46,43 @@
 
     </section>
 
+    <div th:text="${butacas}"></div>
+
 </main>
 
 <footer th:replace="fragments/layout :: footer"></footer>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var butacasJSON = [[${butacas}]];
+    /*]]>*/
+
+    var hola = JSON.parse(butacasJSON);
+
+    let butacas = new Array(5);
+    for (let i=0;i<butacas.length;i++){
+        butacas[i] = new Array(5);
+    }
+
+    let layout = document.getElementById("layout");
+    let text = "";
+
+    for (var i = 0; i<butacas.length; i++){
+        text+="<tr>";
+        for (var j = 0;j<butacas[i].length;j++){
+            text+="<td><i class=\"bi bi-circle-fill\"></i></td>";
+        }
+       text+="</tr>";
+    }
+
+    layout.innerHTML = text;
+
+    console.log(butacas);
+    console.log(text)
+    console.log(butacasJSON);
+    console.log(hola);
+
+</script>
 
 <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 </body>
