@@ -3,12 +3,17 @@ package com.daw.ticketsdaw.Controllers;
 import com.daw.ticketsdaw.Entities.Evento;
 import com.daw.ticketsdaw.Services.EventosService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +23,9 @@ public class EventoController {
 
     @Autowired
     EventosService eventosService;
+
+    @Autowired
+    Environment environment;
 
     @GetMapping({"/", ""})
     public String show(ModelMap modelMap){
@@ -45,7 +53,11 @@ public class EventoController {
     }
 
     @PostMapping({"/", ""})
-    public String saveEvento(@ModelAttribute @Valid Evento evento, BindingResult bindingResult){
+    public String saveEvento(@ModelAttribute @Valid Evento evento, BindingResult bindingResult, @RequestParam("testFile") MultipartFile multipartFile) throws IOException {
+        //File upload code
+        Path path = Paths.get(environment.getProperty("tickets.uploads.path") + "randomtext");
+        multipartFile.transferTo(path);
+
         if(bindingResult.hasErrors()){
             return "redirect:/eventos/create";
         }

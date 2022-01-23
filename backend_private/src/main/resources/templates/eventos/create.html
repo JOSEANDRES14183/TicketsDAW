@@ -7,7 +7,7 @@
 
 <main>
     <section class="container-md">
-        <form method="POST" th:action="'/eventos'" th:object="${evento}">
+        <form method="POST" th:action="'/eventos'" th:object="${evento}" enctype="multipart/form-data">
             <div class="mb-3" th:unless="${evento.getId() == null}">
                 <label for="id" class="form-label">Identificador</label>
                 <input type="number" class="form-control" readonly th:field="*{id}">
@@ -59,6 +59,10 @@
             <div class="mb-3">
                 <label for="duracionEstandar" class="form-label">Duración estándar</label>
                 <input type="number" class="form-control w-25" th:field="*{duracionEstandar}">
+            </div>
+            <div class="mb-3">
+                <label for="testFile" class="form-label">Fichero</label>
+                <input type="file" class="form-control w-25" id="testFile" name="testFile">
             </div>
             <button type="submit" class="btn btn-primary" th:text="'Guardar'"></button>
         </form>
