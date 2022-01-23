@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,6 +48,24 @@ public class SalaServiceImpl implements SalaService{
     public String getButacasJson(Sala sala) {
 
         List<Butaca> butacas = sala.getButacas();
+        int butacasRows = 1;
+
+        for (Butaca butaca : butacas){
+            int currentRow = 0;
+            if (butaca.getPosY()!=currentRow){
+                currentRow = butaca.getNumButaca();
+                butacasRows++;
+            }
+        }
+
+        List<ArrayList<Butaca>> butacasAdaptadas = new ArrayList<>();
+        while(butacasAdaptadas.size()<butacasRows){
+            butacasAdaptadas.add(new ArrayList<>());
+        }
+
+
+
+
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
 
