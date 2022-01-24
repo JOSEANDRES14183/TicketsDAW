@@ -1,7 +1,9 @@
 package com.daw.ticketsdaw.Controllers;
 
+import com.daw.ticketsdaw.DTOs.EventoDTO;
 import com.daw.ticketsdaw.Entities.Evento;
 import com.daw.ticketsdaw.Services.EventosService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
@@ -27,6 +29,8 @@ public class EventoController {
 
     @Autowired
     Environment environment;
+
+    private ModelMapper modelMapper = new ModelMapper();
 
     @GetMapping({"/", ""})
     public String show(ModelMap modelMap){
@@ -55,14 +59,18 @@ public class EventoController {
 
     @PostMapping({"/", ""})
     @Transactional(rollbackFor = {IOException.class})
-    public String saveEvento(@ModelAttribute @Valid Evento evento, BindingResult bindingResult, @RequestParam("testFile") MultipartFile multipartFile) throws IOException {
+    public String saveEvento(@ModelAttribute @Valid EventoDTO eventoDTO, BindingResult bindingResult, @RequestParam("testFile") MultipartFile multipartFile) throws IOException {
+        if(bindingResult.hasErrors()){
+            return "redirect:/eventos/create";
+        }
+
+        Evento evento = modelMapper.map(eventoDTO, Evento.class);
+
         //File upload code
         Path path = Paths.get(environment.getProperty("tickets.uploads.path") + "randomText");
         multipartFile.transferTo(path);
 
-        if(bindingResult.hasErrors()){
-            return "redirect:/eventos/create";
-        }
+
         eventosService.save(evento);
         return "redirect:/eventos";
     }
