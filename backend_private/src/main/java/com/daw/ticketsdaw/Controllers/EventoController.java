@@ -5,6 +5,7 @@ import com.daw.ticketsdaw.Services.EventosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -53,9 +54,10 @@ public class EventoController {
     }
 
     @PostMapping({"/", ""})
+    @Transactional(rollbackFor = {IOException.class})
     public String saveEvento(@ModelAttribute @Valid Evento evento, BindingResult bindingResult, @RequestParam("testFile") MultipartFile multipartFile) throws IOException {
         //File upload code
-        Path path = Paths.get(environment.getProperty("tickets.uploads.path") + "randomtext");
+        Path path = Paths.get(environment.getProperty("tickets.uploads.path") + "randomText");
         multipartFile.transferTo(path);
 
         if(bindingResult.hasErrors()){
