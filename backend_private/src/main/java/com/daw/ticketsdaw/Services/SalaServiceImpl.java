@@ -48,8 +48,8 @@ public class SalaServiceImpl implements SalaService{
     public String getButacasJson(Sala sala) {
 
         List<Butaca> butacas = sala.getButacas();
-        int rows=butacas.get(0).getPosY();
-        int columns=butacas.get(0).getPosX();
+        int rows=0;
+        int columns=0;
 
         for (Butaca butaca : butacas){
             if(butaca.getPosY()>rows){

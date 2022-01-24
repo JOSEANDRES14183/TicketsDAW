@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/layout :: head('Butacas ' + ${sala.nombre})"></head>
+
+<body>
+
+<header th:replace="fragments/layout :: header('Salas')"></header>
+
+<main>
+  <div class="container-md">
+
+    <table class="table table-bordered w-75 mx-auto" id="layout">
+      <tbody><tr>
+        <td>q</td>
+        <td>q</td>
+        <td>q</td>
+        <td>q</td>
+        <td>q</td>
+      </tr>
+      <tr>
+        <td>q</td>
+        <td>q</td>
+        <td>q</td>
+        <td>q</td>
+        <td>q</td>
+      </tr>
+      <tr>
+        <td>q</td>
+        <td>q</td>
+        <td>q</td>
+        <td>q</td>
+        <td>q</td>
+      </tr>
+      <tr>
+        <td>q</td>
+        <td>q</td>
+        <td>q</td>
+        <td>q</td>
+        <td>q</td>
+      </tr>
+      <tr>
+        <td>q</td>
+        <td>q</td>
+        <td>q</td>
+        <td>q</td>
+        <td>q</td>
+      </tr></tbody>
+    </table>
+
+    <div class="d-flex justify-content-evenly mt-4">
+      <button class="btn btn-primary" onclick="addLinea()">Añadir linea</button>
+      <button class="btn btn-primary">Eliminar linea</button>
+      <button class="btn btn-primary">Añadir columna</button>
+      <button class="btn btn-primary">Eliminar columna</button>
+    </div>
+
+  </div>
+</main>
+
+<footer th:replace="fragments/layout :: footer"></footer>
+
+<script>
+
+  let layout = document.querySelector("#layout > tbody");
+
+  function addLinea(){
+    layout.innerHTML+="<tr></tr>";
+  }
+
+</script>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

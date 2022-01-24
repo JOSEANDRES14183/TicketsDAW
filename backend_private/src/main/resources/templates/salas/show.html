@@ -21,6 +21,7 @@
 
         <div class="mb-4">
             <h3>Distribución</h3>
+            <a th:if="${sala.butacas.size()<=0}" class="text-secondary fst-italic text-decoration-none">+Añadir distribución</a>
                 <table id="layout"></table>
         </div>
 

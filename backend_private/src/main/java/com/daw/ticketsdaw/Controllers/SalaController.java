@@ -66,4 +66,12 @@ public class SalaController {
         return "redirect:/salas";
     }
 
+    @GetMapping("{id}/butacas")
+    public String showButacasForm(ModelMap modelMap, @PathVariable("id") int salaId){
+        Sala sala = salaService.read(salaId);
+        modelMap.addAttribute("sala",sala);
+        modelMap.addAttribute("butacas",salaService.getButacasJson(sala));
+        return "salas/butacas-form";
+    }
+
 }
