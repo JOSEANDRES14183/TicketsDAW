@@ -48,29 +48,33 @@ public class SalaServiceImpl implements SalaService{
     public String getButacasJson(Sala sala) {
 
         List<Butaca> butacas = sala.getButacas();
-        int butacasRows = 1;
+        int rows=butacas.get(0).getPosY();
+        int columns=butacas.get(0).getPosX();
 
         for (Butaca butaca : butacas){
-            int currentRow = 0;
-            if (butaca.getPosY()!=currentRow){
-                currentRow = butaca.getNumButaca();
-                butacasRows++;
+            if(butaca.getPosY()>rows){
+                rows = butaca.getPosY();
+            }
+            if(butaca.getPosX()>columns){
+                columns = butaca.getPosX();
             }
         }
 
-        List<ArrayList<Butaca>> butacasAdaptadas = new ArrayList<>();
-        while(butacasAdaptadas.size()<butacasRows){
-            butacasAdaptadas.add(new ArrayList<>());
+        List<ArrayList<Butaca>> layout = new ArrayList<>();
+
+        while(layout.size()<rows+1){
+            layout.add(new ArrayList<>(columns+1));
         }
 
-
-
+        for (Butaca butaca: butacas){
+            layout.get(butaca.getPosY()).add(butaca.getPosX(),butaca);
+        }
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
 
         try {
-            return mapper.writeValueAsString(sala.getButacas());
+            return mapper.writeValueAsString(layout);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

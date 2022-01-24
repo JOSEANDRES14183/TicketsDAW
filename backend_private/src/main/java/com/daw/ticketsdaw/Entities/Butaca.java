@@ -1,6 +1,7 @@
 package com.daw.ticketsdaw.Entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.ToString;
 
@@ -21,10 +22,12 @@ public class Butaca {
 
     @Id
     @Column(name = "pos_x")
+    @JsonIgnore
     private int posX;
 
     @Id
     @Column(name = "pos_y")
+    @JsonIgnore
     private int posY;
 
     @Column(name = "num_butaca")

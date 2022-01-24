@@ -54,15 +54,10 @@
 
 <script th:inline="javascript">
     /*<![CDATA[*/
-    var butacasJSON = [[${butacas}]];
+    let butacasJSON = [[${butacas}]];
     /*]]>*/
 
-    var hola = JSON.parse(butacasJSON);
-
-    let butacas = new Array(5);
-    for (let i=0;i<butacas.length;i++){
-        butacas[i] = new Array(5);
-    }
+    let butacas = JSON.parse(butacasJSON);
 
     let layout = document.getElementById("layout");
     let text = "";
@@ -77,10 +72,8 @@
 
     layout.innerHTML = text;
 
-    console.log(butacas);
-    console.log(text)
     console.log(butacasJSON);
-    console.log(hola);
+    console.log(butacas);
 
 </script>
 
