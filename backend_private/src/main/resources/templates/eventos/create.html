@@ -21,6 +21,14 @@
                 <input type="text" class="form-control" th:field="*{descripcion}">
             </div>
             <div class="mb-3">
+                <label for="categoria" class="form-label">Categoria</label>
+                <select class="form-control" th:field="*{categoria}">
+                    <option th:each="categoria: ${categorias}"
+                            th:value="${categoria.id}"
+                            th:text="${categoria.nombre}"/>
+                </select>
+            </div>
+            <div class="mb-3">
                 <label for="estaOculto" class="form-label">Esta oculto</label>
                 <select class="form-control w-25" th:field="*{estaOculto}">
                     <option value="true">Oculto</option>

@@ -2,10 +2,14 @@ package com.daw.ticketsdaw.Controllers;
 
 import com.daw.ticketsdaw.DTOs.EventoDTO;
 import com.daw.ticketsdaw.Entities.Evento;
+import com.daw.ticketsdaw.Entities.NormasEvento;
+import com.daw.ticketsdaw.Entities.Organizador;
 import com.daw.ticketsdaw.Entities.RecursoMedia;
 import com.daw.ticketsdaw.Repositories.OrganizadorRepository;
 import com.daw.ticketsdaw.Repositories.RecursoMediaRepository;
+import com.daw.ticketsdaw.Services.CategoriaService;
 import com.daw.ticketsdaw.Services.EventosService;
+import com.daw.ticketsdaw.Services.NormasEventoService;
 import com.daw.ticketsdaw.Services.RecursoMediaService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +36,10 @@ public class EventoController {
     EventosService eventosService;
     @Autowired
     RecursoMediaService mediaService;
+    @Autowired
+    NormasEventoService normasService;
+    @Autowired
+    CategoriaService categoriaService;
 
     @Autowired
     Environment environment;
@@ -53,6 +61,7 @@ public class EventoController {
     @GetMapping({"create"})
     public String showForm(ModelMap model){
         model.addAttribute("evento", new Evento());
+        model.addAttribute("categorias", categoriaService.read());
         return "eventos/create";
     }
 
@@ -60,6 +69,7 @@ public class EventoController {
     public String showUpdateForm(ModelMap model, @PathVariable(name="id") Integer eventoId){
         Evento evento = eventosService.read(eventoId);
         model.addAttribute("evento", evento);
+        model.addAttribute("categorias", categoriaService.read());
         return "eventos/create";
     }
 
@@ -72,20 +82,37 @@ public class EventoController {
 
         //If ID is null, this is a create operation, and all NonNull file inputs are mandatory
         if(eventoDTO.getId() == null){
-            if(eventoDTO.getDocumentoNormas().isEmpty())
+            if(eventoDTO.getFotoPerfil().isEmpty())
                 return "redirect:/eventos/create?error=validation";
-
-
         }
 
+        Evento eventoPrevState = eventosService.read(eventoDTO.getId());
         Evento evento = modelMapper.map(eventoDTO, Evento.class);
 
-        //File upload code
-        Path path = Paths.get(environment.getProperty("tickets.uploads.path") + "randomText");
-        //multipartFile.transferTo(path);
+        RecursoMedia fotoPerfil = null;
+        NormasEvento documentoNormas = null;
 
-        /*evento.setFotoPerfil(repo.getById(1));
-        evento.setOrganizador(repo2.getById(2));*/
+        if(eventoDTO.getFotoPerfil().isEmpty()){
+            evento.setFotoPerfil(eventoPrevState.getFotoPerfil());
+        }
+        else{
+            fotoPerfil = mediaService.createFromFile(eventoDTO.getFotoPerfil());
+            evento.setFotoPerfil(fotoPerfil);
+        }
+
+        if(eventoDTO.getDocumentoNormas().isEmpty()){
+            evento.setDocumentoNormas(eventoPrevState.getDocumentoNormas());
+        }
+        else{
+            documentoNormas = normasService.createFromFile(eventoDTO.getDocumentoNormas());
+            evento.setDocumentoNormas(documentoNormas);
+        }
+
+        //TODO: Get user id from context
+        Organizador organizador = new Organizador();
+        organizador.setId(2);
+
+        evento.setOrganizador(organizador);
 
         eventosService.save(evento);
         return "redirect:/eventos";

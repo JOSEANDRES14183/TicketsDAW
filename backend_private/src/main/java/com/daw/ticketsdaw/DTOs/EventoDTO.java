@@ -1,5 +1,6 @@
 package com.daw.ticketsdaw.DTOs;
 
+import com.daw.ticketsdaw.Entities.Categoria;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +23,9 @@ public class EventoDTO {
     private boolean esNominativo;
     @NotNull
     private int duracionEstandar;
+
+    @NotNull
+    private Categoria categoria;
 
     MultipartFile fotoPerfil;
 
