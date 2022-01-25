@@ -80,14 +80,19 @@ public class EventoController {
             return "redirect:/eventos/create?error=validation";
         }
 
+        Evento eventoPrevState;
+        Evento evento = modelMapper.map(eventoDTO, Evento.class);
+
         //If ID is null, this is a create operation, and all NonNull file inputs are mandatory
         if(eventoDTO.getId() == null){
             if(eventoDTO.getFotoPerfil().isEmpty())
                 return "redirect:/eventos/create?error=validation";
+            eventoPrevState = new Evento();
+        }
+        else{
+            eventoPrevState = eventosService.read(eventoDTO.getId());
         }
 
-        Evento eventoPrevState = eventosService.read(eventoDTO.getId());
-        Evento evento = modelMapper.map(eventoDTO, Evento.class);
 
         RecursoMedia fotoPerfil = null;
         NormasEvento documentoNormas = null;

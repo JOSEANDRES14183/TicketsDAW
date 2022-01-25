@@ -22,17 +22,17 @@ public class RecursoMediaService {
     Environment environment;
 
     public RecursoMedia createFromFile(MultipartFile multipartFile) throws IOException {
-        //TODO: GENERATE RANDOM STRING OR SANITIZE USER INPUT
+        //TODO: GENERATE RANDOM STRING OR SANITIZE USER INPUT AND REFACTOR
         String fileName = multipartFile.getOriginalFilename();
-
-        Path path = Paths.get(environment.getProperty("tickets.uploads.path") + fileName);
-        multipartFile.transferTo(path);
 
         RecursoMedia recursoMedia = new RecursoMedia();
         recursoMedia.setPrioridad(0);
         recursoMedia.setNombreArchivo(fileName);
 
         mediaRepository.save(recursoMedia);
+
+        Path path = Paths.get(environment.getProperty("tickets.uploads.path") + fileName);
+        multipartFile.transferTo(path);
 
         return recursoMedia;
     }

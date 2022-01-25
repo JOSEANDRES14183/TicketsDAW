@@ -23,16 +23,16 @@ public class NormasEventoService {
     Environment environment;
 
     public NormasEvento createFromFile(MultipartFile multipartFile) throws IOException {
-        //TODO: GENERATE RANDOM STRING OR SANITIZE USER INPUT
+        //TODO: GENERATE RANDOM STRING OR SANITIZE USER INPUT AND REFACTOR
         String fileName = multipartFile.getOriginalFilename();
-
-        Path path = Paths.get(environment.getProperty("tickets.uploads.path") + fileName);
-        multipartFile.transferTo(path);
 
         NormasEvento normasEvento = new NormasEvento();
         normasEvento.setNombrePdf(fileName);
 
         normasRepository.save(normasEvento);
+
+        Path path = Paths.get(environment.getProperty("tickets.uploads.path") + fileName);
+        multipartFile.transferTo(path);
 
         return normasEvento;
     }
