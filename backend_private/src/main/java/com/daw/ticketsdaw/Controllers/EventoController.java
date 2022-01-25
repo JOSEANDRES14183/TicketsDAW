@@ -2,7 +2,11 @@ package com.daw.ticketsdaw.Controllers;
 
 import com.daw.ticketsdaw.DTOs.EventoDTO;
 import com.daw.ticketsdaw.Entities.Evento;
+import com.daw.ticketsdaw.Entities.RecursoMedia;
+import com.daw.ticketsdaw.Repositories.OrganizadorRepository;
+import com.daw.ticketsdaw.Repositories.RecursoMediaRepository;
 import com.daw.ticketsdaw.Services.EventosService;
+import com.daw.ticketsdaw.Services.RecursoMediaService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -26,6 +30,8 @@ public class EventoController {
 
     @Autowired
     EventosService eventosService;
+    @Autowired
+    RecursoMediaService mediaService;
 
     @Autowired
     Environment environment;
@@ -59,17 +65,27 @@ public class EventoController {
 
     @PostMapping({"/", ""})
     @Transactional(rollbackFor = {IOException.class})
-    public String saveEvento(@ModelAttribute @Valid EventoDTO eventoDTO, BindingResult bindingResult, @RequestParam("testFile") MultipartFile multipartFile) throws IOException {
+    public String saveEvento(@ModelAttribute @Valid EventoDTO eventoDTO, BindingResult bindingResult) throws IOException {
         if(bindingResult.hasErrors()){
-            return "redirect:/eventos/create";
+            return "redirect:/eventos/create?error=validation";
+        }
+
+        //If ID is null, this is a create operation, and all NonNull file inputs are mandatory
+        if(eventoDTO.getId() == null){
+            if(eventoDTO.getDocumentoNormas().isEmpty())
+                return "redirect:/eventos/create?error=validation";
+
+
         }
 
         Evento evento = modelMapper.map(eventoDTO, Evento.class);
 
         //File upload code
         Path path = Paths.get(environment.getProperty("tickets.uploads.path") + "randomText");
-        multipartFile.transferTo(path);
+        //multipartFile.transferTo(path);
 
+        /*evento.setFotoPerfil(repo.getById(1));
+        evento.setOrganizador(repo2.getById(2));*/
 
         eventosService.save(evento);
         return "redirect:/eventos";
