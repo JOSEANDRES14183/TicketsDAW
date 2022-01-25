@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/layout :: head('Butacas ' + ${sala.nombre})"></head>
+
+<body>
+
+<header th:replace="fragments/layout :: header('Salas')"></header>
+
+<main>
+  <div class="container-md">
+
+    <div class="d-flex justify-content-evenly my-4">
+      <button class="btn btn-primary" onclick="addRow()">Añadir linea</button>
+      <button class="btn btn-primary" onclick="deleteRow()">Eliminar linea</button>
+      <button class="btn btn-primary" onclick="addColumn()">Añadir columna</button>
+      <button class="btn btn-primary" onclick="deleteColumn()">Eliminar columna</button>
+      <a th:href="@{'/salas/' + ${sala.id}}" class="btn btn-secondary">Volver</a>
+    </div>
+
+    <table class="table table-bordered w-75 mx-auto" id="layout">
+      <tbody></tbody>
+    </table>
+
+  </div>
+</main>
+
+<footer th:replace="fragments/layout :: footer"></footer>
+
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  let butacasJSON = [[${butacas}]];
+  /*]]>*/
+
+  let butacas = JSON.parse(butacasJSON);
+  let layout = document.querySelector("#layout > tbody");
+
+  if (butacas.length<2) {
+    butacas = new Array(10);
+    for (let i = 0; i < butacas.length; i++) {
+      butacas[i] = new Array(10);
+    }
+  }
+
+  let text = "";
+  for (let i = 0; i<butacas.length; i++){
+    text+="<tr>";
+    for (let j = 0;j<butacas[i].length;j++){
+      text+="<td>q</td>";
+    }
+    text+="</tr>";
+  }
+  layout.innerHTML = text;
+
+  function addRow(){
+    let text = "<tr>";
+    for (let i=0;i<butacas[0].length;i++){
+      text += "<td>q</td>"
+    }
+    text += "</tr>";
+    layout.innerHTML += text;
+    butacas.push(new Array(butacas[0].length));
+  }
+
+  function deleteRow(){
+    layout.removeChild(layout.lastChild);
+    butacas.pop();
+  }
+
+  function addColumn(){
+    layout.childNodes.forEach(element => {
+      element.innerHTML+="<td>q</td>";
+    })
+  }
+
+  function deleteColumn(){
+    layout.childNodes.forEach(element => {
+      element.removeChild(element.lastChild);
+    })
+  }
+
+  console.log(butacas);
+  console.log(butacasJSON);
+
+</script>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

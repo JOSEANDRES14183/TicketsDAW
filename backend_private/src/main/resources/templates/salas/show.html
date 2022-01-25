@@ -10,16 +10,23 @@
 <main>
 
     <section class="container-md">
-        <div class="mb-4 d-flex flex-column">
-            <h3 th:text="${sala.nombre}"></h3>
-            <span th:text="${sala.direccion}"></span>
-            <span th:text="${sala.ciudad.nombre}"></span>
-            <span>
-                Aforo máximo: <span th:text="${sala.aforoMax}"></span>
-            </span>
+        <div class="mb-4 d-flex">
+            <div class="d-flex flex-column">
+                <h3 th:text="${sala.nombre}"></h3>
+                <span th:text="${sala.direccion}"></span>
+                <span th:text="${sala.ciudad.nombre}"></span>
+                <span>Aforo máximo: <span th:text="${sala.aforoMax}"></span>
+            </div>
         </div>
+
         <div class="mb-4">
-            <h3>Distribución</h3></div>
+            <h3>Distribución</h3>
+            <a th:href="@{'/salas/' + ${sala.id} + '/butacas'}" th:text="${sala.butacas.size()<=0} ? '+Añadir distribución' : '+Modificar distribución'"
+               class="d-inline-block text-secondary fst-italic text-decoration-none mt-2 mb-3">
+                +Añadir distribución</a>
+                <table id="layout"></table>
+        </div>
+
         <div class="mb-4">
             <h3 class="mb-3">Restricciones</h3>
             <table class="table table-bordered table-striped">
@@ -45,6 +52,31 @@
 </main>
 
 <footer th:replace="fragments/layout :: footer"></footer>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    let butacasJSON = [[${butacas}]];
+    /*]]>*/
+
+    let butacas = JSON.parse(butacasJSON);
+
+    let layout = document.getElementById("layout");
+    let text = "";
+
+    for (let i = 0; i<butacas.length; i++){
+        text+="<tr>";
+        for (let j = 0;j<butacas[i].length;j++){
+            text+="<td><i class=\"bi bi-circle-fill\"></i></td>";
+        }
+       text+="</tr>";
+    }
+
+    layout.innerHTML = text;
+
+    // console.log(butacasJSON);
+    // console.log(butacas);
+
+</script>
 
 <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 </body>
