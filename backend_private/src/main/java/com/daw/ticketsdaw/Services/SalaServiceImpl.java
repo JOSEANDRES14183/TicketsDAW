@@ -46,7 +46,6 @@ public class SalaServiceImpl implements SalaService{
 
     @Override
     public String getButacasJson(Sala sala) {
-
         List<Butaca> butacas = sala.getButacas();
         int rows=0;
         int columns=0;

@@ -10,63 +10,75 @@
 <main>
   <div class="container-md">
 
-    <table class="table table-bordered w-75 mx-auto" id="layout">
-      <tbody><tr>
-        <td>q</td>
-        <td>q</td>
-        <td>q</td>
-        <td>q</td>
-        <td>q</td>
-      </tr>
-      <tr>
-        <td>q</td>
-        <td>q</td>
-        <td>q</td>
-        <td>q</td>
-        <td>q</td>
-      </tr>
-      <tr>
-        <td>q</td>
-        <td>q</td>
-        <td>q</td>
-        <td>q</td>
-        <td>q</td>
-      </tr>
-      <tr>
-        <td>q</td>
-        <td>q</td>
-        <td>q</td>
-        <td>q</td>
-        <td>q</td>
-      </tr>
-      <tr>
-        <td>q</td>
-        <td>q</td>
-        <td>q</td>
-        <td>q</td>
-        <td>q</td>
-      </tr></tbody>
-    </table>
-
-    <div class="d-flex justify-content-evenly mt-4">
-      <button class="btn btn-primary" onclick="addLinea()">Añadir linea</button>
-      <button class="btn btn-primary">Eliminar linea</button>
-      <button class="btn btn-primary">Añadir columna</button>
-      <button class="btn btn-primary">Eliminar columna</button>
+    <div class="d-flex justify-content-evenly my-4">
+      <button class="btn btn-primary" onclick="addRow()">Añadir linea</button>
+      <button class="btn btn-primary" onclick="deleteRow()">Eliminar linea</button>
+      <button class="btn btn-primary" onclick="addColumn()">Añadir columna</button>
+      <button class="btn btn-primary" onclick="deleteColumn()">Eliminar columna</button>
     </div>
+
+    <table class="table table-bordered w-75 mx-auto" id="layout">
+      <tbody></tbody>
+    </table>
 
   </div>
 </main>
 
 <footer th:replace="fragments/layout :: footer"></footer>
 
-<script>
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  let butacasJSON = [[${butacas}]];
+  /*]]>*/
 
+  let butacas = JSON.parse(butacasJSON);
   let layout = document.querySelector("#layout > tbody");
 
-  function addLinea(){
-    layout.innerHTML+="<tr></tr>";
+  if (butacas.length<2) {
+    butacas = new Array(10);
+    for (let i = 0; i < butacas.length; i++) {
+      butacas[i] = new Array(10);
+    }
   }
+
+  let text = "";
+  for (let i = 0; i<butacas.length; i++){
+    text+="<tr>";
+    for (let j = 0;j<butacas[i].length;j++){
+      text+="<td>q</td>";
+    }
+    text+="</tr>";
+  }
+  layout.innerHTML = text;
+
+  function addRow(){
+    let text = "<tr>";
+    for (let i=0;i<butacas[0].length;i++){
+      text += "<td>q</td>"
+    }
+    text += "</tr>";
+    layout.innerHTML += text;
+  }
+
+  function deleteRow(){
+    layout.removeChild(layout.lastChild)
+  }
+
+  function addColumn(){
+    layout.childNodes.forEach(element => {
+      element.innerHTML+="<td>q</td>";
+    })
+
+  }
+
+  function deleteColumn(){
+    layout.childNodes.forEach(element => {
+      element.removeChild(element.lastChild);
+    })
+  }
+
+  console.log(butacas);
+  console.log(butacasJSON);
 
 </script>
 
