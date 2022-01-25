@@ -15,6 +15,7 @@
       <button class="btn btn-primary" onclick="deleteRow()">Eliminar linea</button>
       <button class="btn btn-primary" onclick="addColumn()">Añadir columna</button>
       <button class="btn btn-primary" onclick="deleteColumn()">Eliminar columna</button>
+      <a th:href="@{'/salas/' + ${sala.id}}" class="btn btn-secondary">Volver</a>
     </div>
 
     <table class="table table-bordered w-75 mx-auto" id="layout">
@@ -58,17 +59,18 @@
     }
     text += "</tr>";
     layout.innerHTML += text;
+    butacas.push(new Array(butacas[0].length));
   }
 
   function deleteRow(){
-    layout.removeChild(layout.lastChild)
+    layout.removeChild(layout.lastChild);
+    butacas.pop();
   }
 
   function addColumn(){
     layout.childNodes.forEach(element => {
       element.innerHTML+="<td>q</td>";
     })
-
   }
 
   function deleteColumn(){

@@ -10,18 +10,20 @@
 <main>
 
     <section class="container-md">
-        <div class="mb-4 d-flex flex-column">
-            <h3 th:text="${sala.nombre}"></h3>
-            <span th:text="${sala.direccion}"></span>
-            <span th:text="${sala.ciudad.nombre}"></span>
-            <span>
-                Aforo máximo: <span th:text="${sala.aforoMax}"></span>
-            </span>
+        <div class="mb-4 d-flex">
+            <div class="d-flex flex-column">
+                <h3 th:text="${sala.nombre}"></h3>
+                <span th:text="${sala.direccion}"></span>
+                <span th:text="${sala.ciudad.nombre}"></span>
+                <span>Aforo máximo: <span th:text="${sala.aforoMax}"></span>
+            </div>
         </div>
 
         <div class="mb-4">
             <h3>Distribución</h3>
-            <a th:text="${sala.butacas.size()<=0} ? '+Añadir distribución' : '+Modificar distribución'" class="text-secondary fst-italic text-decoration-none">+Añadir distribución</a>
+            <a th:href="@{'/salas/' + ${sala.id} + '/butacas'}" th:text="${sala.butacas.size()<=0} ? '+Añadir distribución' : '+Modificar distribución'"
+               class="d-inline-block text-secondary fst-italic text-decoration-none mt-2 mb-3">
+                +Añadir distribución</a>
                 <table id="layout"></table>
         </div>
 
@@ -47,8 +49,6 @@
 
     </section>
 
-    <div th:text="${butacas}"></div>
-
 </main>
 
 <footer th:replace="fragments/layout :: footer"></footer>
@@ -73,8 +73,8 @@
 
     layout.innerHTML = text;
 
-    console.log(butacasJSON);
-    console.log(butacas);
+    // console.log(butacasJSON);
+    // console.log(butacas);
 
 </script>
 
