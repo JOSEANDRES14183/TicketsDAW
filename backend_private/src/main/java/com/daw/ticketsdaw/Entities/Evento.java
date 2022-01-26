@@ -28,11 +28,15 @@ public class Evento {
     @Column(name = "duracion_estandar", nullable = false)
     private int duracionEstandar;
 
-    //Foreign keys
     @ManyToOne
     @ToString.Exclude
     @JoinColumn(name = "id_organizador", nullable = false)
     private Organizador organizador;
+
+    @ManyToOne
+    @ToString.Exclude
+    @JoinColumn(name = "id_categoria", nullable = false)
+    private Categoria categoria;
 
     @ManyToOne
     @ToString.Exclude

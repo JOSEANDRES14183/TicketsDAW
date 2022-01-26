@@ -7,7 +7,7 @@
 
 <main>
     <section class="container-md">
-        <form method="POST" th:action="'/eventos'" th:object="${evento}">
+        <form method="POST" th:action="'/eventos'" th:object="${evento}" enctype="multipart/form-data">
             <div class="mb-3" th:unless="${evento.getId() == null}">
                 <label for="id" class="form-label">Identificador</label>
                 <input type="number" class="form-control" readonly th:field="*{id}">
@@ -17,8 +17,16 @@
                 <input type="text" class="form-control" th:field="*{titulo}">
             </div>
             <div class="mb-3">
-                <label for="descripcion" class="form-label">Descripción</label>
+                <label for="descripcion" class="form-label">Descripción (Opcional)</label>
                 <input type="text" class="form-control" th:field="*{descripcion}">
+            </div>
+            <div class="mb-3">
+                <label for="categoria" class="form-label">Categoria</label>
+                <select class="form-control" th:field="*{categoria}">
+                    <option th:each="categoria: ${categorias}"
+                            th:value="${categoria.id}"
+                            th:text="${categoria.nombre}"/>
+                </select>
             </div>
             <div class="mb-3">
                 <label for="estaOculto" class="form-label">Esta oculto</label>
@@ -41,24 +49,20 @@
                 </select>
             </div>
             <div class="mb-3">
-                <label for="fotoPerfil" class="form-label">Foto de perfil [DEBUG]</label>
-                <select class="form-control w-25" th:field="*{fotoPerfil}">
-                    <option value="1">1</option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="documentoNormas" class="form-label">Documento de normas [DEBUG]</label>
-                <select class="form-control w-25" th:field="*{documentoNormas}">
-                    <option value="1">1</option>
-                </select>
-            </div>
-            <div class="mb-3">
                 <label for="edadMinima" class="form-label">Edad mínima</label>
                 <input type="number" class="form-control w-25" th:field="*{edadMinima}">
             </div>
             <div class="mb-3">
                 <label for="duracionEstandar" class="form-label">Duración estándar</label>
                 <input type="number" class="form-control w-25" th:field="*{duracionEstandar}">
+            </div>
+            <div class="mb-3">
+                <label for="fotoPerfil" class="form-label">Foto de perfil</label>
+                <input type="file" class="form-control w-25" id="fotoPerfil" name="fotoPerfil">
+            </div>
+            <div class="mb-3">
+                <label for="documentoNormas" class="form-label">Documento de normas (Opcional)</label>
+                <input type="file" class="form-control w-25" id="documentoNormas" name="documentoNormas">
             </div>
             <button type="submit" class="btn btn-primary" th:text="'Guardar'"></button>
         </form>

@@ -12,7 +12,7 @@ public class RecursoMedia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "nombre_archivo", nullable = false)
+    @Column(name = "nombre_archivo", nullable = false, unique = true)
     private String nombreArchivo;
     @NotNull
     private int prioridad;
