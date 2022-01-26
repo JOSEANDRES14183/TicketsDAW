@@ -1,10 +1,13 @@
 package com.daw.ticketsdaw.Entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.validation.constraints.*;
 
 @Data
@@ -43,4 +46,7 @@ public class Sala implements Serializable {
     @NotNull
     private Ciudad ciudad;
 
+    @OneToMany(mappedBy = "sala")
+    @JsonManagedReference
+    private List<Butaca> butacas = new ArrayList<>();
 }
