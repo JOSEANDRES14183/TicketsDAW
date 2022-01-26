@@ -6,6 +6,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Data
 @Entity
@@ -47,4 +48,10 @@ public class Evento {
     @ToString.Exclude
     @JoinColumn(name = "documento_normas")
     private NormasEvento documentoNormas;
+
+    @OneToMany(mappedBy = "eventoGaleriaImagenes")
+    List<RecursoMedia> galeriaImagenes;
+
+    @OneToMany(mappedBy = "eventoGaleriaVideos")
+    List<RecursoMedia> galeriaVideos;
 }
