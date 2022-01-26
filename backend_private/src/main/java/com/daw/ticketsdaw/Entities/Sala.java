@@ -31,6 +31,12 @@ public class Sala implements Serializable {
     @Column(name = "aforo_max")
     private int aforoMax;
 
+    @NotNull
+    private double latitud;
+
+    @NotNull
+    private double longitud;
+
     @Column(name = "esta_oculto")
     private boolean estaOculto;
 
