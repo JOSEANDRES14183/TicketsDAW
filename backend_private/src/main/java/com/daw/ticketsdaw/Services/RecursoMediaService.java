@@ -2,6 +2,8 @@ package com.daw.ticketsdaw.Services;
 
 import com.daw.ticketsdaw.Entities.RecursoMedia;
 import com.daw.ticketsdaw.Repositories.RecursoMediaRepository;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -14,16 +16,12 @@ import java.nio.file.Paths;
 
 @Service
 @Transactional
-public class RecursoMediaService {
+public class RecursoMediaService extends AbstractFileService{
     @Autowired
     RecursoMediaRepository mediaRepository;
 
-    @Autowired
-    Environment environment;
-
     public RecursoMedia createFromFile(MultipartFile multipartFile) throws IOException {
-        //TODO: GENERATE RANDOM STRING OR SANITIZE USER INPUT AND REFACTOR
-        String fileName = multipartFile.getOriginalFilename();
+        String fileName = generateSafeFileName(multipartFile.getOriginalFilename());
 
         RecursoMedia recursoMedia = new RecursoMedia();
         recursoMedia.setPrioridad(0);
@@ -31,8 +29,7 @@ public class RecursoMediaService {
 
         mediaRepository.save(recursoMedia);
 
-        Path path = Paths.get(environment.getProperty("tickets.uploads.path") + fileName);
-        multipartFile.transferTo(path);
+        saveMultipartAs(multipartFile, fileName);
 
         return recursoMedia;
     }

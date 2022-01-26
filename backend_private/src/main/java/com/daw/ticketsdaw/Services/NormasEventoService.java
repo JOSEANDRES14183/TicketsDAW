@@ -15,24 +15,19 @@ import java.nio.file.Paths;
 
 @Service
 @Transactional
-public class NormasEventoService {
+public class NormasEventoService extends AbstractFileService{
     @Autowired
     NormasEventoRepository normasRepository;
 
-    @Autowired
-    Environment environment;
-
     public NormasEvento createFromFile(MultipartFile multipartFile) throws IOException {
-        //TODO: GENERATE RANDOM STRING OR SANITIZE USER INPUT AND REFACTOR
-        String fileName = multipartFile.getOriginalFilename();
+        String fileName = generateSafeFileName(multipartFile.getOriginalFilename());
 
         NormasEvento normasEvento = new NormasEvento();
         normasEvento.setNombrePdf(fileName);
 
         normasRepository.save(normasEvento);
 
-        Path path = Paths.get(environment.getProperty("tickets.uploads.path") + fileName);
-        multipartFile.transferTo(path);
+        saveMultipartAs(multipartFile, fileName);
 
         return normasEvento;
     }
