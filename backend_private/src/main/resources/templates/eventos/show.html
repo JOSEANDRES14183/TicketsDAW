@@ -68,7 +68,7 @@
         <div class="mb-4">
             <h3 class="mb-3">Normas del evento</h3>
             <p th:if="${evento.getDocumentoNormas() == null}">No hay ningún documento asignado</p>
-            <p th:unless="${evento.getDocumentoNormas() == null}" th:text="${evento.getDocumentoNormas().getNombrePdf()}"></p>
+            <a th:unless="${evento.getDocumentoNormas() == null}" th:text="${evento.getDocumentoNormas().getNombrePdf()}" th:href="'/img/' + ${evento.getDocumentoNormas().getNombrePdf()}"></a>
         </div>
 
         <a href="/eventos" class="btn btn-primary">Volver</a>
