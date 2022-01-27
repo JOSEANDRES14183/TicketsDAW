@@ -39,6 +39,12 @@
                 </select>
             </div>
             <div class="mb-3">
+                <label for="aforoMax" class="form-label">Mapa</label>
+                <div class="sala-map border rounded" id="googleMap"></div>
+                <input type="hidden" th:field="*{latitud}" />
+                <input type="hidden" th:field="*{longitud}" />
+            </div>
+            <div class="mb-3">
                 <label for="aforoMax" class="form-label">Aforo máximo</label>
                 <input type="number" th:field="*{aforoMax}" class="form-control w-25" id="aforoMax" name="aforoMax">
             </div>
@@ -51,6 +57,42 @@
 
 <footer th:replace="fragments/layout :: footer"></footer>
 
+<script>
+
+    function myMap(){
+
+        let currentLatitud = (parseFloat(document.querySelector("#latitud").value) === 0.0) ? 39.63632380135206 : document.querySelector("#latitud").value;
+        let currentLongitud = (parseFloat(document.querySelector("#longitud").value) === 0.0) ? 2.935153961699708 : document.querySelector("#longitud").value;
+
+        let mapProp= {
+            center:new google.maps.LatLng(currentLatitud, currentLongitud),
+            zoom:8,
+        };
+
+        let map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+        let marker = new google.maps.Marker({map: map})
+
+        if (currentLatitud != 0.0 & currentLongitud != 0.0){
+            marker.setPosition({lat: parseFloat(currentLatitud), lng: parseFloat(currentLongitud)});
+        }
+
+        google.maps.event.addListener(map, 'click', event => {
+            placeMarker(event.latLng);
+            document.querySelector("#latitud").value=event.latLng.lat();
+            document.querySelector("#longitud").value=event.latLng.lng();
+        });
+
+        function placeMarker(location) {
+            marker.setPosition(location);
+        }
+    }
+
+</script>
+
 <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+<script src="https://maps.googleapis.com/maps/api/js?
+key=AIzaSyCIBWMOCC_XY2ia1tPFUKYjY4ACzhqbEA0&callback=myMap"></script>
+
 </body>
 </html>
