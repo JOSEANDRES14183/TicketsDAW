@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 @Service
 @Transactional
@@ -30,5 +31,11 @@ public class NormasEventoService extends AbstractFileService{
         saveMultipartAs(multipartFile, fileName);
 
         return normasEvento;
+    }
+
+    @Override
+    boolean checkFileExt(String fileExt) {
+        final String[] validExtensions = {"png", "jpg", "webp", "pdf"};
+        return Arrays.stream(validExtensions).anyMatch(fileExt::equals);
     }
 }

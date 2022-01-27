@@ -13,12 +13,15 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 @Service
 @Transactional
 public class RecursoMediaService extends AbstractFileService{
     @Autowired
     RecursoMediaRepository mediaRepository;
+
+
 
     public RecursoMedia createFromFile(MultipartFile multipartFile) throws IOException {
         String fileName = generateSafeFileName(multipartFile.getOriginalFilename());
@@ -38,13 +41,9 @@ public class RecursoMediaService extends AbstractFileService{
         return mediaRepository.findById(id).get();
     }
 
-    public void save(RecursoMedia media){
-        //TODO: Tratar ficheros aqui
-        mediaRepository.save(media);
-    }
-
-    public void remove(RecursoMedia media){
-        //TODO: Tratar ficheros aqui
-        mediaRepository.delete(media);
+    @Override
+    boolean checkFileExt(String fileExt) {
+        final String[] validExtensions = {"png", "jpg", "webp"};
+        return Arrays.stream(validExtensions).anyMatch(fileExt::equals);
     }
 }

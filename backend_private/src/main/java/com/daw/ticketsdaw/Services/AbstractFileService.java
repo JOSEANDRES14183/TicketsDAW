@@ -1,5 +1,6 @@
 package com.daw.ticketsdaw.Services;
 
+import com.daw.ticketsdaw.Exceptions.IncorrectFileExtensionException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ public abstract class AbstractFileService {
 
     protected String generateSafeFileName(String originalFileName){
         String fileExt = StringUtils.substringAfterLast(originalFileName, ".");
+        if(!checkFileExt(fileExt))
+            throw new IncorrectFileExtensionException("Invalid file extension: " + fileExt);
         return RandomStringUtils.randomAlphanumeric(15) + "." + fileExt;
     }
 
@@ -23,4 +26,6 @@ public abstract class AbstractFileService {
         Path path = Paths.get(environment.getProperty("tickets.uploads.path") + fileName);
         multipartFile.transferTo(path);
     }
+
+    abstract boolean checkFileExt(String fileExt);
 }
