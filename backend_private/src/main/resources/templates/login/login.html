@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/layout :: head('Log In')"></head>
+
+<body class="bg-secondary">
+
+<header th:replace="fragments/layout :: header('Log In')"></header>
+
+<div class="container-md">
+
+    <div class="w-50 mx-auto card bg-white rounded">
+        <div class="card-body">
+            <h4 class="card-title my-4 text-center">Inicia Sesión</h4>
+            <form action="" class="p-5">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Nombre de usuario</label>
+                    <input type="text" class="form-control" id="username" name="username" aria-describedby="NombreField">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" id="password" name="password" aria-describedby="NombreField">
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary">Inicia</button>
+                    <button class="btn btn-secondary">Volver</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card-footer text-muted text-center">
+            2 days ago
+        </div>
+    </div>
+
+</div>
+
+<footer th:fragment="footer"></footer>
+
+</body>
+</html>

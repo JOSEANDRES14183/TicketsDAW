@@ -10,9 +10,12 @@
 </head>
 <body>
 
-<header th:fragment="header(name)" class="mb-4 py-4 border-bottom">
-    <div class="container-md">
+<header th:fragment="header(name)" class="mb-4 py-4 border-bottom bg-white">
+    <div class="container-md d-flex justify-content-between">
         <h1 th:text="${name}"></h1>
+        <div>
+            <a th:href="@{'/login'}">Log In</a> / <a href="">Register</a>
+        </div>
     </div>
 </header>
 
