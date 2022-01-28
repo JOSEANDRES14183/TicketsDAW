@@ -1,5 +1,6 @@
 package com.daw.ticketsdaw.Services;
 
+import com.daw.ticketsdaw.Entities.Evento;
 import com.daw.ticketsdaw.Entities.RecursoMedia;
 import com.daw.ticketsdaw.Repositories.RecursoMediaRepository;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -21,24 +22,43 @@ public class RecursoMediaService extends AbstractFileService{
     @Autowired
     RecursoMediaRepository mediaRepository;
 
-    public RecursoMedia createFromFile(MultipartFile multipartFile) throws IOException{
-        return createFromFile(multipartFile, null);
-    }
-
-    public RecursoMedia createFromFile(MultipartFile multipartFile, RecursoMedia baseRecursoMedia) throws IOException {
+    public RecursoMedia createFromFile(MultipartFile multipartFile) throws IOException {
         String fileName = generateSafeFileName(multipartFile.getOriginalFilename());
 
-        RecursoMedia recursoMedia;
-
-        if(baseRecursoMedia != null)
-            recursoMedia = baseRecursoMedia;
-        else{
-            recursoMedia = new RecursoMedia();
-            recursoMedia.setPrioridad(0);
-        }
-
+        RecursoMedia recursoMedia = new RecursoMedia();
+        recursoMedia.setPrioridad(0);
 
         recursoMedia.setNombreArchivo(fileName);
+
+        mediaRepository.save(recursoMedia);
+
+        saveMultipartAs(multipartFile, fileName);
+
+        return recursoMedia;
+    }
+
+    public RecursoMedia saveImageGallery(MultipartFile multipartFile, RecursoMedia baseRecursoMedia, Evento evento) throws IOException {
+        String fileName = generateSafeFileName(multipartFile.getOriginalFilename());
+
+        RecursoMedia recursoMedia = baseRecursoMedia;
+
+        recursoMedia.setNombreArchivo(fileName);
+        recursoMedia.setEventoGaleriaImagenes(evento);
+
+        mediaRepository.save(recursoMedia);
+
+        saveMultipartAs(multipartFile, fileName);
+
+        return recursoMedia;
+    }
+
+    public RecursoMedia saveVideoGallery(MultipartFile multipartFile, RecursoMedia baseRecursoMedia, Evento evento) throws IOException {
+        String fileName = generateSafeFileName(multipartFile.getOriginalFilename());
+
+        RecursoMedia recursoMedia = baseRecursoMedia;
+
+        recursoMedia.setNombreArchivo(fileName);
+        recursoMedia.setEventoGaleriaVideos(evento);
 
         mediaRepository.save(recursoMedia);
 

@@ -132,6 +132,13 @@ public class EventoController {
         return "redirect:/eventos";
     }
 
+    @GetMapping({"/{id}/images/add"})
+    public String showImgForm(ModelMap model, @PathVariable(name="id") Integer eventoId){
+        model.addAttribute("evento", eventosService.read(eventoId));
+        model.addAttribute("galeria", new GaleriaDTO());
+        return "eventos/galerias/create";
+    }
+
     @PostMapping({"/{id}/images/add"})
     @Transactional(rollbackFor = {IOException.class})
     public String addImage(@ModelAttribute @Valid GaleriaDTO galeriaDTO, @PathVariable(name="id") Integer eventoId, BindingResult bindingResult) throws IOException {
@@ -141,7 +148,7 @@ public class EventoController {
 
         RecursoMedia formSubmittedMedia = modelMapper.map(galeriaDTO, RecursoMedia.class);
 
-        RecursoMedia savedMedia = mediaService.createFromFile(galeriaDTO.getMedia(), formSubmittedMedia);
+        RecursoMedia savedMedia = mediaService.saveImageGallery(galeriaDTO.getMedia(), formSubmittedMedia, eventosService.read(eventoId));
 
         return "redirect:/eventos";
     }

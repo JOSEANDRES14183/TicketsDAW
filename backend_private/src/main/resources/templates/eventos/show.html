@@ -71,6 +71,11 @@
             <a th:unless="${evento.getDocumentoNormas() == null}" th:text="${evento.getDocumentoNormas().getNombrePdf()}" th:href="'/img/' + ${evento.getDocumentoNormas().getNombrePdf()}"></a>
         </div>
 
+        <div class="mb-4">
+            <h3 class="mb-3">Galeria de imágenes</h3>
+
+        </div>
+
         <a href="/eventos" class="btn btn-primary">Volver</a>
     </section>
 
