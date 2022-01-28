@@ -1,6 +1,7 @@
 package com.daw.ticketsdaw.Controllers;
 
 import com.daw.ticketsdaw.DTOs.EventoDTO;
+import com.daw.ticketsdaw.DTOs.GaleriaDTO;
 import com.daw.ticketsdaw.Entities.Evento;
 import com.daw.ticketsdaw.Entities.NormasEvento;
 import com.daw.ticketsdaw.Entities.Organizador;
@@ -128,6 +129,20 @@ public class EventoController {
         Evento evento = new Evento();
         evento.setId(eventoId);
         eventosService.remove(evento);
+        return "redirect:/eventos";
+    }
+
+    @PostMapping({"/{id}/images/add"})
+    @Transactional(rollbackFor = {IOException.class})
+    public String addImage(@ModelAttribute @Valid GaleriaDTO galeriaDTO, @PathVariable(name="id") Integer eventoId, BindingResult bindingResult) throws IOException {
+        if(bindingResult.hasErrors()){
+            return "redirect:/eventos/" + eventoId + "/images/add?error=validation";
+        }
+
+        RecursoMedia formSubmittedMedia = modelMapper.map(galeriaDTO, RecursoMedia.class);
+
+        RecursoMedia savedMedia = mediaService.createFromFile(galeriaDTO.getMedia(), formSubmittedMedia);
+
         return "redirect:/eventos";
     }
 }

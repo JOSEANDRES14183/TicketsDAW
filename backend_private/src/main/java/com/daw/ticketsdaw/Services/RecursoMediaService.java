@@ -21,13 +21,23 @@ public class RecursoMediaService extends AbstractFileService{
     @Autowired
     RecursoMediaRepository mediaRepository;
 
+    public RecursoMedia createFromFile(MultipartFile multipartFile) throws IOException{
+        return createFromFile(multipartFile, null);
+    }
 
-
-    public RecursoMedia createFromFile(MultipartFile multipartFile) throws IOException {
+    public RecursoMedia createFromFile(MultipartFile multipartFile, RecursoMedia baseRecursoMedia) throws IOException {
         String fileName = generateSafeFileName(multipartFile.getOriginalFilename());
 
-        RecursoMedia recursoMedia = new RecursoMedia();
-        recursoMedia.setPrioridad(0);
+        RecursoMedia recursoMedia;
+
+        if(baseRecursoMedia != null)
+            recursoMedia = baseRecursoMedia;
+        else{
+            recursoMedia = new RecursoMedia();
+            recursoMedia.setPrioridad(0);
+        }
+
+
         recursoMedia.setNombreArchivo(fileName);
 
         mediaRepository.save(recursoMedia);

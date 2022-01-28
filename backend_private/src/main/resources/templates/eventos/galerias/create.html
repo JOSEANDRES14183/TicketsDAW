@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head('Añadir imagen')"></head>
+
+<body>
+<header th:replace="fragments/layout :: header('Añadir imagen')"></header>
+
+<main>
+    <section class="container-md">
+        <form method="POST" th:action="'/eventos/' + ${evento.id} + '/images/add'" th:object="${evento}" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="media" class="form-label">Imagen</label>
+                <input type="file" class="form-control w-25" id="media" name="media">
+            </div>
+            <div class="mb-3">
+                <label for="prioridad" class="form-label">Prioridad</label>
+                <input type="number" class="form-control w-25" th:field="*{prioridad}">
+            </div>
+            <button type="submit" class="btn btn-primary" th:text="'Guardar'"></button>
+        </form>
+    </section>
+</main>
+
+<footer th:replace="fragments/layout :: footer"></footer>
+
+</body>
+</html>
