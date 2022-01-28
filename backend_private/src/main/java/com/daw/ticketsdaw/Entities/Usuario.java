@@ -15,9 +15,10 @@ public class Usuario implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Column(name = "nombre_usuario")
+    @Column(name = "nombre_usuario", unique = true)
     private String nombreUsuario;
 
+    @Column(unique = true)
     private String email;
 
     @Column(name = "password_hash")
