@@ -8,18 +8,17 @@
 
 <main>
   <section class="container-md">
-    <form method="POST" action="#">
-
+    <form method="POST" th:object="${organizador}">
       <div class="mb-3">
         <label for="nombre" class="form-label">Nombre</label>
-        <input type="" id="nombre" name="nombre" class="form-control" aria-describedby="NombreField">
+        <input type="text" th:field="*{nombre}" class="form-control" aria-describedby="NombreField">
       </div>
 
       <div th:replace="fragments/user-form :: user-inputs"></div>
 
       <div class="mb-3">
         <label for="descripcion" class="form-label">Descripcion</label>
-        <textarea id="descripcion" name="descripcion" class="form-control" aria-describedby="DescripcionField"></textarea>
+        <textarea th:field="*{descripcion}" class="form-control" aria-describedby="DescripcionField"></textarea>
       </div>
 
       <button type="submit" class="btn btn-primary">Regístrate</button>

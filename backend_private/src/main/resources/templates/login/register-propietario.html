@@ -8,7 +8,7 @@
 
 <main>
     <section class="container-md">
-        <form method="POST" action="#">
+        <form method="POST" th:object="${propietario}">
             <div th:replace="fragments/user-form :: user-inputs"></div>
             <button type="submit" class="btn btn-primary">Regístrate</button>
         </form>

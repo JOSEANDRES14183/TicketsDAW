@@ -15,21 +15,8 @@ public class Organizador extends Usuario{
     @Size(max = 30)
     private String nombre;
 
-    @Column(name = "enlace_twitter")
-    @Size(max = 64)
-    private String enlaceTwitter;
-
-    @Column(name = "enlace_instagram")
-    @Size(max = 64)
-    private String enlaceInstagram;
-
-    @Column(name = "enlace_facebook")
-    @Size(max = 64)
-    private String enlaceFacebook;
-
-    @Column(name = "enlace_personal")
-    @Size(max = 64)
-    private String enlacePersonal;
+    @Size(max = 300)
+    private String descripcion;
 
     @NotNull
     @ManyToOne

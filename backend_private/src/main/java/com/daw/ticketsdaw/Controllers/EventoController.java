@@ -5,8 +5,6 @@ import com.daw.ticketsdaw.Entities.Evento;
 import com.daw.ticketsdaw.Entities.NormasEvento;
 import com.daw.ticketsdaw.Entities.Organizador;
 import com.daw.ticketsdaw.Entities.RecursoMedia;
-import com.daw.ticketsdaw.Repositories.OrganizadorRepository;
-import com.daw.ticketsdaw.Repositories.RecursoMediaRepository;
 import com.daw.ticketsdaw.Services.CategoriaService;
 import com.daw.ticketsdaw.Services.EventosService;
 import com.daw.ticketsdaw.Services.NormasEventoService;
@@ -19,14 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping("/eventos")

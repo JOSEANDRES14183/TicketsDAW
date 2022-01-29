@@ -9,10 +9,10 @@ import java.io.Serializable;
 @Entity
 @Table(name = "usuario")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Usuario implements Serializable {
+public abstract class Usuario implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "nombre_usuario", unique = true)
@@ -25,6 +25,6 @@ public class Usuario implements Serializable {
     private String passwordHash;
 
     @Column(name = "esta_deshabilitado")
-    private boolean estaDeshabilitado;
+    private boolean estaDeshabilitado  = true;
 
 }
