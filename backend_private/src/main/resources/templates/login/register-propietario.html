@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments/layout :: head('Registro de propetario')"></head>
+
+<body>
+
+<header th:replace="fragments/layout :: header('Registro de propetario')"></header>
+
+<main>
+    <section class="container-md">
+        <form method="POST" action="#">
+            <div th:replace="fragments/user-form :: user-inputs"></div>
+            <button type="submit" class="btn btn-primary">Regístrate</button>
+        </form>
+    </section>
+</main>
+
+<footer th:replace="fragments/layout :: footer"></footer>
+
+</body>
+</html>

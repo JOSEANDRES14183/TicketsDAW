@@ -1,6 +1,8 @@
 package com.daw.ticketsdaw.Controllers;
 
+import com.daw.ticketsdaw.Entities.PropietarioSala;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -15,6 +17,12 @@ public class LoginController {
     @PostMapping("/login")
     public String login(){
         return "login/login";
+    }
+
+    @GetMapping("/register/propietario")
+    public String showRegisterPropietario(ModelMap modelMap){
+        modelMap.addAttribute("propietario", new PropietarioSala());
+        return "login/register-propietario";
     }
 
 

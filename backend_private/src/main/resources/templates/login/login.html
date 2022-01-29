@@ -26,7 +26,17 @@
                         <button type="submit" class="btn btn-primary">Inicia</button>
                     </div>
                 </form>
-                <a class="d-block text-secondary mb-2" href="#">¿No tienes una cuenta? Regístrate</a>
+                <div class="dropdown">
+                    <a class="text-secondary mb-2 dropdown-toggle"
+                       type="button" id="register"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false"
+                    >¿No tienes una cuenta? Regístrate</a>
+                    <ul class="dropdown-menu" aria-labelledby="register">
+                        <li><a class="dropdown-item" href="/register/propietario">Regístrate como propietario</a></li>
+                        <li><a class="dropdown-item" href="/register/organizador">Regístrate como organizador</a></li>
+                    </ul>
+                </div>
                 <a class="d-block text-secondary" href="#">He olvidado mi contraseña</a>
             </div>
         </div>
