@@ -3,6 +3,7 @@ package com.daw.ticketsdaw.Controllers;
 import com.daw.ticketsdaw.DTOs.OrganizadorDTO;
 import com.daw.ticketsdaw.Entities.Organizador;
 import com.daw.ticketsdaw.Entities.PropietarioSala;
+import com.daw.ticketsdaw.Entities.Usuario;
 import com.daw.ticketsdaw.Services.NormasEventoService;
 import com.daw.ticketsdaw.Services.RecursoMediaService;
 import com.daw.ticketsdaw.Services.UsuarioService;
@@ -16,7 +17,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
 
@@ -35,12 +39,21 @@ public class LoginController {
     private final ModelMapper modelMapper = new ModelMapper();
 
     @GetMapping("/login")
-    public String showLogin(){
+    public String showLogin(ModelMap modelMap, HttpSession session){
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        if (usuario!=null){
+            modelMap.addAttribute("welcome","Welcome " + usuario.getNombreUsuario());
+        }
         return "login/login";
     }
 
     @PostMapping("/login")
-    public String login(){
+    public String login(@RequestParam("username") String username, @RequestParam("password") String password, HttpServletRequest request, ModelMap modelMap){
+        Usuario usuario = usuarioService.getByNombreUsuario(username);
+        if(passwordEncoder.matches(password,usuario.getPasswordHash())){
+            request.getSession().setAttribute("usuario",usuario);
+            modelMap.addAttribute("welcome","Welcome " + usuario.getNombreUsuario());
+        }
         return "login/login";
     }
 
@@ -68,9 +81,9 @@ public class LoginController {
 
     @PostMapping("/register/organizador")
     public String saveOrganizador(@Valid @ModelAttribute OrganizadorDTO organizadorDTO, BindingResult bindingResult) throws IOException {
-//        if (bindingResult.hasErrors()){
-//            return "redirect:/register/organizador";
-//        }
+        if (bindingResult.hasErrors()){
+            return "redirect:/register/organizador";
+        }
 
         Organizador organizador = modelMapper.map(organizadorDTO, Organizador.class);
 
@@ -80,6 +93,12 @@ public class LoginController {
         usuarioService.create(organizador);
 
         return "redirect:/eventos";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session){
+        session.invalidate();
+        return "redirect:/login";
     }
 
 

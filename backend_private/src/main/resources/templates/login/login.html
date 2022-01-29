@@ -13,7 +13,7 @@
         <div class="card-body">
             <h4 class="card-title my-4 text-center">Inicia Sesión</h4>
             <div class="p-5">
-                <form action="#" class="mb-3">
+                <form method="POST" class="mb-3">
                     <div class="mb-3">
                         <label for="username" class="form-label">Nombre de usuario</label>
                         <input type="text" class="form-control" id="username" name="username" aria-describedby="NombreField">
@@ -43,6 +43,7 @@
 
         <div class="card-footer text-muted text-center">
             Tickets DAW
+            <p th:text="${welcome}"></p>
         </div>
     </div>
 

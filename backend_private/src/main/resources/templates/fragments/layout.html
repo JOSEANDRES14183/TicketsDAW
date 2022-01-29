@@ -14,7 +14,8 @@
     <div class="container-md d-flex justify-content-between">
         <h1 th:text="${name}"></h1>
         <div>
-            <a th:href="@{'/login'}">Log In</a> / <a href="">Register</a>
+            <a th:if="${session.usuario==null}" th:href="@{'/login'}">Log In / </a><a th:if="${session.usuario==null}" href="">Register</a>
+            <a th:if="${session.usuario!=null}" th:href="@{'/logout'}">Log Out</a>
         </div>
     </div>
 </header>
