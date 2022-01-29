@@ -1,5 +1,6 @@
 package com.daw.ticketsdaw.Controllers;
 
+import com.daw.ticketsdaw.Entities.Organizador;
 import com.daw.ticketsdaw.Entities.PropietarioSala;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,6 +24,12 @@ public class LoginController {
     public String showRegisterPropietario(ModelMap modelMap){
         modelMap.addAttribute("propietario", new PropietarioSala());
         return "login/register-propietario";
+    }
+
+    @GetMapping("/register/organizador")
+    public String showRegisterOrganizador(ModelMap modelMap){
+        modelMap.addAttribute("organizador", new Organizador());
+        return "login/register-organizador";
     }
 
 

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments/layout :: head('Registro de organizador')"></head>
+
+<body>
+
+<header th:replace="fragments/layout :: header('Registro de organizador')"></header>
+
+<main>
+  <section class="container-md">
+    <form method="POST" action="#">
+
+      <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre</label>
+        <input type="" id="nombre" name="nombre" class="form-control" aria-describedby="NombreField">
+      </div>
+
+      <div th:replace="fragments/user-form :: user-inputs"></div>
+
+      <div class="mb-3">
+        <label for="descripcion" class="form-label">Descripcion</label>
+        <textarea id="descripcion" name="descripcion" class="form-control" aria-describedby="DescripcionField"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Regístrate</button>
+    </form>
+  </section>
+</main>
+
+<footer th:replace="fragments/layout :: footer"></footer>
+
+</body>
+</html>
