@@ -8,7 +8,7 @@
 
 <main>
   <section class="container-md">
-    <form method="POST" th:object="${organizador}">
+    <form method="POST" th:object="${organizador}" enctype="multipart/form-data">
       <div class="mb-3">
         <label for="nombre" class="form-label">Nombre</label>
         <input type="text" th:field="*{nombre}" class="form-control" aria-describedby="NombreField">
