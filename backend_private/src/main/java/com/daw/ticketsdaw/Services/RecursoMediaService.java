@@ -71,6 +71,14 @@ public class RecursoMediaService extends AbstractFileService{
         return mediaRepository.findById(id).get();
     }
 
+    public void save(RecursoMedia recursoMedia){
+        mediaRepository.save(recursoMedia);
+    }
+
+    public void delete(RecursoMedia recursoMedia){
+        mediaRepository.delete(recursoMedia);
+    }
+
     @Override
     boolean checkFileExt(String fileExt) {
         final String[] validExtensions = {"png", "jpg", "webp"};

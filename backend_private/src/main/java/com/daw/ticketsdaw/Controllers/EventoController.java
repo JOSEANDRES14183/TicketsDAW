@@ -150,18 +150,35 @@ public class EventoController {
 
         RecursoMedia savedMedia = mediaService.saveImageGallery(galeriaDTO.getMedia(), formSubmittedMedia, eventosService.read(eventoId));
 
-        return "redirect:/eventos";
+        return "redirect:/eventos/" + eventoId;
     }
 //"/{eventoId}/videos/{mediaId}/update"
     @PostMapping({"/{eventoId}/images/{mediaId}/update"})
     @Transactional(rollbackFor = {IOException.class})
     public String changePriority(@PathVariable Integer eventoId, @PathVariable Integer mediaId, @RequestParam Integer prioridad) throws IOException {
-
         Evento evento = eventosService.read(eventoId);
         RecursoMedia media = mediaService.read(mediaId);
 
-        //if(media.getEventoGaleriaImagenes().eq)
+        if(!media.getEventoGaleriaImagenes().equals(evento))
+            return "redirect:/eventos/" + eventoId + "?error=unauthorized";
 
-        return "redirect:/eventos";
+        media.setPrioridad(prioridad);
+
+        mediaService.save(media);
+
+        return "redirect:/eventos/" + eventoId;
+    }
+
+    @GetMapping({"/{eventoId}/images/{mediaId}/delete"})
+    public String deleteGallery(@PathVariable Integer eventoId, @PathVariable Integer mediaId){
+        Evento evento = eventosService.read(eventoId);
+        RecursoMedia media = mediaService.read(mediaId);
+
+        if(!media.getEventoGaleriaImagenes().equals(evento))
+            return "redirect:/eventos/" + eventoId + "?error=unauthorized";
+
+        mediaService.delete(media);
+
+        return "redirect:/eventos/" + eventoId;
     }
 }

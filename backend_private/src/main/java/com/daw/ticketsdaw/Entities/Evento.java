@@ -50,6 +50,7 @@ public class Evento {
     private NormasEvento documentoNormas;
 
     @OneToMany(mappedBy = "eventoGaleriaImagenes")
+    @OrderBy("prioridad desc")
     List<RecursoMedia> galeriaImagenes;
 
     @OneToMany(mappedBy = "eventoGaleriaVideos")

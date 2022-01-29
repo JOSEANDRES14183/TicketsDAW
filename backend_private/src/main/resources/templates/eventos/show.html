@@ -87,24 +87,26 @@
             <div class="container-fluid d-flex gap-3">
                 <img th:each="imagen: ${evento.getGaleriaImagenes()}"
                      th:src="'/img/' + ${imagen.nombreArchivo}"
-                     th:attr="data-gallery-id=${imagen.id}"
+                     th:attr="data-gallery-id=${imagen.id}, data-gallery-prioridad=${imagen.prioridad}"
                      class="galleryItem"
-                     style="">
+                     data-bs-toggle="modal" data-bs-target="#modalGaleria">
             </div>
+            <a th:href="'/eventos/' + ${evento.id} + '/images/add'">Añadir imágen</a>
         </div>
 
-        <div class="modal" tabindex="-1">
+        <div class="modal" tabindex="-1" id="modalGaleria">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form>
+                    <form method="post" action="#PLACEHOLDER" id="galeriaForm">
                         <div class="modal-header">
                             <h5 class="modal-title">Establecer prioridad</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <input type="hidden" name="">
+                            <input type="number" name="prioridad" id="prioridad">
                         </div>
                         <div class="modal-footer">
+                            <a href="#PLACEHOLDER" class="btn btn-danger" id="deleteGalleryBtn">Eliminar</a>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                             <input type="submit" class="btn btn-primary" value="Guardar">
                         </div>
@@ -119,5 +121,19 @@
 </main>
 
 <footer th:replace="fragments/layout :: footer"></footer>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    let galeriaModal = document.getElementById("modalGaleria");
+    galeriaModal.addEventListener('show.bs.modal', function (event) {
+        let button = event.relatedTarget
+        let prioridad = button.getAttribute("data-gallery-prioridad")
+        let recursoMediaId = button.getAttribute("data-gallery-id")
+        let eventoId = [[${evento.id}]]
+        document.getElementById("galeriaForm").setAttribute("action", "/eventos/" + eventoId + "/images/" + recursoMediaId + "/update")
+        document.getElementById("prioridad").setAttribute("value", prioridad)
+        document.getElementById("deleteGalleryBtn").setAttribute("href", "/eventos/" + eventoId + "/images/" + recursoMediaId + "/delete")
+    })
+    /*]]>*/
+</script>
 </body>
 </html>
