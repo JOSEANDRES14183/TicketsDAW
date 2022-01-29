@@ -20,7 +20,10 @@
         <label for="descripcion" class="form-label">Descripcion</label>
         <textarea th:field="*{descripcion}" class="form-control" aria-describedby="DescripcionField"></textarea>
       </div>
-
+      <div class="mb-3">
+        <label for="fotoPerfil" class="form-label">Foto de perfil</label>
+        <input type="file" class="form-control w-25" th:field="*{fotoPerfil}">
+      </div>
       <button type="submit" class="btn btn-primary">Regístrate</button>
     </form>
   </section>
