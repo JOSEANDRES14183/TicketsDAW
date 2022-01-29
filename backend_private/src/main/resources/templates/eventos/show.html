@@ -2,7 +2,18 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="fragments/layout :: head(${evento.titulo})"></head>
+<style>
+    .galleryItem{
+        height: 100px;
+        width: 100px;
+        object-fit: cover;
+    }
 
+    .galleryItem:hover{
+        cursor: pointer;
+        box-shadow: 0 0 5px black;
+    }
+</style>
 <body>
 
 <header th:replace="fragments/layout :: header('Eventos')"></header>
@@ -73,7 +84,33 @@
 
         <div class="mb-4">
             <h3 class="mb-3">Galeria de imágenes</h3>
+            <div class="container-fluid d-flex gap-3">
+                <img th:each="imagen: ${evento.getGaleriaImagenes()}"
+                     th:src="'/img/' + ${imagen.nombreArchivo}"
+                     th:attr="data-gallery-id=${imagen.id}"
+                     class="galleryItem"
+                     style="">
+            </div>
+        </div>
 
+        <div class="modal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form>
+                        <div class="modal-header">
+                            <h5 class="modal-title">Establecer prioridad</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" name="">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <input type="submit" class="btn btn-primary" value="Guardar">
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
 
         <a href="/eventos" class="btn btn-primary">Volver</a>

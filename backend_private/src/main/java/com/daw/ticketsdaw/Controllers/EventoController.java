@@ -152,4 +152,16 @@ public class EventoController {
 
         return "redirect:/eventos";
     }
+//"/{eventoId}/videos/{mediaId}/update"
+    @PostMapping({"/{eventoId}/images/{mediaId}/update"})
+    @Transactional(rollbackFor = {IOException.class})
+    public String changePriority(@PathVariable Integer eventoId, @PathVariable Integer mediaId, @RequestParam Integer prioridad) throws IOException {
+
+        Evento evento = eventosService.read(eventoId);
+        RecursoMedia media = mediaService.read(mediaId);
+
+        //if(media.getEventoGaleriaImagenes().eq)
+
+        return "redirect:/eventos";
+    }
 }
