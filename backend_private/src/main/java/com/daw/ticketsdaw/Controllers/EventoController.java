@@ -1,17 +1,12 @@
 package com.daw.ticketsdaw.Controllers;
 
 import com.daw.ticketsdaw.DTOs.EventoDTO;
+
+import com.daw.ticketsdaw.Entities.*;
+import com.daw.ticketsdaw.Services.*;
 import com.daw.ticketsdaw.DTOs.GaleriaDTO;
-import com.daw.ticketsdaw.Entities.Evento;
-import com.daw.ticketsdaw.Entities.NormasEvento;
-import com.daw.ticketsdaw.Entities.Organizador;
-import com.daw.ticketsdaw.Entities.RecursoMedia;
 import com.daw.ticketsdaw.Repositories.OrganizadorRepository;
 import com.daw.ticketsdaw.Repositories.RecursoMediaRepository;
-import com.daw.ticketsdaw.Services.CategoriaService;
-import com.daw.ticketsdaw.Services.EventosService;
-import com.daw.ticketsdaw.Services.NormasEventoService;
-import com.daw.ticketsdaw.Services.RecursoMediaService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -20,14 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping("/eventos")
@@ -41,6 +32,8 @@ public class EventoController {
     NormasEventoService normasService;
     @Autowired
     CategoriaService categoriaService;
+    @Autowired
+    private UsuarioService usuarioService;
 
     @Autowired
     Environment environment;
@@ -48,9 +41,13 @@ public class EventoController {
     private ModelMapper modelMapper = new ModelMapper();
 
     @GetMapping({"/", ""})
-    public String show(ModelMap modelMap){
-        modelMap.addAttribute("eventos", eventosService.read());
-        return "eventos/index";
+    public String show(ModelMap modelMap, HttpSession session){
+        if(session.getAttribute("usuario")!=null && session.getAttribute("usuario").getClass()== Organizador.class){
+            Organizador organizador = (Organizador) usuarioService.getById(((Usuario)session.getAttribute("usuario")).getId());
+            modelMap.addAttribute("eventos", organizador.getEventos());
+            return "eventos/index";
+        }
+        return "redirect:/login";
     }
 
     @GetMapping({"/{id}"})
@@ -76,7 +73,7 @@ public class EventoController {
 
     @PostMapping({"/", ""})
     @Transactional(rollbackFor = {IOException.class})
-    public String saveEvento(@ModelAttribute @Valid EventoDTO eventoDTO, BindingResult bindingResult) throws IOException {
+    public String saveEvento(@ModelAttribute @Valid EventoDTO eventoDTO, BindingResult bindingResult, HttpSession session) throws IOException {
         if(bindingResult.hasErrors()){
             return "redirect:/eventos/create?error=validation";
         }
@@ -115,9 +112,7 @@ public class EventoController {
         }
 
         //TODO: Get user id from context
-        Organizador organizador = new Organizador();
-        organizador.setId(2);
-
+        Organizador organizador = (Organizador) usuarioService.getById(((Usuario) session.getAttribute("usuario")).getId());
         evento.setOrganizador(organizador);
 
         eventosService.save(evento);

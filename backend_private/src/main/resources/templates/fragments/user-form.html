@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<body>
+
+<div th:fragment="user-inputs">
+    <div class="mb-3">
+        <label for="nombreUsuario" class="form-label">Nombre de usuario</label>
+        <input type="text" th:field="*{nombreUsuario}" class="form-control" aria-describedby="NombreUsuarioField">
+    </div>
+    <div class="mb-3">
+        <label for="email" class="form-label">Correo electrónico</label>
+        <input type="text" class="form-control" th:field="*{email}" aria-describedby="EmailField">
+    </div>
+    <div class="mb-3">
+        <label for="passwordHash" class="form-label">Contraseña</label>
+        <input type="password" class="form-control" th:field="*{passwordHash}" aria-describedby="PasswordField">
+    </div>
+</div>
+
+</body>
+</html>
