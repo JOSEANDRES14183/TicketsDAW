@@ -22,9 +22,4 @@ public class RecursoMedia {
     @ToString.Exclude
     @JoinColumn(name = "id_evento_galeria_img")
     private Evento eventoGaleriaImagenes;
-
-    @ManyToOne
-    @ToString.Exclude
-    @JoinColumn(name = "id_evento_galeria_vid")
-    private Evento eventoGaleriaVideos;
 }

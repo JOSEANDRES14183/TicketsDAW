@@ -52,21 +52,6 @@ public class RecursoMediaService extends AbstractFileService{
         return recursoMedia;
     }
 
-    public RecursoMedia saveVideoGallery(MultipartFile multipartFile, RecursoMedia baseRecursoMedia, Evento evento) throws IOException {
-        String fileName = generateSafeFileName(multipartFile.getOriginalFilename());
-
-        RecursoMedia recursoMedia = baseRecursoMedia;
-
-        recursoMedia.setNombreArchivo(fileName);
-        recursoMedia.setEventoGaleriaVideos(evento);
-
-        mediaRepository.save(recursoMedia);
-
-        saveMultipartAs(multipartFile, fileName);
-
-        return recursoMedia;
-    }
-
     public RecursoMedia read(int id){
         return mediaRepository.findById(id).get();
     }

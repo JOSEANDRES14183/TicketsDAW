@@ -152,7 +152,7 @@ public class EventoController {
 
         return "redirect:/eventos/" + eventoId;
     }
-//"/{eventoId}/videos/{mediaId}/update"
+
     @PostMapping({"/{eventoId}/images/{mediaId}/update"})
     @Transactional(rollbackFor = {IOException.class})
     public String changePriority(@PathVariable Integer eventoId, @PathVariable Integer mediaId, @RequestParam Integer prioridad) throws IOException {

@@ -52,7 +52,4 @@ public class Evento {
     @OneToMany(mappedBy = "eventoGaleriaImagenes")
     @OrderBy("prioridad desc")
     List<RecursoMedia> galeriaImagenes;
-
-    @OneToMany(mappedBy = "eventoGaleriaVideos")
-    List<RecursoMedia> galeriaVideos;
 }
