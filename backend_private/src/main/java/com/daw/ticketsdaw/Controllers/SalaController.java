@@ -74,7 +74,7 @@ public class SalaController {
     @PostMapping({"/",""})
     public String saveSala(@ModelAttribute @Valid SalaDTO salaDTO, BindingResult bindingResult, HttpSession session){
         if(bindingResult.hasErrors()){
-            return "redirect:/salas/create";
+            return "redirect:/salas/create?error=validation";
         }
 
         Sala sala = modelMapper.map(salaDTO, Sala.class);

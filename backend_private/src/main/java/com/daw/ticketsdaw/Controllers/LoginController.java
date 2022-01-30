@@ -72,7 +72,7 @@ public class LoginController {
     @PostMapping("/register/propietario")
     public String savePropietario(@Valid @ModelAttribute PropietarioSala propietarioSala, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
-            return "redirect:/register/propietario";
+            return "redirect:/register/propietario?error=validation";
         }
         propietarioSala.setPasswordHash(passwordEncoder.encode(propietarioSala.getPasswordHash()));
         usuarioService.create(propietarioSala);
@@ -82,7 +82,7 @@ public class LoginController {
     @PostMapping("/register/organizador")
     public String saveOrganizador(@Valid @ModelAttribute OrganizadorDTO organizadorDTO, BindingResult bindingResult) throws IOException {
         if (bindingResult.hasErrors()){
-            return "redirect:/register/organizador";
+            return "redirect:/register/organizador?error=validation";
         }
 
         Organizador organizador = modelMapper.map(organizadorDTO, Organizador.class);
