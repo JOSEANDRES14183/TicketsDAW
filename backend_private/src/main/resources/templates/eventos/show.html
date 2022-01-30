@@ -2,7 +2,18 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="fragments/layout :: head(${evento.titulo})"></head>
+<style>
+    .galleryItem{
+        height: 100px;
+        width: 100px;
+        object-fit: cover;
+    }
 
+    .galleryItem:hover{
+        cursor: pointer;
+        box-shadow: 0 0 5px black;
+    }
+</style>
 <body>
 
 <header th:replace="fragments/layout :: header('Eventos')"></header>
@@ -33,6 +44,9 @@
                     <span>
                         Categoria: <span th:text="${evento.categoria.nombre}"></span>
                     </span>
+                    <span>
+                        Galeria imagenes: <span th:text="${evento.galeriaImagenes}"></span>
+                    </span>
                 </div>
             </div>
             <div class="col" style="height: 350px">
@@ -62,7 +76,40 @@
         <div class="mb-4">
             <h3 class="mb-3">Normas del evento</h3>
             <p th:if="${evento.getDocumentoNormas() == null}">No hay ningún documento asignado</p>
-            <p th:unless="${evento.getDocumentoNormas() == null}" th:text="${evento.getDocumentoNormas().getNombrePdf()}"></p>
+            <a th:unless="${evento.getDocumentoNormas() == null}" th:text="${evento.getDocumentoNormas().getNombrePdf()}" th:href="'/img/' + ${evento.getDocumentoNormas().getNombrePdf()}"></a>
+        </div>
+
+        <div class="mb-4">
+            <h3 class="mb-3">Galeria de imágenes</h3>
+            <div class="container-fluid d-flex gap-3">
+                <img th:each="imagen: ${evento.getGaleriaImagenes()}"
+                     th:src="'/img/' + ${imagen.nombreArchivo}"
+                     th:attr="data-gallery-id=${imagen.id}, data-gallery-prioridad=${imagen.prioridad}"
+                     class="galleryItem"
+                     data-bs-toggle="modal" data-bs-target="#modalGaleria">
+            </div>
+            <a th:href="'/eventos/' + ${evento.id} + '/images/add'">Añadir imágen</a>
+        </div>
+
+        <div class="modal" tabindex="-1" id="modalGaleria">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="post" action="#PLACEHOLDER" id="galeriaForm">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Establecer prioridad</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="number" name="prioridad" id="prioridad">
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#PLACEHOLDER" class="btn btn-danger" id="deleteGalleryBtn">Eliminar</a>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <input type="submit" class="btn btn-primary" value="Guardar">
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
 
         <a href="/eventos" class="btn btn-primary">Volver</a>
@@ -71,5 +118,19 @@
 </main>
 
 <footer th:replace="fragments/layout :: footer"></footer>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    let galeriaModal = document.getElementById("modalGaleria");
+    galeriaModal.addEventListener('show.bs.modal', function (event) {
+        let button = event.relatedTarget
+        let prioridad = button.getAttribute("data-gallery-prioridad")
+        let recursoMediaId = button.getAttribute("data-gallery-id")
+        let eventoId = [[${evento.id}]]
+        document.getElementById("galeriaForm").setAttribute("action", "/eventos/" + eventoId + "/images/" + recursoMediaId + "/update")
+        document.getElementById("prioridad").setAttribute("value", prioridad)
+        document.getElementById("deleteGalleryBtn").setAttribute("href", "/eventos/" + eventoId + "/images/" + recursoMediaId + "/delete")
+    })
+    /*]]>*/
+</script>
 </body>
 </html>

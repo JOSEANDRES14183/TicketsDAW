@@ -1,8 +1,12 @@
 package com.daw.ticketsdaw.Controllers;
 
 import com.daw.ticketsdaw.DTOs.EventoDTO;
+
 import com.daw.ticketsdaw.Entities.*;
 import com.daw.ticketsdaw.Services.*;
+import com.daw.ticketsdaw.DTOs.GaleriaDTO;
+import com.daw.ticketsdaw.Repositories.OrganizadorRepository;
+import com.daw.ticketsdaw.Repositories.RecursoMediaRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -121,5 +125,55 @@ public class EventoController {
         evento.setId(eventoId);
         eventosService.remove(evento);
         return "redirect:/eventos";
+    }
+
+    @GetMapping({"/{id}/images/add"})
+    public String showImgForm(ModelMap model, @PathVariable(name="id") Integer eventoId){
+        model.addAttribute("evento", eventosService.read(eventoId));
+        model.addAttribute("galeria", new GaleriaDTO());
+        return "eventos/galerias/create";
+    }
+
+    @PostMapping({"/{id}/images/add"})
+    @Transactional(rollbackFor = {IOException.class})
+    public String addImage(@ModelAttribute @Valid GaleriaDTO galeriaDTO, @PathVariable(name="id") Integer eventoId, BindingResult bindingResult) throws IOException {
+        if(bindingResult.hasErrors()){
+            return "redirect:/eventos/" + eventoId + "/images/add?error=validation";
+        }
+
+        RecursoMedia formSubmittedMedia = modelMapper.map(galeriaDTO, RecursoMedia.class);
+
+        RecursoMedia savedMedia = mediaService.saveImageGallery(galeriaDTO.getMedia(), formSubmittedMedia, eventosService.read(eventoId));
+
+        return "redirect:/eventos/" + eventoId;
+    }
+
+    @PostMapping({"/{eventoId}/images/{mediaId}/update"})
+    @Transactional(rollbackFor = {IOException.class})
+    public String changePriority(@PathVariable Integer eventoId, @PathVariable Integer mediaId, @RequestParam Integer prioridad) throws IOException {
+        Evento evento = eventosService.read(eventoId);
+        RecursoMedia media = mediaService.read(mediaId);
+
+        if(!media.getEventoGaleriaImagenes().equals(evento))
+            return "redirect:/eventos/" + eventoId + "?error=unauthorized";
+
+        media.setPrioridad(prioridad);
+
+        mediaService.save(media);
+
+        return "redirect:/eventos/" + eventoId;
+    }
+
+    @GetMapping({"/{eventoId}/images/{mediaId}/delete"})
+    public String deleteGallery(@PathVariable Integer eventoId, @PathVariable Integer mediaId){
+        Evento evento = eventosService.read(eventoId);
+        RecursoMedia media = mediaService.read(mediaId);
+
+        if(!media.getEventoGaleriaImagenes().equals(evento))
+            return "redirect:/eventos/" + eventoId + "?error=unauthorized";
+
+        mediaService.delete(media);
+
+        return "redirect:/eventos/" + eventoId;
     }
 }

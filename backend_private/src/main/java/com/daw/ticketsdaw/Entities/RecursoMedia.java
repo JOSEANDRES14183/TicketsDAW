@@ -2,6 +2,7 @@ package com.daw.ticketsdaw.Entities;
 
 import com.sun.istack.NotNull;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -16,4 +17,9 @@ public class RecursoMedia {
     private String nombreArchivo;
     @NotNull
     private int prioridad;
+
+    @ManyToOne
+    @ToString.Exclude
+    @JoinColumn(name = "id_evento_galeria_img")
+    private Evento eventoGaleriaImagenes;
 }
