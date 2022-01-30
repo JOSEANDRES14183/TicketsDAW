@@ -38,7 +38,7 @@ public class Sala implements Serializable {
     private double longitud;
 
     @Column(name = "esta_oculto")
-    private boolean estaOculto;
+    private boolean estaOculto = true;
 
     @ToString.Exclude
     @ManyToOne

@@ -11,14 +11,7 @@
     <section class="container-md">
         <form method="POST" th:action="'/salas'" th:object="${sala}">
 
-            <div th:if="${sala.id == null}">
-                <input type="hidden" value="1" id="propietarioSala" name="propietarioSala">
-                <input type="hidden" value="true" id="estaOculto" name="estaOculto">
-            </div>
-
             <div th:unless="${sala.id == null}">
-                <input type="hidden" th:field="*{propietarioSala}">
-                <input type="hidden" th:field="*{estaOculto}">
                 <input type="hidden" th:field="*{id}">
             </div>
 
