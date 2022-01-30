@@ -57,18 +57,27 @@
 
         <div class="mb-4">
             <h3 class="mb-3">Sesiones</h3>
+            <div class="dropdown">
+                <a class="text-secondary mb-2 dropdown-toggle"
+                   type="button" id="crearSesion"
+                   data-bs-toggle="dropdown"
+                   aria-expanded="false"
+                >Crear sesión</a>
+                <ul class="dropdown-menu" aria-labelledby="crearSesion">
+                    <li><a class="dropdown-item" th:href="'/eventos/' + ${evento.id} + '/sesiones_no_num/create'">Sesión no numerada</a></li>
+                    <li><a class="dropdown-item" th:href="'/eventos/' + ${evento.id} + '/sesiones_num/create'">Sesión numerada</a></li>
+                </ul>
+            </div>
             <table class="table table-bordered table-striped">
                 <tr>
-                    <th>Estas</th>
-                    <th>son</th>
-                    <th>las</th>
-                    <th>sesiones</th>
+                    <th>Id</th>
+                    <th>DateTime Inicio</th>
+                    <th>Esta oculto</th>
                 </tr>
-                <tr>
-                    <td>Estos</td>
-                    <td>son</td>
-                    <td>los</td>
-                    <td>datos</td>
+                <tr th:each="sesion: ${sesiones}">
+                    <td><a th:text="${sesion.id}" th:href="'/eventos/' + ${evento.id} + '/sesiones/' + ${sesion.id}"></a></td>
+                    <td th:text="${sesion.dateTimeIni}"></td>
+                    <td th:text="${sesion.estaOculto}"></td>
                 </tr>
             </table>
         </div>
