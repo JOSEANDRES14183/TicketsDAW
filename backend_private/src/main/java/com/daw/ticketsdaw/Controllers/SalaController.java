@@ -1,14 +1,19 @@
 package com.daw.ticketsdaw.Controllers;
 
+import com.daw.ticketsdaw.Entities.PropietarioSala;
 import com.daw.ticketsdaw.Entities.Sala;
+import com.daw.ticketsdaw.Entities.Usuario;
 import com.daw.ticketsdaw.Services.CiudadService;
 import com.daw.ticketsdaw.Services.SalaService;
+import com.daw.ticketsdaw.Services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -21,10 +26,17 @@ public class SalaController {
     @Autowired
     private CiudadService ciudadService;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
     @GetMapping({"/",""})
-    public String index(ModelMap modelMap){
-        modelMap.addAttribute("salas",salaService.read());
-        return "salas/index";
+    public String index(ModelMap modelMap, HttpSession session){
+        if(session.getAttribute("usuario")!=null && session.getAttribute("usuario").getClass()== PropietarioSala.class){
+            PropietarioSala propietarioSala = (PropietarioSala) usuarioService.getById(((Usuario) session.getAttribute("usuario")).getId());
+            modelMap.addAttribute("salas", propietarioSala.getSalas());
+            return "salas/index";
+        }
+        return "redirect:/login";
     }
 
     @GetMapping("{id}")
