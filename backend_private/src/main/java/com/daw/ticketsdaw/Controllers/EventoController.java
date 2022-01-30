@@ -32,6 +32,8 @@ public class EventoController {
     CategoriaService categoriaService;
     @Autowired
     private UsuarioService usuarioService;
+    @Autowired
+    private SalaService salaService;
 
     @Autowired
     Environment environment;
@@ -173,5 +175,12 @@ public class EventoController {
         mediaService.delete(media);
 
         return "redirect:/eventos/" + eventoId;
+    }
+
+    @GetMapping("/{eventoId}/sesion_num/create")
+    public String showSesionNumeradaForm(ModelMap modelMap){
+        modelMap.addAttribute("sesion",new SesionNumerada());
+        modelMap.addAttribute("salasConButacas",salaService.read());
+        return "eventos/session-num-form";
     }
 }

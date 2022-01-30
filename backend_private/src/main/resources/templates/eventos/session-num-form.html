@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head('Crear sesion numerada')"></head>
+
+<body>
+<header th:replace="fragments/layout :: header('Formulario sesion numerada')"></header>
+
+<main>
+    <section class="container-md">
+        <form method="POST" th:action="'/sesion_num'" th:object="${sesion}">
+
+            <div class="mb-3">
+                <label th:for="*{entradasMax}" class="form-label">Máximo de entradas</label>
+                <input type="number" class="form-control" th:field="*{entradasMax}">
+            </div>
+
+            <div class="mb-3">
+                <label th:for="*{fechaFinVenta}" class="form-label">Fecha de fin de venta de entradas</label>
+                <input type="datetime-local" class="form-control" th:field="*{fechaFinVenta}">
+            </div>
+
+            <div class="mb-3">
+                <label th:for="*{fechaIni}" class="form-label">Fecha de inicio del evento</label>
+                <input type="datetime-local" class="form-control" th:field="*{fechaIni}">
+            </div>
+
+            <div class="mb-3">
+                <label th:for="*{fechaFin}" class="form-label">Fecha de final del evento</label>
+                <input type="datetime-local" class="form-control" th:field="*{fechaFin}">
+            </div>
+
+            <div class="mb-3">
+                <label th:for="*{precio}" class="form-label">Precio</label>
+                <input type="number" min="0.00" max="10000.00" step="0.1" class="form-control" th:field="*{precio}">
+            </div>
+
+            <div class="mb-3">
+                <label th:for="*{sala}" class="form-label">Sala</label>
+                <select class="form-control" th:field="*{sala}">
+                    <option th:each="sala: ${salasConButacas}"
+                            th:value="${sala.id}"
+                            th:text="${sala.nombre}"/>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary" th:text="'Guardar'"></button>
+        </form>
+    </section>
+</main>
+
+<footer th:replace="fragments/layout :: footer"></footer>
+
+</body>
+</html>

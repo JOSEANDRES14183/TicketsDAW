@@ -36,7 +36,7 @@ public abstract class Sesion {
 
     @NotNull
     @Column(name = "esta_oculto")
-    private boolean estaOculto;
+    private boolean estaOculto = false;
 
     @ToString.Exclude
     @ManyToOne
