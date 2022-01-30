@@ -31,7 +31,7 @@ public abstract class Sesion {
     private Date fechaIni;
 
     @NotNull
-    @Column(name = "fecha_ini")
+    @Column(name = "fecha_fin")
     private Date fechaFin;
 
     @NotNull
