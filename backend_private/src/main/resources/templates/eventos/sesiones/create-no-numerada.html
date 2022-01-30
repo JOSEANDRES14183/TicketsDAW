@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head('Crear sesion no numerada')"></head>
+
+<body>
+<header th:replace="fragments/layout :: header('Crear sesion no numerada')"></header>
+
+<main>
+    <section class="container-md">
+        <form method="POST" th:action="'/PLACEHOLDER'" th:object="${sesion}" enctype="multipart/form-data">
+            <div class="mb-3" th:unless="${sesion.getId() == null}">
+                <label for="id" class="form-label">Identificador</label>
+                <input type="number" class="form-control" readonly th:field="*{id}">
+            </div>
+            <div class="mb-3">
+                <label th:for="*{entradasMax}" class="form-label">Entradas máximas</label>
+                <input type="number" class="form-control" th:field="*{entradasMax}">
+            </div>
+            <div class="mb-3">
+                <label th:for="*{sala}" class="form-label">Categoria</label>
+                <select class="form-control" th:field="*{sala}">
+                    <option th:each="sala: ${salas}"
+                            th:value="${sala.id}"
+                            th:text="${sala.nombre}"/>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="estaOculto" class="form-label">Esta oculto</label>
+                <select class="form-control w-25" th:field="*{estaOculto}">
+                    <option value="true">Oculto</option>
+                    <option value="false">No oculto</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="esNominativo" class="form-label">Es nominativo</label>
+                <select class="form-control w-25" th:field="*{esNominativo}">
+                    <option value="true">Nominativo</option>
+                    <option value="false">No nominativo</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="organizador" class="form-label">Organizador [DEBUG]</label>
+                <select class="form-control w-25" th:field="*{organizador}">
+                    <option value="2">2</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="edadMinima" class="form-label">Edad mínima</label>
+                <input type="number" class="form-control w-25" th:field="*{edadMinima}">
+            </div>
+            <div class="mb-3">
+                <label for="duracionEstandar" class="form-label">Duración estándar</label>
+                <input type="number" class="form-control w-25" th:field="*{duracionEstandar}">
+            </div>
+            <div class="mb-3">
+                <label for="fotoPerfil" class="form-label">Foto de perfil</label>
+                <input type="file" class="form-control w-25" id="fotoPerfil" name="fotoPerfil">
+            </div>
+            <div class="mb-3">
+                <label for="documentoNormas" class="form-label">Documento de normas (Opcional)</label>
+                <input type="file" class="form-control w-25" id="documentoNormas" name="documentoNormas">
+            </div>
+            <button type="submit" class="btn btn-primary" th:text="'Guardar'"></button>
+        </form>
+    </section>
+</main>
+
+<footer th:replace="fragments/layout :: footer"></footer>
+
+</body>
+</html>

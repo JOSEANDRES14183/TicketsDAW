@@ -32,6 +32,8 @@ public class EventoController {
     CategoriaService categoriaService;
     @Autowired
     private UsuarioService usuarioService;
+    @Autowired
+    SalaServiceImpl salaService;
 
     @Autowired
     Environment environment;
@@ -173,5 +175,12 @@ public class EventoController {
         mediaService.delete(media);
 
         return "redirect:/eventos/" + eventoId;
+    }
+
+    @GetMapping({"/{eventoId}/sesiones_no_num/create"})
+    public String showFormNoNum(ModelMap model){
+        model.addAttribute("sesion", new SesionNoNumerada());
+        model.addAttribute("salas", salaService.read());
+        return "eventos/sesiones/create-no-numerada";
     }
 }
