@@ -5,8 +5,6 @@ import com.daw.ticketsdaw.DTOs.EventoDTO;
 import com.daw.ticketsdaw.Entities.*;
 import com.daw.ticketsdaw.Services.*;
 import com.daw.ticketsdaw.DTOs.GaleriaDTO;
-import com.daw.ticketsdaw.Repositories.OrganizadorRepository;
-import com.daw.ticketsdaw.Repositories.RecursoMediaRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
