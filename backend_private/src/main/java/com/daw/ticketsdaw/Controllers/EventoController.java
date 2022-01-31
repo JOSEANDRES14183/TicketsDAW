@@ -180,10 +180,16 @@ public class EventoController {
     }
 
     @GetMapping("/{eventoId}/sesiones_num/create")
-    public String showSesionNumeradaForm(ModelMap modelMap, @PathVariable int eventoId){
+    public String showCreateSesionNumerada(ModelMap modelMap, @PathVariable int eventoId){
         modelMap.addAttribute("sesion",new SesionNumerada());
         modelMap.addAttribute("salasConButacas",salaService.getSalasWithButacas());
-        modelMap.addAttribute("evento",eventosService.read(eventoId));
+        return "eventos/sesiones/session-num-form";
+    }
+
+    @GetMapping("/{eventoId}/sesiones_num/{sesionId}/update")
+    public String showUpdateSesionNumerada(ModelMap modelMap, @PathVariable int sesionId){
+        modelMap.addAttribute("sesion",sesionService.read(sesionId));
+        modelMap.addAttribute("salasConButacas",salaService.getSalasWithButacas());
         return "eventos/sesiones/session-num-form";
     }
 
@@ -193,4 +199,5 @@ public class EventoController {
         sesionService.save(sesionNumerada);
         return "redirect:/eventos/"+sesionNumerada.getEvento().getId();
     }
+
 }
