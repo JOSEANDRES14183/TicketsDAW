@@ -126,6 +126,8 @@ public class EventoController {
         eventosService.remove(evento);
         return "redirect:/eventos";
     }
+    
+    //TODO: Crear mapping para eliminar Documento de normas
 
     @GetMapping({"/{id}/images/add"})
     public String showImgForm(ModelMap model, @PathVariable(name="id") Integer eventoId){
