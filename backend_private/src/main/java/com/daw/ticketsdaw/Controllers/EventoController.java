@@ -34,6 +34,8 @@ public class EventoController {
     private UsuarioService usuarioService;
     @Autowired
     SalaServiceImpl salaService;
+    @Autowired
+    SesionService sesionService;
 
     @Autowired
     Environment environment;
@@ -180,9 +182,22 @@ public class EventoController {
     }
 
     @GetMapping({"/{eventoId}/sesiones_no_num/create"})
-    public String showFormNoNum(ModelMap model){
+    public String showFormNoNum(ModelMap model, @PathVariable Integer eventoId){
         model.addAttribute("sesion", new SesionNoNumerada());
         model.addAttribute("salas", salaService.read());
+        model.addAttribute("evento", eventosService.read(eventoId));
         return "eventos/sesiones/create-no-numerada";
+    }
+
+    @PostMapping({"/{eventoId}/sesiones_no_num"})
+    public String saveSesionNoNum(@Valid @ModelAttribute SesionNoNumerada sesion, BindingResult bindingResult, @PathVariable Integer eventoId) throws IOException {
+        if(bindingResult.hasErrors()){
+            System.out.println(bindingResult.getFieldError());
+            return "redirect:/eventos/" + eventoId + "/sesiones_no_num/create?error=validation";
+        }
+
+        sesionService.save(sesion);
+
+        return "redirect:/eventos/" + eventoId;
     }
 }
