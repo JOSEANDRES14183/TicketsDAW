@@ -32,6 +32,8 @@ public class EventoController {
     CategoriaService categoriaService;
     @Autowired
     private UsuarioService usuarioService;
+    @Autowired
+    SesionService sesionService;
 
     @Autowired
     Environment environment;
