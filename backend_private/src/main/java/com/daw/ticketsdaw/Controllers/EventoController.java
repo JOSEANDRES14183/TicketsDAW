@@ -34,6 +34,8 @@ public class EventoController {
     private UsuarioService usuarioService;
     @Autowired
     private SalaService salaService;
+    @Autowired
+    private SesionService sesionService;
 
     @Autowired
     Environment environment;
@@ -178,14 +180,17 @@ public class EventoController {
     }
 
     @GetMapping("/{eventoId}/sesiones_num/create")
-    public String showSesionNumeradaForm(ModelMap modelMap){
+    public String showSesionNumeradaForm(ModelMap modelMap, @PathVariable int eventoId){
         modelMap.addAttribute("sesion",new SesionNumerada());
         modelMap.addAttribute("salasConButacas",salaService.getSalasWithButacas());
+        modelMap.addAttribute("evento",eventosService.read(eventoId));
         return "eventos/sesiones/session-num-form";
     }
 
-    @PostMapping("/sesiones_num")
-    public String saveSesionNum(@Valid @ModelAttribute SesionNumerada sesionNumerada) {
-        
+    @PostMapping("/{eventoId}/sesiones_num")
+    public String saveSesionNum(@Valid @ModelAttribute SesionNumerada sesionNumerada, @PathVariable int eventoId) {
+        sesionNumerada.setEvento(eventosService.read(eventoId));
+        sesionService.save(sesionNumerada);
+        return "redirect:/eventos/"+sesionNumerada.getEvento().getId();
     }
 }
