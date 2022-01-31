@@ -74,9 +74,9 @@
                     <th>DateTime Inicio</th>
                     <th>Esta oculto</th>
                 </tr>
-                <tr th:each="sesion: ${sesiones}">
+                <tr th:each="sesion: ${evento.sesiones}">
                     <td><a th:text="${sesion.id}" th:href="'/eventos/' + ${evento.id} + '/sesiones/' + ${sesion.id}"></a></td>
-                    <td th:text="${sesion.dateTimeIni}"></td>
+                    <td th:text="${sesion.fechaIni}"></td>
                     <td th:text="${sesion.estaOculto}"></td>
                 </tr>
             </table>
