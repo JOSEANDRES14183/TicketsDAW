@@ -177,10 +177,15 @@ public class EventoController {
         return "redirect:/eventos/" + eventoId;
     }
 
-    @GetMapping("/{eventoId}/sesion_num/create")
+    @GetMapping("/{eventoId}/sesiones_num/create")
     public String showSesionNumeradaForm(ModelMap modelMap){
         modelMap.addAttribute("sesion",new SesionNumerada());
-        modelMap.addAttribute("salasConButacas",salaService.read());
-        return "eventos/session-num-form";
+        modelMap.addAttribute("salasConButacas",salaService.getSalasWithButacas());
+        return "eventos/sesiones/session-num-form";
+    }
+
+    @PostMapping("/sesiones_num")
+    public String saveSesionNum(@Valid @ModelAttribute SesionNumerada sesionNumerada) {
+        
     }
 }
