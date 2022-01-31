@@ -25,15 +25,15 @@ public abstract class Sesion {
 
     @NotNull
     @Column(name = "fecha_fin_venta")
-    private LocalDateTime fechaFinVenta;
+    private Date fechaFinVenta;
 
     @NotNull
     @Column(name = "fecha_ini")
-    private LocalDateTime fechaIni;
+    private Date fechaIni;
 
     @NotNull
     @Column(name = "fecha_fin")
-    private LocalDateTime fechaFin;
+    private Date fechaFin;
 
     @NotNull
     @Column(name = "esta_oculto")
