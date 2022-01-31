@@ -5,6 +5,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -16,7 +17,7 @@ public abstract class Sesion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @NotNull
     @Column(name = "entradas_max")
@@ -24,15 +25,15 @@ public abstract class Sesion {
 
     @NotNull
     @Column(name = "fecha_fin_venta")
-    private Date fechaFinVenta;
+    private LocalDateTime fechaFinVenta;
 
     @NotNull
     @Column(name = "fecha_ini")
-    private Date fechaIni;
+    private LocalDateTime fechaIni;
 
     @NotNull
     @Column(name = "fecha_fin")
-    private Date fechaFin;
+    private LocalDateTime fechaFin;
 
     @NotNull
     @Column(name = "esta_oculto")
