@@ -7,17 +7,21 @@
 
 <main>
     <section class="container-md">
-        <form method="POST" th:action="'/PLACEHOLDER'" th:object="${sesion}" enctype="multipart/form-data">
+        <form method="POST" th:action="'/eventos/' + ${evento.id} + '/sesiones_no_num'" th:object="${sesion}">
             <div class="mb-3" th:unless="${sesion.getId() == null}">
                 <label for="id" class="form-label">Identificador</label>
                 <input type="number" class="form-control" readonly th:field="*{id}">
+            </div>
+            <div class="mb-3">
+                <label th:for="*{evento}" class="form-label">[DEBUG] Evento</label>
+                <input type="number" class="form-control" th:field="*{evento}">
             </div>
             <div class="mb-3">
                 <label th:for="*{entradasMax}" class="form-label">Entradas máximas</label>
                 <input type="number" class="form-control" th:field="*{entradasMax}">
             </div>
             <div class="mb-3">
-                <label th:for="*{sala}" class="form-label">Categoria</label>
+                <label th:for="*{sala}" class="form-label">Sala</label>
                 <select class="form-control" th:field="*{sala}">
                     <option th:each="sala: ${salas}"
                             th:value="${sala.id}"
@@ -32,33 +36,16 @@
                 </select>
             </div>
             <div class="mb-3">
-                <label for="esNominativo" class="form-label">Es nominativo</label>
-                <select class="form-control w-25" th:field="*{esNominativo}">
-                    <option value="true">Nominativo</option>
-                    <option value="false">No nominativo</option>
-                </select>
+                <label for="fechaFinVenta" class="form-label">Fecha y hora de fin de venta</label>
+                <input type="datetime-local" class="form-control w-25" th:field="*{fechaFinVenta}">
             </div>
             <div class="mb-3">
-                <label for="organizador" class="form-label">Organizador [DEBUG]</label>
-                <select class="form-control w-25" th:field="*{organizador}">
-                    <option value="2">2</option>
-                </select>
+                <label for="fechaIni" class="form-label">Fecha y hora de inicio del evento</label>
+                <input type="datetime-local" class="form-control w-25" th:field="*{fechaIni}">
             </div>
             <div class="mb-3">
-                <label for="edadMinima" class="form-label">Edad mínima</label>
-                <input type="number" class="form-control w-25" th:field="*{edadMinima}">
-            </div>
-            <div class="mb-3">
-                <label for="duracionEstandar" class="form-label">Duración estándar</label>
-                <input type="number" class="form-control w-25" th:field="*{duracionEstandar}">
-            </div>
-            <div class="mb-3">
-                <label for="fotoPerfil" class="form-label">Foto de perfil</label>
-                <input type="file" class="form-control w-25" id="fotoPerfil" name="fotoPerfil">
-            </div>
-            <div class="mb-3">
-                <label for="documentoNormas" class="form-label">Documento de normas (Opcional)</label>
-                <input type="file" class="form-control w-25" id="documentoNormas" name="documentoNormas">
+                <label for="fechaFin" class="form-label">Fecha y hora de fin del evento</label>
+                <input type="datetime-local" class="form-control w-25" th:field="*{fechaFin}">
             </div>
             <button type="submit" class="btn btn-primary" th:text="'Guardar'"></button>
         </form>

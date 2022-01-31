@@ -13,10 +13,6 @@ import java.util.List;
 @Entity
 @Table(name = "sesion_no_numerada")
 public class SesionNoNumerada extends Sesion{
-    @NotNull
-    @Column(name = "plazas_max")
-    private int plazasMax;
-
     @OneToMany(mappedBy = "sesion")
     List<TipoEntrada> tiposEntrada;
 }
