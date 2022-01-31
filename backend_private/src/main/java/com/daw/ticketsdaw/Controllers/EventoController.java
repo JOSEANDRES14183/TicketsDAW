@@ -187,6 +187,15 @@ public class EventoController {
         return "eventos/sesiones/create-no-numerada";
     }
 
+    @GetMapping({"/{eventoId}/sesiones_no_num/{sesionId}/update"})
+    public String updateNoNum(ModelMap model, @PathVariable Integer eventoId, @PathVariable Integer sesionId){
+        //TODO: Hace falta un metodo de read individual
+        model.addAttribute("sesion", new SesionNoNumerada());
+        model.addAttribute("salas", salaService.read());
+        model.addAttribute("evento", eventosService.read(eventoId));
+        return "eventos/sesiones/create-no-numerada";
+    }
+
     @PostMapping({"/{eventoId}/sesiones_no_num"})
     public String saveSesionNoNum(@Valid @ModelAttribute SesionNoNumerada sesion, BindingResult bindingResult, @PathVariable Integer eventoId) throws IOException {
         if(bindingResult.hasErrors()){
