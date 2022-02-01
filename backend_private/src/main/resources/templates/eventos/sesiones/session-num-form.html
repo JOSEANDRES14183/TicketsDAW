@@ -40,7 +40,10 @@
 
             <div class="mb-3">
                 <label th:for="*{precio}" class="form-label">Precio</label>
-                <input type="number" min="0.00" max="10000.00" step="0.1" class="form-control" th:field="*{precio}">
+                <div class="input-group">
+                    <input type="number" min="0.00" max="10000.00" step="0.1" class="form-control" th:field="*{precio}">
+                    <span class="input-group-text">€</span>
+                </div>
             </div>
 
             <div class="mb-3">
@@ -63,22 +66,19 @@
 
 <script>
 
+    showSalaInfo();
     document.querySelector("#sala").addEventListener("change",showSalaInfo,true);
 
     function showSalaInfo(){
-
         let salaId = document.querySelector("#sala").value;
-
         fetch('/salas/' + salaId + '/getJSON')
             .then(response => response.json())
             .then(function (data){
-                console.log(data);
                 printSalaInfo(data);
             });
     }
 
     function printSalaInfo(sala){
-
         let container = document.querySelector("#infoSala");
         let text = "";
 
