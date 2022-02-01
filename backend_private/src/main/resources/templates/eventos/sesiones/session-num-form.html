@@ -52,12 +52,47 @@
                 </select>
             </div>
 
+            <div class="my-4" id="infoSala"></div>
+
             <button type="submit" class="btn btn-primary" th:text="'Guardar'"></button>
         </form>
     </section>
 </main>
 
 <footer th:replace="fragments/layout :: footer"></footer>
+
+<script>
+
+    document.querySelector("#sala").addEventListener("change",showSalaInfo,true);
+
+    function showSalaInfo(){
+
+        let salaId = document.querySelector("#sala").value;
+
+        fetch('/salas/' + salaId + '/getJSON')
+            .then(response => response.json())
+            .then(function (data){
+                console.log(data);
+                printSalaInfo(data);
+            });
+    }
+
+    function printSalaInfo(sala){
+
+        let container = document.querySelector("#infoSala");
+        let text = "";
+
+        text+="<div class=\"d-flex flex-column\">" +
+            "<h4>"+sala["nombre"]+"</h4>" +
+            "<span>Dirección: "+sala["direccion"]+"</span>" +
+            "<span>"+sala["ciudad"]["nombre"]+"</span>" +
+            "<span>Aforo máximo: "+sala["aforoMax"]+"</span>" +
+            "</div>"
+
+        container.innerHTML = text;
+    }
+
+</script>
 
 </body>
 </html>
