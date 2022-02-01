@@ -47,12 +47,56 @@
                 <label for="fechaFin" class="form-label">Fecha y hora de fin del evento</label>
                 <input type="datetime-local" class="form-control w-25" th:field="*{fechaFin}">
             </div>
+            <div id="tiposEntrada">
+                <fieldset th:each="tipoEntrada, iStat: ${sesion.tiposEntrada}">
+                    <legend>Tipo de entrada</legend>
+                    <div class="mb-3">
+                        <label th:for="'nombreTipo' + ${iStat.index}" class="form-label">Nombre del tipo</label>
+                        <input type="text" class="form-control w-25" th:value="${'PLACEHOLDER'}" name="nombreTipo" th:id="'nombreTipo' + ${iStat.index}">
+                    </div>
+                    <div class="mb-3">
+                        <label th:for="'maxEntradasTipo' + ${iStat.index}" class="form-label">Entradas máximas</label>
+                        <input type="number" class="form-control w-25" th:value="${'PLACEHOLDER'}" name="maxEntradasTipo" th:id="'maxEntradasTipo' + ${iStat.index}">
+                    </div>
+                    <div class="mb-3">
+                        <label th:for="'precioTipo' + ${iStat.index}" class="form-label">Precio por entrada</label>
+                        <div class="input-group w-25">
+                            <input type="number" class="form-control" th:value="${'PLACEHOLDER'}" name="precioTipo" th:id="'precioTipo' + ${iStat.index}">
+                            <span class="input-group-text">€</span>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
             <button type="submit" class="btn btn-primary" th:text="'Guardar'"></button>
         </form>
     </section>
 </main>
-
 <footer th:replace="fragments/layout :: footer"></footer>
+<script>
+    let iteration = 0
+    let iterationText = iteration + "G"
+    let fieldset = document.createElement('fieldset')
+    let legend = document.createElement("legend")
+    legend.appendChild(document.createTextNode("Tipo de entrada"))
+    fieldset.appendChild(legend)
+
+    let divNombre = document.createElement("div")
+        divNombre.classList.add("mb-3")
+            let labelNombre = document.createElement("label")
+            labelNombre.htmlFor = "nombreTipo" + iterationText
+            labelNombre.classList.add("form-label")
+            labelNombre.appendChild(document.createTextNode("Entradas máximas"))
+        divNombre.appendChild(labelNombre)
+            let inputNombre = document.createElement("input")
+            inputNombre.type = "text"
+            inputNombre.classList.add("form-control", "w-25")
+            inputNombre.name = "nombreTipo"
+            inputNombre.id = "nombreTipo" + iterationText
+        divNombre.appendChild(inputNombre)
+    fieldset.appendChild(divNombre)
+
+    document.getElementById("tiposEntrada").appendChild(fieldset)
+</script>
 
 </body>
 </html>
