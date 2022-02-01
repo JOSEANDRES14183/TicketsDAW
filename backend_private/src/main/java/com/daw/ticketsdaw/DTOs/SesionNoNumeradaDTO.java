@@ -48,5 +48,9 @@ public class SesionNoNumeradaDTO {
     @NotNull
     private Sala sala;
 
-    List<TipoEntrada> tiposEntrada;
+    List<String> nombreTipo;
+
+    List<Integer> maxEntradasTipo;
+
+    List<Float> precioTipo;
 }

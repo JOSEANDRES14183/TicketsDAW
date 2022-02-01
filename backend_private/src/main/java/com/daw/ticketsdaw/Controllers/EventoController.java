@@ -2,6 +2,7 @@ package com.daw.ticketsdaw.Controllers;
 
 import com.daw.ticketsdaw.DTOs.EventoDTO;
 
+import com.daw.ticketsdaw.DTOs.SesionNoNumeradaDTO;
 import com.daw.ticketsdaw.Entities.*;
 import com.daw.ticketsdaw.Services.*;
 import com.daw.ticketsdaw.DTOs.GaleriaDTO;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/eventos")
@@ -36,6 +39,8 @@ public class EventoController {
     private SalaService salaService;
     @Autowired
     private SesionService sesionService;
+    @Autowired
+    private TipoEntradaService tipoEntradaService;
 
     @Autowired
     Environment environment;
@@ -196,13 +201,24 @@ public class EventoController {
     }
 
     @PostMapping({"/{eventoId}/sesiones_no_num"})
-    public String saveSesionNoNum(@Valid @ModelAttribute SesionNoNumerada sesion, BindingResult bindingResult, @PathVariable Integer eventoId) throws IOException {
+    @Transactional
+    public String saveSesionNoNum(@Valid @ModelAttribute SesionNoNumeradaDTO sesionDTO, BindingResult bindingResult, @PathVariable Integer eventoId) throws IOException {
         if(bindingResult.hasErrors()){
-            System.out.println(bindingResult.getFieldError());
+            return "redirect:/eventos/" + eventoId + "/sesiones_no_num/create?error=validation";
+        }
+
+        SesionNoNumerada sesion = modelMapper.map(sesionDTO, SesionNoNumerada.class);
+
+        if(!(sesionDTO.getMaxEntradasTipo().size() == sesionDTO.getNombreTipo().size() &&
+                sesionDTO.getNombreTipo().size() == sesionDTO.getPrecioTipo().size())){
             return "redirect:/eventos/" + eventoId + "/sesiones_no_num/create?error=validation";
         }
 
         sesionService.save(sesion);
+
+        for (int i = 0; i < sesionDTO.getMaxEntradasTipo().size(); i++){
+            tipoEntradaService.save(new TipoEntrada(sesion, sesionDTO.getNombreTipo().get(i), sesionDTO.getMaxEntradasTipo().get(i), sesionDTO.getPrecioTipo().get(i)));
+        }
 
         return "redirect:/eventos/" + eventoId;
     }

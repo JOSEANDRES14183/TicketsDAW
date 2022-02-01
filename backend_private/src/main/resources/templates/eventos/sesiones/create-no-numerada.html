@@ -53,16 +53,16 @@
                     <legend>Tipo de entrada</legend>
                     <div class="mb-3">
                         <label th:for="'nombreTipo' + ${iStat.index}" class="form-label">Nombre del tipo</label>
-                        <input type="text" class="form-control w-25" th:value="${'PLACEHOLDER'}" name="nombreTipo" th:id="'nombreTipo' + ${iStat.index}">
+                        <input type="text" class="form-control w-25" th:value="${tipoEntrada.nombre}" name="nombreTipo" th:id="'nombreTipo' + ${iStat.index}">
                     </div>
                     <div class="mb-3">
                         <label th:for="'maxEntradasTipo' + ${iStat.index}" class="form-label">Entradas máximas</label>
-                        <input type="number" class="form-control w-25" th:value="${'PLACEHOLDER'}" name="maxEntradasTipo" th:id="'maxEntradasTipo' + ${iStat.index}">
+                        <input type="number" class="form-control w-25" th:value="${tipoEntrada.maxEntradas}" name="maxEntradasTipo" th:id="'maxEntradasTipo' + ${iStat.index}">
                     </div>
                     <div class="mb-3">
                         <label th:for="'precioTipo' + ${iStat.index}" class="form-label">Precio por entrada</label>
                         <div class="input-group w-25">
-                            <input type="number" class="form-control" th:value="${'PLACEHOLDER'}" name="precioTipo" th:id="'precioTipo' + ${iStat.index}">
+                            <input type="number" class="form-control" th:value="${tipoEntrada.precio}" name="precioTipo" th:id="'precioTipo' + ${iStat.index}">
                             <span class="input-group-text">€</span>
                         </div>
                     </div>

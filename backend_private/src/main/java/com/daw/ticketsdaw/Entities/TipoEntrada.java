@@ -11,6 +11,18 @@ import javax.validation.constraints.NotNull;
 @Table(name = "tipo_entrada")
 @IdClass(TipoEntradaId.class)
 public class TipoEntrada {
+
+    public TipoEntrada(SesionNoNumerada sesion, String nombre, int maxEntradas, float precio) {
+        this.sesion = sesion;
+        this.nombre = nombre;
+        this.maxEntradas = maxEntradas;
+        this.precio = precio;
+    }
+
+    public TipoEntrada() {
+
+    }
+
     @Id
     @ToString.Exclude
     @ManyToOne
@@ -26,4 +38,5 @@ public class TipoEntrada {
 
     @NotNull
     private float precio;
+
 }
