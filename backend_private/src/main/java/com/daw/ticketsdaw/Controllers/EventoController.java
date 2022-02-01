@@ -189,8 +189,7 @@ public class EventoController {
 
     @GetMapping({"/{eventoId}/sesiones_no_num/{sesionId}/update"})
     public String updateNoNum(ModelMap model, @PathVariable Integer eventoId, @PathVariable Integer sesionId){
-        //TODO: Hace falta un metodo de read individual
-        model.addAttribute("sesion", sesionService.read(sesionId));
+        model.addAttribute("sesion", (SesionNoNumerada) sesionService.read(sesionId));
         model.addAttribute("salas", salaService.read());
         model.addAttribute("evento", eventosService.read(eventoId));
         return "eventos/sesiones/create-no-numerada";
