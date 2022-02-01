@@ -37,7 +37,7 @@ public class WebConfig implements WebMvcConfigurer {
 
 //    @Override
 //    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(new SalaInterceptor()).addPathPatterns("/salas");
+//        registry.addInterceptor(new SalaInterceptor()).addPathPatterns("/salas/**");
 //        WebMvcConfigurer.super.addInterceptors(registry);
 //    }
 

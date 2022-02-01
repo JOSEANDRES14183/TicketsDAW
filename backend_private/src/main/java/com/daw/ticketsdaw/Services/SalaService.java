@@ -21,4 +21,6 @@ public interface SalaService{
 
     public String getButacasJson(Sala sala);
 
+    public List<Sala> getSalasWithButacas();
+
 }

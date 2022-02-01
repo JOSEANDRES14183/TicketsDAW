@@ -2,6 +2,7 @@ package com.daw.ticketsdaw.Entities;
 
 import lombok.Data;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -37,7 +38,7 @@ public abstract class Sesion {
 
     @NotNull
     @Column(name = "esta_oculto")
-    private boolean estaOculto;
+    private boolean estaOculto = false;
 
     @ToString.Exclude
     @ManyToOne

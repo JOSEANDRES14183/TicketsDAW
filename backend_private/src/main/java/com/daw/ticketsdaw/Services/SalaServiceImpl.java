@@ -77,4 +77,9 @@ public class SalaServiceImpl implements SalaService{
         }
         return null;
     }
+
+    @Override
+    public List<Sala> getSalasWithButacas() {
+        return salaRepository.getSalasWithButacas();
+    }
 }

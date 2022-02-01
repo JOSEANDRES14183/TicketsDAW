@@ -17,6 +17,8 @@ public class SesionService {
         sesionRepository.save(sesion);
     }
 
+    public Sesion read(int id){ return sesionRepository.findById(id).get();}
+
     public void delete(Sesion sesion){
         sesionRepository.delete(sesion);
     }
