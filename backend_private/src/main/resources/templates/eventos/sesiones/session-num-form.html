@@ -9,6 +9,10 @@
     <section class="container-md">
         <form method="POST" th:action="'/eventos/'+${evento.id}+'/sesiones_num'" th:object="${sesion}">
 
+            <div th:unless="${sesion.id == null}">
+                <input type="hidden" th:field="*{id}">
+            </div>
+
             <div class="mb-3">
                 <label th:for="*{evento}" class="form-label">ID Evento</label>
                 <input type="number" class="form-control" th:value="${evento.id}" id="evento" name="evento">
