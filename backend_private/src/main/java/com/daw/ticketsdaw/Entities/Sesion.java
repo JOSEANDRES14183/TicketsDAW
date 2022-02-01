@@ -2,10 +2,10 @@ package com.daw.ticketsdaw.Entities;
 
 import lombok.Data;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -14,6 +14,9 @@ import java.util.Date;
 @Inheritance(strategy = InheritanceType.JOINED)
 
 public abstract class Sesion {
+
+    @Transient
+    private final String dateTimeFormat = "yyyy-MM-dd'T'HH:mm";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,14 +28,17 @@ public abstract class Sesion {
 
     @NotNull
     @Column(name = "fecha_fin_venta")
+    @DateTimeFormat(pattern = dateTimeFormat)
     private Date fechaFinVenta;
 
     @NotNull
     @Column(name = "fecha_ini")
+    @DateTimeFormat(pattern = dateTimeFormat)
     private Date fechaIni;
 
     @NotNull
     @Column(name = "fecha_fin")
+    @DateTimeFormat(pattern = dateTimeFormat)
     private Date fechaFin;
 
     @NotNull
