@@ -48,6 +48,7 @@
                 <input type="datetime-local" class="form-control w-25" th:field="*{fechaFin}">
             </div>
             <div id="tiposEntrada">
+                <a class="btn btn-primary" onclick="addTipoEntrada()">Añadir</a>
                 <fieldset th:each="tipoEntrada, iStat: ${sesion.tiposEntrada}">
                     <legend>Tipo de entrada</legend>
                     <div class="mb-3">
@@ -74,28 +75,68 @@
 <footer th:replace="fragments/layout :: footer"></footer>
 <script>
     let iteration = 0
-    let iterationText = iteration + "G"
-    let fieldset = document.createElement('fieldset')
-    let legend = document.createElement("legend")
-    legend.appendChild(document.createTextNode("Tipo de entrada"))
-    fieldset.appendChild(legend)
+    function addTipoEntrada(){
+        iteration++
+        let iterationText = iteration + "G"
+        let fieldset = document.createElement('fieldset')
+        let legend = document.createElement("legend")
+        legend.appendChild(document.createTextNode("Tipo de entrada"))
+        fieldset.appendChild(legend)
 
-    let divNombre = document.createElement("div")
-        divNombre.classList.add("mb-3")
-            let labelNombre = document.createElement("label")
-            labelNombre.htmlFor = "nombreTipo" + iterationText
-            labelNombre.classList.add("form-label")
-            labelNombre.appendChild(document.createTextNode("Entradas máximas"))
-        divNombre.appendChild(labelNombre)
-            let inputNombre = document.createElement("input")
-            inputNombre.type = "text"
-            inputNombre.classList.add("form-control", "w-25")
-            inputNombre.name = "nombreTipo"
-            inputNombre.id = "nombreTipo" + iterationText
-        divNombre.appendChild(inputNombre)
-    fieldset.appendChild(divNombre)
+        let divNombre = document.createElement("div")
+            divNombre.classList.add("mb-3")
+                let labelNombre = document.createElement("label")
+                labelNombre.htmlFor = "nombreTipo" + iterationText
+                labelNombre.classList.add("form-label")
+                labelNombre.appendChild(document.createTextNode("Nombre del tipo"))
+            divNombre.appendChild(labelNombre)
+                let inputNombre = document.createElement("input")
+                inputNombre.type = "text"
+                inputNombre.classList.add("form-control", "w-25")
+                inputNombre.name = "nombreTipo"
+                inputNombre.id = "nombreTipo" + iterationText
+            divNombre.appendChild(inputNombre)
+        fieldset.appendChild(divNombre)
 
-    document.getElementById("tiposEntrada").appendChild(fieldset)
+        let divMaxEntradas = document.createElement("div")
+            divMaxEntradas.classList.add("mb-3")
+                let labelMaxEntradas = document.createElement("label")
+                labelMaxEntradas.htmlFor = "maxEntradasTipo" + iterationText
+                labelMaxEntradas.classList.add("form-label")
+                labelMaxEntradas.appendChild(document.createTextNode("Entradas máximas"))
+            divMaxEntradas.appendChild(labelMaxEntradas)
+                let inputMaxEntradas = document.createElement("input")
+                inputMaxEntradas.type = "number"
+                inputMaxEntradas.classList.add("form-control", "w-25")
+                inputMaxEntradas.name = "maxEntradasTipo"
+                inputMaxEntradas.id = "maxEntradasTipo" + iterationText
+            divMaxEntradas.appendChild(inputMaxEntradas)
+        fieldset.appendChild(divMaxEntradas)
+
+        let divPrecio = document.createElement("div")
+            divPrecio.classList.add("mb-3")
+                let labelPrecio = document.createElement("label")
+                labelPrecio.htmlFor = "precioTipo" + iterationText
+                labelPrecio.classList.add("form-label")
+                labelPrecio.appendChild(document.createTextNode("Precio por entrada"))
+            divPrecio.appendChild(labelPrecio)
+                let inputGroupPrecio = document.createElement("div")
+                inputGroupPrecio.classList.add("input-group", "w-25")
+                    let inputPrecio = document.createElement("input")
+                    inputPrecio.type = "number"
+                    inputPrecio.classList.add("form-control", "w-25")
+                    inputPrecio.name = "precioTipo"
+                    inputPrecio.id = "precioTipo" + iterationText
+                inputGroupPrecio.appendChild(inputPrecio)
+                    let spanPrecio = document.createElement("span")
+                    spanPrecio.classList.add("input-group-text")
+                    spanPrecio.appendChild(document.createTextNode("€"))
+                inputGroupPrecio.appendChild(spanPrecio)
+            divPrecio.appendChild(inputGroupPrecio)
+        fieldset.appendChild(divPrecio)
+
+        document.getElementById("tiposEntrada").appendChild(fieldset)
+    }
 </script>
 
 </body>
