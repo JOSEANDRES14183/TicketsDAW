@@ -183,13 +183,15 @@ public class EventoController {
     public String showCreateSesionNumerada(ModelMap modelMap, @PathVariable int eventoId){
         modelMap.addAttribute("sesion",new SesionNumerada());
         modelMap.addAttribute("salasConButacas",salaService.getSalasWithButacas());
+        modelMap.addAttribute("evento",eventosService.read(eventoId));
         return "eventos/sesiones/session-num-form";
     }
 
     @GetMapping("/{eventoId}/sesiones_num/{sesionId}/update")
-    public String showUpdateSesionNumerada(ModelMap modelMap, @PathVariable int sesionId){
+    public String showUpdateSesionNumerada(ModelMap modelMap, @PathVariable int sesionId, @PathVariable int eventoId){
         modelMap.addAttribute("sesion",sesionService.read(sesionId));
         modelMap.addAttribute("salasConButacas",salaService.getSalasWithButacas());
+        modelMap.addAttribute("evento",eventosService.read(eventoId));
         return "eventos/sesiones/session-num-form";
     }
 

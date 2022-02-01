@@ -7,11 +7,11 @@
 
 <main>
     <section class="container-md">
-        <form method="POST" th:action="'/eventos/'+${eventoId}+'/sesiones_num'" th:object="${sesion}">
+        <form method="POST" th:action="'/eventos/'+${evento.id}+'/sesiones_num'" th:object="${sesion}">
 
             <div class="mb-3">
                 <label th:for="*{evento}" class="form-label">ID Evento</label>
-                <input type="number" class="form-control" th:value="${eventoId}" id="evento" name="evento">
+                <input type="number" class="form-control" th:value="${evento.id}" id="evento" name="evento">
             </div>
 
             <div class="mb-3">
