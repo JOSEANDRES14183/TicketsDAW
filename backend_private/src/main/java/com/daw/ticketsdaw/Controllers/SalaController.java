@@ -38,7 +38,7 @@ public class SalaController {
             modelMap.addAttribute("salas", propietarioSala.getSalas());
             return "salas/index";
         }
-        return "redirect:/login";
+        return "redirect:/auth/login";
     }
 
     @GetMapping("{id}")

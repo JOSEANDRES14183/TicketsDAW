@@ -50,7 +50,7 @@ public class EventoController {
             modelMap.addAttribute("eventos", organizador.getEventos());
             return "eventos/index";
         }
-        return "redirect:/login";
+        return "redirect:/auth/login";
     }
 
     @GetMapping({"/{id}"})
