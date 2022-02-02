@@ -24,19 +24,21 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (request.getSession().getAttribute("usuario")==null){
+            response.sendRedirect("/auth/login");
             return false;
         }
 
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
 
-        if (request.getRequestURI().equals("/salas/**") && usuario.getClass() == PropietarioSala.class){
+        if (request.getRequestURI().startsWith("/salas") && usuario.getClass() == PropietarioSala.class){
             return true;
         }
 
-        if (request.getRequestURI().equals("/eventos/**") && usuario.getClass() == Organizador.class){
+        if (request.getRequestURI().startsWith("/eventos") && usuario.getClass() == Organizador.class){
             return true;
         }
-        
+
+        response.sendRedirect("/auth/login");
         return false;
     }
 
