@@ -1,7 +1,6 @@
 package com.daw.ticketsdaw;
 
-import com.daw.ticketsdaw.Converters.StringToOrganitzadorConverter;
-import com.daw.ticketsdaw.Interceptors.SalaInterceptor;
+import com.daw.ticketsdaw.Interceptors.LoginInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,10 +34,12 @@ public class WebConfig implements WebMvcConfigurer {
         return new BCryptPasswordEncoder();
     }
 
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(new SalaInterceptor()).addPathPatterns("/salas/**");
-//        WebMvcConfigurer.super.addInterceptors(registry);
-//    }
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new LoginInterceptor())
+                .addPathPatterns("/**")
+                .excludePathPatterns("/auth/**");
+        WebMvcConfigurer.super.addInterceptors(registry);
+    }
 
 }

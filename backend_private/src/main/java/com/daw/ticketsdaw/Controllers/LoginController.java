@@ -14,10 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -25,6 +22,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 
 @Controller
+@RequestMapping("/auth")
 public class LoginController {
 
     @Autowired
@@ -72,7 +70,7 @@ public class LoginController {
     @PostMapping("/register/propietario")
     public String savePropietario(@Valid @ModelAttribute PropietarioSala propietarioSala, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
-            return "redirect:/register/propietario?error=validation";
+            return "redirect:/auth/register/propietario?error=validation";
         }
         propietarioSala.setPasswordHash(passwordEncoder.encode(propietarioSala.getPasswordHash()));
         usuarioService.create(propietarioSala);
@@ -82,7 +80,7 @@ public class LoginController {
     @PostMapping("/register/organizador")
     public String saveOrganizador(@Valid @ModelAttribute OrganizadorDTO organizadorDTO, BindingResult bindingResult) throws IOException {
         if (bindingResult.hasErrors()){
-            return "redirect:/register/organizador?error=validation";
+            return "redirect:/auth/register/organizador?error=validation";
         }
 
         Organizador organizador = modelMapper.map(organizadorDTO, Organizador.class);
@@ -98,7 +96,7 @@ public class LoginController {
     @GetMapping("/logout")
     public String logout(HttpSession session){
         session.invalidate();
-        return "redirect:/login";
+        return "redirect:/auth/login";
     }
 
 

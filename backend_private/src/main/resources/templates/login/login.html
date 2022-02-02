@@ -33,8 +33,8 @@
                        aria-expanded="false"
                     >¿No tienes una cuenta? Regístrate</a>
                     <ul class="dropdown-menu" aria-labelledby="register">
-                        <li><a class="dropdown-item" href="/register/propietario">Regístrate como propietario</a></li>
-                        <li><a class="dropdown-item" href="/register/organizador">Regístrate como organizador</a></li>
+                        <li><a class="dropdown-item" th:href="@{'/auth/register/propietario'}">Regístrate como propietario</a></li>
+                        <li><a class="dropdown-item" th:href="@{'/auth/register/organizador'}">Regístrate como organizador</a></li>
                     </ul>
                 </div>
                 <a class="d-block text-secondary" href="#">He olvidado mi contraseña</a>
