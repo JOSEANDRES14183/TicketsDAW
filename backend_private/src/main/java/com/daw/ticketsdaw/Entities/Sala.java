@@ -1,5 +1,6 @@
 package com.daw.ticketsdaw.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.ToString;
@@ -44,12 +45,14 @@ public class Sala implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_propietario", referencedColumnName = "id")
     @NotNull
+    @JsonIgnore
     private PropietarioSala propietarioSala;
 
     @ToString.Exclude
     @ManyToOne
     @JoinColumn(name="ciudad", referencedColumnName = "id")
     @NotNull
+    @JsonManagedReference
     private Ciudad ciudad;
 
     @OneToMany(mappedBy = "sala")

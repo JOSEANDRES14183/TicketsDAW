@@ -2,6 +2,7 @@ package com.daw.ticketsdaw.Controllers;
 
 import com.daw.ticketsdaw.DTOs.EventoDTO;
 
+import com.daw.ticketsdaw.DTOs.SesionNumeradaDTO;
 import com.daw.ticketsdaw.Entities.*;
 import com.daw.ticketsdaw.Services.*;
 import com.daw.ticketsdaw.DTOs.GaleriaDTO;
@@ -33,7 +34,9 @@ public class EventoController {
     @Autowired
     private UsuarioService usuarioService;
     @Autowired
-    SesionService sesionService;
+    private SalaService salaService;
+    @Autowired
+    private SesionService sesionService;
 
     @Autowired
     Environment environment;
@@ -176,4 +179,43 @@ public class EventoController {
 
         return "redirect:/eventos/" + eventoId;
     }
+
+    @GetMapping("/{eventoId}/sesiones_num/create")
+    public String showCreateSesionNumerada(ModelMap modelMap, @PathVariable int eventoId){
+        modelMap.addAttribute("sesion",new SesionNumerada());
+        modelMap.addAttribute("salasConButacas",salaService.getSalasWithButacas());
+        modelMap.addAttribute("evento",eventosService.read(eventoId));
+        return "eventos/sesiones/session-num-form";
+    }
+
+    @GetMapping("/{eventoId}/sesiones_num/{sesionId}/update")
+    public String showUpdateSesionNumerada(ModelMap modelMap, @PathVariable int sesionId, @PathVariable int eventoId){
+        modelMap.addAttribute("sesion",sesionService.read(sesionId));
+        modelMap.addAttribute("salasConButacas",salaService.getSalasWithButacas());
+        modelMap.addAttribute("evento",eventosService.read(eventoId));
+        return "eventos/sesiones/session-num-form";
+    }
+
+    @PostMapping("/{eventoId}/sesiones_num")
+    public String saveSesionNum(@Valid @ModelAttribute SesionNumeradaDTO sesionNumeradaDTO, BindingResult bindingResult , @PathVariable int eventoId, HttpSession session) {
+        if (bindingResult.hasErrors()){
+            return "redirect:/eventos";
+        }
+        SesionNumerada sesionNumerada = modelMapper.map(sesionNumeradaDTO, SesionNumerada.class);
+        if (sesionNumerada.getId()!=null){
+           Sesion sesionPrevState = sesionService.read(sesionNumerada.getId());
+           if (sesionPrevState.getEvento().getOrganizador() != session.getAttribute("usuario")){
+               return "redirect:/eventos";
+           }
+        }
+        Evento evento = eventosService.read(eventoId);
+        Organizador loggedOrganizador = (Organizador) session.getAttribute("usuario");
+        if (evento.getOrganizador().getId() != loggedOrganizador.getId()){
+            return "redirect:/eventos";
+        }
+        sesionNumerada.setEvento(evento);
+        sesionService.save(sesionNumerada);
+        return "redirect:/eventos/"+sesionNumerada.getEvento().getId();
+    }
+
 }

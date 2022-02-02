@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head('Crear sesion numerada')"></head>
+
+<body>
+<header th:replace="fragments/layout :: header('Formulario sesion numerada')"></header>
+
+<main>
+    <section class="container-md">
+        <form method="POST" th:action="'/eventos/'+${evento.id}+'/sesiones_num'" th:object="${sesion}">
+
+            <div th:unless="${sesion.id == null}">
+                <input type="hidden" th:field="*{id}">
+            </div>
+
+            <div class="mb-3">
+                <label th:for="*{entradasMax}" class="form-label">Máximo de entradas</label>
+                <input type="number" class="form-control" th:field="*{entradasMax}">
+            </div>
+
+            <div class="mb-3">
+                <label th:for="*{fechaFinVenta}" class="form-label">Fecha de fin de venta de entradas</label>
+                <input type="datetime-local" class="form-control" th:field="*{fechaFinVenta}">
+            </div>
+
+            <div class="mb-3">
+                <label th:for="*{fechaIni}" class="form-label">Fecha de inicio del evento</label>
+                <input type="datetime-local" class="form-control" th:field="*{fechaIni}">
+            </div>
+
+            <div class="mb-3">
+                <label th:for="*{fechaFin}" class="form-label">Fecha de final del evento</label>
+                <input type="datetime-local" class="form-control" th:field="*{fechaFin}">
+            </div>
+
+            <div class="mb-3">
+                <label th:for="*{precio}" class="form-label">Precio</label>
+                <div class="input-group">
+                    <input type="number" min="0.00" max="10000.00" step="0.1" class="form-control" th:field="*{precio}">
+                    <span class="input-group-text">€</span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label th:for="*{sala}" class="form-label">Sala</label>
+                <select class="form-control" th:field="*{sala}">
+                    <option th:each="sala: ${salasConButacas}"
+                            th:value="${sala.id}"
+                            th:text="${sala.nombre}"/>
+                </select>
+            </div>
+
+            <div class="my-4" id="infoSala"></div>
+
+            <button type="submit" class="btn btn-primary" th:text="'Guardar'"></button>
+        </form>
+    </section>
+</main>
+
+<footer th:replace="fragments/layout :: footer"></footer>
+
+<script>
+
+    showSalaInfo();
+    document.querySelector("#sala").addEventListener("change",showSalaInfo,true);
+
+    function showSalaInfo(){
+        let salaId = document.querySelector("#sala").value;
+        fetch('/salas/' + salaId + '/getJSON')
+            .then(response => response.json())
+            .then(function (data){
+                printSalaInfo(data);
+            });
+    }
+
+    function printSalaInfo(sala){
+        let container = document.querySelector("#infoSala");
+        let text = "";
+
+        text+="<div class=\"d-flex flex-column\">" +
+            "<h4>"+sala["nombre"]+"</h4>" +
+            "<span>Dirección: "+sala["direccion"]+"</span>" +
+            "<span>"+sala["ciudad"]["nombre"]+"</span>" +
+            "<span>Aforo máximo: "+sala["aforoMax"]+"</span>" +
+            "</div>"
+
+        container.innerHTML = text;
+    }
+
+</script>
+
+</body>
+</html>
