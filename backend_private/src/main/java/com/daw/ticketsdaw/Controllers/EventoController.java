@@ -45,12 +45,9 @@ public class EventoController {
 
     @GetMapping({"/", ""})
     public String show(ModelMap modelMap, HttpSession session){
-        if(session.getAttribute("usuario")!=null && session.getAttribute("usuario").getClass()== Organizador.class){
-            Organizador organizador = (Organizador) usuarioService.getById(((Usuario)session.getAttribute("usuario")).getId());
-            modelMap.addAttribute("eventos", organizador.getEventos());
-            return "eventos/index";
-        }
-        return "redirect:/auth/login";
+        Organizador organizador = (Organizador) usuarioService.getById(((Usuario)session.getAttribute("usuario")).getId());
+        modelMap.addAttribute("eventos", organizador.getEventos());
+        return "eventos/index";
     }
 
     @GetMapping({"/{id}"})

@@ -33,26 +33,31 @@ public class SalaController {
 
     @GetMapping({"/",""})
     public String index(ModelMap modelMap, HttpSession session){
-        if(session.getAttribute("usuario")!=null && session.getAttribute("usuario").getClass()== PropietarioSala.class){
-            PropietarioSala propietarioSala = (PropietarioSala) usuarioService.getById(((Usuario) session.getAttribute("usuario")).getId());
-            modelMap.addAttribute("salas", propietarioSala.getSalas());
-            return "salas/index";
+        PropietarioSala propietarioSala = (PropietarioSala) usuarioService.getById(((Usuario) session.getAttribute("usuario")).getId());
+        modelMap.addAttribute("salas", propietarioSala.getSalas());
+        return "salas/index";
+
+    }
+
+    @GetMapping("{id}")
+    public String show(ModelMap modelMap, @PathVariable("id") int salaId, HttpSession session){
+        Sala sala = salaService.read(salaId);
+        if (checkPropietarioSala(sala,session)){
+            modelMap.addAttribute("sala",sala);
+            modelMap.addAttribute("butacas",salaService.getButacasJson(sala));
+            return "salas/show";
         }
         return "redirect:/auth/login";
     }
 
-    @GetMapping("{id}")
-    public String show(ModelMap modelMap, @PathVariable("id") int salaId){
-        Sala sala = salaService.read(salaId);
-        modelMap.addAttribute("sala",sala);
-        modelMap.addAttribute("butacas",salaService.getButacasJson(sala));
-        return "salas/show";
-    }
-
     @GetMapping("{id}/delete")
-    public String delete(@PathVariable("id") int salaId){
-        salaService.delete(salaService.read(salaId));
-        return "redirect:/salas";
+    public String delete(@PathVariable("id") int salaId, HttpSession session){
+        Sala sala = salaService.read(salaId);
+        if (checkPropietarioSala(sala,session)) {
+            salaService.delete(sala);
+            return "redirect:/salas";
+        }
+        return "redirect:/auth/login";
     }
 
     @GetMapping({"create"})
@@ -65,10 +70,14 @@ public class SalaController {
     }
 
     @GetMapping({"{id}/update"})
-        public String update(@PathVariable("id") Integer id, ModelMap modelMap){
-        modelMap.addAttribute("sala",salaService.read(id));
-        modelMap.addAttribute("ciudades",ciudadService.read());
-        return "salas/form";
+        public String update(@PathVariable("id") Integer id, ModelMap modelMap, HttpSession session){
+        Sala sala = salaService.read(id);
+        if (checkPropietarioSala(sala,session)) {
+            modelMap.addAttribute("sala", sala);
+            modelMap.addAttribute("ciudades", ciudadService.read());
+            return "salas/form";
+        }
+        return "redirect:/auth/login";
     }
 
     @PostMapping({"/",""})
@@ -97,6 +106,11 @@ public class SalaController {
     @ResponseBody
     public Sala getSalaAsJSON(@PathVariable int id){
         return salaService.read(id);
+    }
+
+    private boolean checkPropietarioSala(Sala sala, HttpSession session){
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        return sala.getPropietarioSala().getId() == usuario.getId();
     }
 
 }
