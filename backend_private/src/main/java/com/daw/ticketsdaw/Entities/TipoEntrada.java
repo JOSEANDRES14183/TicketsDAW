@@ -9,28 +9,16 @@ import javax.validation.constraints.NotNull;
 @Data
 @Entity
 @Table(name = "tipo_entrada")
-@IdClass(TipoEntradaId.class)
 public class TipoEntrada {
-
-    public TipoEntrada(SesionNoNumerada sesion, String nombre, int maxEntradas, float precio) {
-        this.sesion = sesion;
-        this.nombre = nombre;
-        this.maxEntradas = maxEntradas;
-        this.precio = precio;
-    }
-
-    public TipoEntrada() {
-
-    }
-
-    @Id
     @ToString.Exclude
+    @EmbeddedId
+    private TipoEntradaId primaryKey;
+
+    @ToString.Exclude
+    @MapsId("sesion")
     @ManyToOne
     @JoinColumn(name = "id_sesion", referencedColumnName = "id")
-    private SesionNoNumerada sesion;
-
-    @Id
-    private String nombre;
+    private SesionNoNumerada entitySesion;
 
     @NotNull
     @Column(name = "max_entradas")

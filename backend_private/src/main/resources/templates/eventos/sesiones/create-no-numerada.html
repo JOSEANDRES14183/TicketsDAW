@@ -53,7 +53,7 @@
                     <legend>Tipo de entrada</legend>
                     <div class="mb-3">
                         <label th:for="'nombreTipo' + ${iStat.index}" class="form-label">Nombre del tipo</label>
-                        <input type="text" class="form-control w-25" th:value="${tipoEntrada.nombre}" name="nombreTipo" th:id="'nombreTipo' + ${iStat.index}">
+                        <input type="text" class="form-control w-25" th:value="${tipoEntrada.getPrimaryKey().nombre}" name="nombreTipo" th:id="'nombreTipo' + ${iStat.index}">
                     </div>
                     <div class="mb-3">
                         <label th:for="'maxEntradasTipo' + ${iStat.index}" class="form-label">Entradas máximas</label>

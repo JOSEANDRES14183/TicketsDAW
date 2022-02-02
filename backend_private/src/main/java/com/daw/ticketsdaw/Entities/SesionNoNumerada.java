@@ -2,10 +2,7 @@ package com.daw.ticketsdaw.Entities;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -13,6 +10,6 @@ import java.util.List;
 @Entity
 @Table(name = "sesion_no_numerada")
 public class SesionNoNumerada extends Sesion{
-    @OneToMany(mappedBy = "sesion")
+    @OneToMany(mappedBy = "entitySesion", fetch = FetchType.EAGER)
     List<TipoEntrada> tiposEntrada;
 }

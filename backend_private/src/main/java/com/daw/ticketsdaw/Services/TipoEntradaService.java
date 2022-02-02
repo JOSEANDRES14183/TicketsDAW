@@ -15,4 +15,8 @@ public class TipoEntradaService {
     public void save(TipoEntrada tipoEntrada){
         tipoEntradaRepository.save(tipoEntrada);
     }
+
+    public void delete(TipoEntrada tipoEntrada){
+        tipoEntradaRepository.delete(tipoEntrada);
+    }
 }

@@ -214,10 +214,26 @@ public class EventoController {
             return "redirect:/eventos/" + eventoId + "/sesiones_no_num/create?error=validation";
         }
 
+        if(sesionDTO.getId() != null){
+            SesionNoNumerada sesionPrevState = (SesionNoNumerada) sesionService.read(sesionDTO.getId());
+            sesion.setTiposEntrada(sesionPrevState.getTiposEntrada());
+        }
+
         sesionService.save(sesion);
 
+        var temp = (SesionNoNumerada) sesionService.read(sesion.getId());
+
+        for (var tipoEntrada: temp.getTiposEntrada()) {
+            tipoEntradaService.delete(tipoEntrada);
+        }
+
         for (int i = 0; i < sesionDTO.getMaxEntradasTipo().size(); i++){
-            tipoEntradaService.save(new TipoEntrada(sesion, sesionDTO.getNombreTipo().get(i), sesionDTO.getMaxEntradasTipo().get(i), sesionDTO.getPrecioTipo().get(i)));
+            var tipo = new TipoEntrada();
+            tipo.setPrimaryKey(new TipoEntradaId(sesion.getId(), sesionDTO.getNombreTipo().get(i)));
+            tipo.setEntitySesion(sesion);
+            tipo.setMaxEntradas(sesionDTO.getMaxEntradasTipo().get(i));
+            tipo.setPrecio(sesionDTO.getPrecioTipo().get(i));
+            tipoEntradaService.save(tipo);
         }
 
         return "redirect:/eventos/" + eventoId;
