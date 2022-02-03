@@ -44,9 +44,14 @@
                 <input type="datetime-local" class="form-control w-25" th:field="*{fechaFin}">
             </div>
             <div id="tiposEntrada">
-                <a class="btn btn-primary" onclick="addTipoEntrada()">Añadir</a>
+                <a class="btn btn-primary" id="btnAddTipoEntrada">Añadir</a>
                 <fieldset th:each="tipoEntrada, iStat: ${sesion.tiposEntrada}">
-                    <legend>Tipo de entrada</legend>
+                    <div class="d-flex justify-content-start">
+                        <a class="btn btn-light btnRemoveTipoEntrada">
+                            <i class="bi bi-trash-fill"></i>
+                        </a>
+                        <legend>Tipo de entrada</legend>
+                    </div>
                     <div class="mb-3">
                         <label th:for="'nombreTipo' + ${iStat.index}" class="form-label">Nombre del tipo</label>
                         <input type="text" class="form-control w-25" th:value="${tipoEntrada.getPrimaryKey().nombre}" name="nombreTipo" th:id="'nombreTipo' + ${iStat.index}">
@@ -70,14 +75,31 @@
 </main>
 <footer th:replace="fragments/layout :: footer"></footer>
 <script>
+    document.getElementById("btnAddTipoEntrada").addEventListener("click", addTipoEntrada)
+
+    let buttonsArray = document.getElementsByClassName("btnRemoveTipoEntrada")
+    for (let i = 0; i < buttonsArray.length; i++) {
+        buttonsArray[i].addEventListener("click", removeClosestFieldsetParent, false)
+    }
+
     let iteration = 0
     function addTipoEntrada(){
         iteration++
         let iterationText = iteration + "G"
         let fieldset = document.createElement('fieldset')
-        let legend = document.createElement("legend")
-        legend.appendChild(document.createTextNode("Tipo de entrada"))
-        fieldset.appendChild(legend)
+        let divLegend = document.createElement("div")
+        divLegend.classList.add("d-flex", "justify-content-start")
+            let buttonDelete = document.createElement("a")
+            buttonDelete.classList.add("btn", "btn-light", "btnRemoveTipoEntrada")
+            buttonDelete.addEventListener("click", removeClosestFieldsetParent, false)
+                let trashIcon = document.createElement("i")
+                trashIcon.classList.add("bi", "bi-trash-fill")
+            buttonDelete.appendChild(trashIcon)
+        divLegend.appendChild(buttonDelete)
+            let legend = document.createElement("legend")
+            legend.appendChild(document.createTextNode("Tipo de entrada"))
+        divLegend.appendChild(legend)
+        fieldset.appendChild(divLegend)
 
         let divNombre = document.createElement("div")
             divNombre.classList.add("mb-3")
@@ -132,6 +154,11 @@
         fieldset.appendChild(divPrecio)
 
         document.getElementById("tiposEntrada").appendChild(fieldset)
+    }
+
+    function removeClosestFieldsetParent(event){
+        let element = event.target
+        element.closest("fieldset").remove()
     }
 </script>
 
