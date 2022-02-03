@@ -93,4 +93,10 @@ public class SalaController {
         return "salas/butacas-form";
     }
 
+    @GetMapping("{id}/getJSON")
+    @ResponseBody
+    public Sala getSalaAsJSON(@PathVariable int id){
+        return salaService.read(id);
+    }
+
 }
