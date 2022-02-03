@@ -44,11 +44,18 @@ public class LoginController {
     @PostMapping("/login")
     public String login(@RequestParam("username") String username, @RequestParam("password") String password, HttpServletRequest request, ModelMap modelMap){
         Usuario usuario = usuarioService.getByNombreUsuario(username);
-        if(passwordEncoder.matches(password,usuario.getPasswordHash())){
-            request.getSession().setAttribute("usuario",usuario);
-            return "redirect:/login";
+        if (usuario!=null) {
+            if (passwordEncoder.matches(password, usuario.getPasswordHash())) {
+                request.getSession().setAttribute("usuario", usuario);
+                if (usuario.getClass() == PropietarioSala.class){
+                    return "redirect:/salas";
+                }
+                if (usuario.getClass() == Organizador.class){
+                    return "redirect:/eventos";
+                }
+            }
         }
-        return "redirect:/login?error=password";
+        return "redirect:/auth/login?error=password";
     }
 
     @GetMapping("/register/propietario")
