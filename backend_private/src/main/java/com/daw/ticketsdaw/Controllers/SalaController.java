@@ -109,12 +109,6 @@ public class SalaController {
         return "salas/butacas-form";
     }
 
-    @GetMapping("{id}/getJSON")
-    @ResponseBody
-    public Sala getSalaAsJSON(@PathVariable int id){
-        return salaService.read(id);
-    }
-
     private boolean checkPropietarioSala(Sala sala, HttpSession session){
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         return sala.getPropietarioSala().getId() == usuario.getId();

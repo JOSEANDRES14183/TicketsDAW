@@ -66,7 +66,7 @@
 
     function showSalaInfo(){
         let salaId = document.querySelector("#sala").value;
-        fetch('/salas/' + salaId + '/getJSON')
+        fetch('/salas-api/' + salaId)
             .then(response => response.json())
             .then(function (data){
                 printSalaInfo(data);
