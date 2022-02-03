@@ -42,10 +42,6 @@ public class SesionNoNumeradaDTO {
 
     @ToString.Exclude
     @NotNull
-    private Evento evento;
-
-    @ToString.Exclude
-    @NotNull
     private Sala sala;
 
     List<String> nombreTipo;

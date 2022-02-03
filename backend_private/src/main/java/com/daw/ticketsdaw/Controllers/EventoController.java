@@ -209,15 +209,27 @@ public class EventoController {
 
         SesionNoNumerada sesion = modelMapper.map(sesionDTO, SesionNoNumerada.class);
 
+        Evento evento = eventosService.read(eventoId);
+
+        //Check if TipoEntrada inputs have a valid structure
         if(!(sesionDTO.getMaxEntradasTipo().size() == sesionDTO.getNombreTipo().size() &&
                 sesionDTO.getNombreTipo().size() == sesionDTO.getPrecioTipo().size())){
             return "redirect:/eventos/" + eventoId + "/sesiones_no_num/create?error=validation";
         }
 
         if(sesionDTO.getId() != null){
+            //If Sesion had TiposEntrada previously, put them back before saving the object, if not a bug occurs and the TiposEntrada list appears empty even though they aren't dropped from the database
             SesionNoNumerada sesionPrevState = (SesionNoNumerada) sesionService.read(sesionDTO.getId());
             sesion.setTiposEntrada(sesionPrevState.getTiposEntrada());
+
+            //Check if evento id has changed since last submission
+            if(sesionPrevState.getEvento().getId() != eventoId)
+                return "redirect:/eventos?error=validation";
+
+            //TODO: Check auth
         }
+
+        sesion.setEvento(evento);
 
         sesionService.save(sesion);
 
