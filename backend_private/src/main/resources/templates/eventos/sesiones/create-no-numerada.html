@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head('Crear sesion no numerada')"></head>
+
+<body>
+<header th:replace="fragments/layout :: header('Crear sesion no numerada')"></header>
+
+<main>
+    <section class="container-md">
+        <form method="POST" th:action="'/eventos/' + ${evento.id} + '/sesiones_no_num'" th:object="${sesion}">
+            <div class="mb-3" th:unless="${sesion.getId() == null}">
+                <label for="id" class="form-label">Identificador</label>
+                <input type="number" class="form-control" readonly th:field="*{id}">
+            </div>
+            <div class="mb-3">
+                <label th:for="*{entradasMax}" class="form-label">Entradas máximas</label>
+                <input type="number" class="form-control" th:field="*{entradasMax}">
+            </div>
+            <div class="mb-3">
+                <label th:for="*{sala}" class="form-label">Sala</label>
+                <select class="form-control" th:field="*{sala}">
+                    <option th:each="sala: ${salas}"
+                            th:value="${sala.id}"
+                            th:text="${sala.nombre}"/>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="estaOculto" class="form-label">Esta oculto</label>
+                <select class="form-control w-25" th:field="*{estaOculto}">
+                    <option value="true">Oculto</option>
+                    <option value="false">No oculto</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="fechaFinVenta" class="form-label">Fecha y hora de fin de venta</label>
+                <input type="datetime-local" class="form-control w-25" th:field="*{fechaFinVenta}">
+            </div>
+            <div class="mb-3">
+                <label for="fechaIni" class="form-label">Fecha y hora de inicio del evento</label>
+                <input type="datetime-local" class="form-control w-25" th:field="*{fechaIni}">
+            </div>
+            <div class="mb-3">
+                <label for="fechaFin" class="form-label">Fecha y hora de fin del evento</label>
+                <input type="datetime-local" class="form-control w-25" th:field="*{fechaFin}">
+            </div>
+            <div id="tiposEntrada">
+                <a class="btn btn-primary" id="btnAddTipoEntrada">Añadir</a>
+                <fieldset th:each="tipoEntrada, iStat: ${sesion.tiposEntrada}">
+                    <div class="d-flex justify-content-start">
+                        <a class="btn btn-light btnRemoveTipoEntrada">
+                            <i class="bi bi-trash-fill"></i>
+                        </a>
+                        <legend>Tipo de entrada</legend>
+                    </div>
+                    <div class="mb-3">
+                        <label th:for="'nombreTipo' + ${iStat.index}" class="form-label">Nombre del tipo</label>
+                        <input type="text" class="form-control w-25" th:value="${tipoEntrada.getPrimaryKey().nombre}" name="nombreTipo" th:id="'nombreTipo' + ${iStat.index}">
+                    </div>
+                    <div class="mb-3">
+                        <label th:for="'maxEntradasTipo' + ${iStat.index}" class="form-label">Entradas máximas</label>
+                        <input type="number" class="form-control w-25" th:value="${tipoEntrada.maxEntradas}" name="maxEntradasTipo" th:id="'maxEntradasTipo' + ${iStat.index}">
+                    </div>
+                    <div class="mb-3">
+                        <label th:for="'precioTipo' + ${iStat.index}" class="form-label">Precio por entrada</label>
+                        <div class="input-group w-25">
+                            <input type="number" class="form-control" th:value="${tipoEntrada.precio}" name="precioTipo" th:id="'precioTipo' + ${iStat.index}">
+                            <span class="input-group-text">€</span>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <button type="submit" class="btn btn-primary" th:text="'Guardar'"></button>
+        </form>
+    </section>
+</main>
+<footer th:replace="fragments/layout :: footer"></footer>
+<script>
+    document.getElementById("btnAddTipoEntrada").addEventListener("click", addTipoEntrada)
+
+    let buttonsArray = document.getElementsByClassName("btnRemoveTipoEntrada")
+    for (let i = 0; i < buttonsArray.length; i++) {
+        buttonsArray[i].addEventListener("click", removeClosestFieldsetParent, false)
+    }
+
+    let iteration = 0
+    function addTipoEntrada(){
+        iteration++
+        let iterationText = iteration + "G"
+        let fieldset = document.createElement('fieldset')
+        let divLegend = document.createElement("div")
+        divLegend.classList.add("d-flex", "justify-content-start")
+            let buttonDelete = document.createElement("a")
+            buttonDelete.classList.add("btn", "btn-light", "btnRemoveTipoEntrada")
+            buttonDelete.addEventListener("click", removeClosestFieldsetParent, false)
+                let trashIcon = document.createElement("i")
+                trashIcon.classList.add("bi", "bi-trash-fill")
+            buttonDelete.appendChild(trashIcon)
+        divLegend.appendChild(buttonDelete)
+            let legend = document.createElement("legend")
+            legend.appendChild(document.createTextNode("Tipo de entrada"))
+        divLegend.appendChild(legend)
+        fieldset.appendChild(divLegend)
+
+        let divNombre = document.createElement("div")
+            divNombre.classList.add("mb-3")
+                let labelNombre = document.createElement("label")
+                labelNombre.htmlFor = "nombreTipo" + iterationText
+                labelNombre.classList.add("form-label")
+                labelNombre.appendChild(document.createTextNode("Nombre del tipo"))
+            divNombre.appendChild(labelNombre)
+                let inputNombre = document.createElement("input")
+                inputNombre.type = "text"
+                inputNombre.classList.add("form-control", "w-25")
+                inputNombre.name = "nombreTipo"
+                inputNombre.id = "nombreTipo" + iterationText
+            divNombre.appendChild(inputNombre)
+        fieldset.appendChild(divNombre)
+
+        let divMaxEntradas = document.createElement("div")
+            divMaxEntradas.classList.add("mb-3")
+                let labelMaxEntradas = document.createElement("label")
+                labelMaxEntradas.htmlFor = "maxEntradasTipo" + iterationText
+                labelMaxEntradas.classList.add("form-label")
+                labelMaxEntradas.appendChild(document.createTextNode("Entradas máximas"))
+            divMaxEntradas.appendChild(labelMaxEntradas)
+                let inputMaxEntradas = document.createElement("input")
+                inputMaxEntradas.type = "number"
+                inputMaxEntradas.classList.add("form-control", "w-25")
+                inputMaxEntradas.name = "maxEntradasTipo"
+                inputMaxEntradas.id = "maxEntradasTipo" + iterationText
+            divMaxEntradas.appendChild(inputMaxEntradas)
+        fieldset.appendChild(divMaxEntradas)
+
+        let divPrecio = document.createElement("div")
+            divPrecio.classList.add("mb-3")
+                let labelPrecio = document.createElement("label")
+                labelPrecio.htmlFor = "precioTipo" + iterationText
+                labelPrecio.classList.add("form-label")
+                labelPrecio.appendChild(document.createTextNode("Precio por entrada"))
+            divPrecio.appendChild(labelPrecio)
+                let inputGroupPrecio = document.createElement("div")
+                inputGroupPrecio.classList.add("input-group", "w-25")
+                    let inputPrecio = document.createElement("input")
+                    inputPrecio.type = "number"
+                    inputPrecio.classList.add("form-control", "w-25")
+                    inputPrecio.name = "precioTipo"
+                    inputPrecio.id = "precioTipo" + iterationText
+                inputGroupPrecio.appendChild(inputPrecio)
+                    let spanPrecio = document.createElement("span")
+                    spanPrecio.classList.add("input-group-text")
+                    spanPrecio.appendChild(document.createTextNode("€"))
+                inputGroupPrecio.appendChild(spanPrecio)
+            divPrecio.appendChild(inputGroupPrecio)
+        fieldset.appendChild(divPrecio)
+
+        document.getElementById("tiposEntrada").appendChild(fieldset)
+    }
+
+    function removeClosestFieldsetParent(event){
+        let element = event.target
+        element.closest("fieldset").remove()
+    }
+</script>
+
+</body>
+</html>

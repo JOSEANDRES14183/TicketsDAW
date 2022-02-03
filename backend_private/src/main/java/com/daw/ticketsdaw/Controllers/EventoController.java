@@ -2,6 +2,7 @@ package com.daw.ticketsdaw.Controllers;
 
 import com.daw.ticketsdaw.DTOs.EventoDTO;
 
+import com.daw.ticketsdaw.DTOs.SesionNoNumeradaDTO;
 import com.daw.ticketsdaw.DTOs.SesionNumeradaDTO;
 import com.daw.ticketsdaw.Entities.*;
 import com.daw.ticketsdaw.Services.*;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/eventos")
@@ -37,6 +40,8 @@ public class EventoController {
     private SalaService salaService;
     @Autowired
     private SesionService sesionService;
+    @Autowired
+    private TipoEntradaService tipoEntradaService;
 
     @Autowired
     Environment environment;
@@ -176,6 +181,73 @@ public class EventoController {
             return "redirect:/eventos/" + eventoId + "?error=unauthorized";
 
         mediaService.delete(media);
+
+        return "redirect:/eventos/" + eventoId;
+    }
+
+    @GetMapping({"/{eventoId}/sesiones_no_num/create"})
+    public String showFormNoNum(ModelMap model, @PathVariable Integer eventoId){
+        model.addAttribute("sesion", new SesionNoNumerada());
+        model.addAttribute("salas", salaService.read());
+        model.addAttribute("evento", eventosService.read(eventoId));
+        return "eventos/sesiones/create-no-numerada";
+    }
+
+    @GetMapping({"/{eventoId}/sesiones_no_num/{sesionId}/update"})
+    public String updateNoNum(ModelMap model, @PathVariable Integer eventoId, @PathVariable Integer sesionId){
+        model.addAttribute("sesion", (SesionNoNumerada) sesionService.read(sesionId));
+        model.addAttribute("salas", salaService.read());
+        model.addAttribute("evento", eventosService.read(eventoId));
+        return "eventos/sesiones/create-no-numerada";
+    }
+
+    @PostMapping({"/{eventoId}/sesiones_no_num"})
+    @Transactional(rollbackFor = {Exception.class})
+    public String saveSesionNoNum(@Valid @ModelAttribute SesionNoNumeradaDTO sesionDTO, BindingResult bindingResult, @PathVariable Integer eventoId) throws IOException {
+        if(bindingResult.hasErrors()){
+            return "redirect:/eventos/" + eventoId + "/sesiones_no_num/create?error=validation";
+        }
+
+        SesionNoNumerada sesion = modelMapper.map(sesionDTO, SesionNoNumerada.class);
+
+        Evento evento = eventosService.read(eventoId);
+
+        //Check if TipoEntrada inputs have a valid structure
+        if(!(sesionDTO.getMaxEntradasTipo().size() == sesionDTO.getNombreTipo().size() &&
+                sesionDTO.getNombreTipo().size() == sesionDTO.getPrecioTipo().size())){
+            return "redirect:/eventos/" + eventoId + "/sesiones_no_num/create?error=validation";
+        }
+
+        if(sesionDTO.getId() != null){
+            //If Sesion had TiposEntrada previously, put them back before saving the object, if not a bug occurs and the TiposEntrada list appears empty even though they aren't dropped from the database
+            SesionNoNumerada sesionPrevState = (SesionNoNumerada) sesionService.read(sesionDTO.getId());
+            sesion.setTiposEntrada(sesionPrevState.getTiposEntrada());
+
+            //Check if evento id has changed since last submission
+            if(sesionPrevState.getEvento().getId() != eventoId)
+                return "redirect:/eventos?error=validation";
+
+            //TODO: Check auth
+        }
+
+        sesion.setEvento(evento);
+
+        sesionService.save(sesion);
+
+        if(sesion.getTiposEntrada() != null){
+            for (var tipoEntrada: sesion.getTiposEntrada()) {
+                tipoEntradaService.delete(tipoEntrada);
+            }
+        }
+
+        for (int i = 0; i < sesionDTO.getMaxEntradasTipo().size(); i++){
+            var tipo = new TipoEntrada();
+            tipo.setPrimaryKey(new TipoEntradaId(sesion.getId(), sesionDTO.getNombreTipo().get(i)));
+            tipo.setEntitySesion(sesion);
+            tipo.setMaxEntradas(sesionDTO.getMaxEntradasTipo().get(i));
+            tipo.setPrecio(sesionDTO.getPrecioTipo().get(i));
+            tipoEntradaService.save(tipo);
+        }
 
         return "redirect:/eventos/" + eventoId;
     }
