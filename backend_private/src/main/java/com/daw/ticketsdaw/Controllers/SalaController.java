@@ -10,7 +10,6 @@ import com.daw.ticketsdaw.Services.UsuarioService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -87,6 +86,14 @@ public class SalaController {
         }
 
         Sala sala = modelMapper.map(salaDTO, Sala.class);
+
+        if(sala.getId()!=null){
+            Sala salaPrevState = salaService.read(sala.getId());
+            if(!checkPropietarioSala(salaPrevState,session)){
+                return "redirect:/auth/login";
+            }
+        }
+
         PropietarioSala propietarioSala = (PropietarioSala) usuarioService.getById(((Usuario) session.getAttribute("usuario")).getId());
         sala.setPropietarioSala(propietarioSala);
 
