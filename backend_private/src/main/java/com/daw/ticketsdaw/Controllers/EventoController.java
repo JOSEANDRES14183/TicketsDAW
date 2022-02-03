@@ -201,7 +201,7 @@ public class EventoController {
     }
 
     @PostMapping({"/{eventoId}/sesiones_no_num"})
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public String saveSesionNoNum(@Valid @ModelAttribute SesionNoNumeradaDTO sesionDTO, BindingResult bindingResult, @PathVariable Integer eventoId) throws IOException {
         if(bindingResult.hasErrors()){
             return "redirect:/eventos/" + eventoId + "/sesiones_no_num/create?error=validation";
@@ -221,10 +221,10 @@ public class EventoController {
 
         sesionService.save(sesion);
 
-        var temp = (SesionNoNumerada) sesionService.read(sesion.getId());
-
-        for (var tipoEntrada: temp.getTiposEntrada()) {
-            tipoEntradaService.delete(tipoEntrada);
+        if(sesion.getTiposEntrada() != null){
+            for (var tipoEntrada: sesion.getTiposEntrada()) {
+                tipoEntradaService.delete(tipoEntrada);
+            }
         }
 
         for (int i = 0; i < sesionDTO.getMaxEntradasTipo().size(); i++){
