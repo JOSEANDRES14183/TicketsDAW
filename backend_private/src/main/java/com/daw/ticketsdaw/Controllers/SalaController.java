@@ -10,7 +10,6 @@ import com.daw.ticketsdaw.Services.UsuarioService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -33,26 +32,31 @@ public class SalaController {
 
     @GetMapping({"/",""})
     public String index(ModelMap modelMap, HttpSession session){
-        if(session.getAttribute("usuario")!=null && session.getAttribute("usuario").getClass()== PropietarioSala.class){
-            PropietarioSala propietarioSala = (PropietarioSala) usuarioService.getById(((Usuario) session.getAttribute("usuario")).getId());
-            modelMap.addAttribute("salas", propietarioSala.getSalas());
-            return "salas/index";
-        }
-        return "redirect:/login";
+        PropietarioSala propietarioSala = (PropietarioSala) usuarioService.getById(((Usuario) session.getAttribute("usuario")).getId());
+        modelMap.addAttribute("salas", propietarioSala.getSalas());
+        return "salas/index";
+
     }
 
     @GetMapping("{id}")
-    public String show(ModelMap modelMap, @PathVariable("id") int salaId){
+    public String show(ModelMap modelMap, @PathVariable("id") int salaId, HttpSession session){
         Sala sala = salaService.read(salaId);
-        modelMap.addAttribute("sala",sala);
-        modelMap.addAttribute("butacas",salaService.getButacasJson(sala));
-        return "salas/show";
+        if (checkPropietarioSala(sala,session)){
+            modelMap.addAttribute("sala",sala);
+            modelMap.addAttribute("butacas",salaService.getButacasJson(sala));
+            return "salas/show";
+        }
+        return "redirect:/auth/login";
     }
 
     @GetMapping("{id}/delete")
-    public String delete(@PathVariable("id") int salaId){
-        salaService.delete(salaService.read(salaId));
-        return "redirect:/salas";
+    public String delete(@PathVariable("id") int salaId, HttpSession session){
+        Sala sala = salaService.read(salaId);
+        if (checkPropietarioSala(sala,session)) {
+            salaService.delete(sala);
+            return "redirect:/salas";
+        }
+        return "redirect:/auth/login";
     }
 
     @GetMapping({"create"})
@@ -65,10 +69,14 @@ public class SalaController {
     }
 
     @GetMapping({"{id}/update"})
-        public String update(@PathVariable("id") Integer id, ModelMap modelMap){
-        modelMap.addAttribute("sala",salaService.read(id));
-        modelMap.addAttribute("ciudades",ciudadService.read());
-        return "salas/form";
+        public String update(@PathVariable("id") Integer id, ModelMap modelMap, HttpSession session){
+        Sala sala = salaService.read(id);
+        if (checkPropietarioSala(sala,session)) {
+            modelMap.addAttribute("sala", sala);
+            modelMap.addAttribute("ciudades", ciudadService.read());
+            return "salas/form";
+        }
+        return "redirect:/auth/login";
     }
 
     @PostMapping({"/",""})
@@ -78,6 +86,14 @@ public class SalaController {
         }
 
         Sala sala = modelMapper.map(salaDTO, Sala.class);
+
+        if(sala.getId()!=null){
+            Sala salaPrevState = salaService.read(sala.getId());
+            if(!checkPropietarioSala(salaPrevState,session)){
+                return "redirect:/auth/login";
+            }
+        }
+
         PropietarioSala propietarioSala = (PropietarioSala) usuarioService.getById(((Usuario) session.getAttribute("usuario")).getId());
         sala.setPropietarioSala(propietarioSala);
 
@@ -93,10 +109,9 @@ public class SalaController {
         return "salas/butacas-form";
     }
 
-    @GetMapping("{id}/getJSON")
-    @ResponseBody
-    public Sala getSalaAsJSON(@PathVariable int id){
-        return salaService.read(id);
+    private boolean checkPropietarioSala(Sala sala, HttpSession session){
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        return sala.getPropietarioSala().getId() == usuario.getId();
     }
 
 }

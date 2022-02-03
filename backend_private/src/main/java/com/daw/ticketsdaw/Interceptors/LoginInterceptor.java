@@ -1,5 +1,10 @@
 package com.daw.ticketsdaw.Interceptors;
 
+import com.daw.ticketsdaw.Entities.Organizador;
+import com.daw.ticketsdaw.Entities.PropietarioSala;
+import com.daw.ticketsdaw.Entities.Usuario;
+import com.daw.ticketsdaw.Services.UsuarioService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -11,11 +16,30 @@ import javax.servlet.http.HttpServletResponse;
 
 
 @Component
-public class SalaInterceptor implements HandlerInterceptor {
+public class LoginInterceptor implements HandlerInterceptor {
+
+    @Autowired
+    UsuarioService usuarioService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        return HandlerInterceptor.super.preHandle(request, response, handler);
+        if (request.getSession().getAttribute("usuario")==null){
+            response.sendRedirect("/auth/login");
+            return false;
+        }
+
+        Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
+
+        if (request.getRequestURI().startsWith("/salas") && usuario.getClass() == PropietarioSala.class){
+            return true;
+        }
+
+        if (request.getRequestURI().startsWith("/eventos") && usuario.getClass() == Organizador.class){
+            return true;
+        }
+
+        response.sendRedirect("/auth/login");
+        return false;
     }
 
     @Override

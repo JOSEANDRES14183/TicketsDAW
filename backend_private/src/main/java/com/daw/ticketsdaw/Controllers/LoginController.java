@@ -14,10 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -25,6 +22,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 
 @Controller
+@RequestMapping("/auth")
 public class LoginController {
 
     @Autowired
@@ -39,22 +37,25 @@ public class LoginController {
     private final ModelMapper modelMapper = new ModelMapper();
 
     @GetMapping("/login")
-    public String showLogin(ModelMap modelMap, HttpSession session){
-        Usuario usuario = (Usuario) session.getAttribute("usuario");
-        if (usuario!=null){
-            modelMap.addAttribute("welcome","Welcome " + usuario.getNombreUsuario());
-        }
+    public String showLogin(){
         return "login/login";
     }
 
     @PostMapping("/login")
     public String login(@RequestParam("username") String username, @RequestParam("password") String password, HttpServletRequest request, ModelMap modelMap){
         Usuario usuario = usuarioService.getByNombreUsuario(username);
-        if(passwordEncoder.matches(password,usuario.getPasswordHash())){
-            request.getSession().setAttribute("usuario",usuario);
-            modelMap.addAttribute("welcome","Welcome " + usuario.getNombreUsuario());
+        if (usuario!=null) {
+            if (passwordEncoder.matches(password, usuario.getPasswordHash())) {
+                request.getSession().setAttribute("usuario", usuario);
+                if (usuario.getClass() == PropietarioSala.class){
+                    return "redirect:/salas";
+                }
+                if (usuario.getClass() == Organizador.class){
+                    return "redirect:/eventos";
+                }
+            }
         }
-        return "login/login";
+        return "redirect:/auth/login?error=password";
     }
 
     @GetMapping("/register/propietario")
@@ -70,19 +71,20 @@ public class LoginController {
     }
 
     @PostMapping("/register/propietario")
-    public String savePropietario(@Valid @ModelAttribute PropietarioSala propietarioSala, BindingResult bindingResult){
+    public String savePropietario(@Valid @ModelAttribute PropietarioSala propietarioSala, BindingResult bindingResult, HttpServletRequest request){
         if (bindingResult.hasErrors()){
-            return "redirect:/register/propietario?error=validation";
+            return "redirect:/auth/register/propietario?error=validation";
         }
         propietarioSala.setPasswordHash(passwordEncoder.encode(propietarioSala.getPasswordHash()));
         usuarioService.create(propietarioSala);
+        request.getSession().setAttribute("usuario",propietarioSala);
         return "redirect:/salas";
     }
 
     @PostMapping("/register/organizador")
-    public String saveOrganizador(@Valid @ModelAttribute OrganizadorDTO organizadorDTO, BindingResult bindingResult) throws IOException {
+    public String saveOrganizador(@Valid @ModelAttribute OrganizadorDTO organizadorDTO, BindingResult bindingResult, HttpServletRequest request) throws IOException {
         if (bindingResult.hasErrors()){
-            return "redirect:/register/organizador?error=validation";
+            return "redirect:/auth/register/organizador?error=validation";
         }
 
         Organizador organizador = modelMapper.map(organizadorDTO, Organizador.class);
@@ -91,14 +93,14 @@ public class LoginController {
         organizador.setFotoPerfil(mediaService.createFromFile(organizadorDTO.getFotoPerfil()));
 
         usuarioService.create(organizador);
-
+        request.getSession().setAttribute("usuario",organizador);
         return "redirect:/eventos";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session){
         session.invalidate();
-        return "redirect:/login";
+        return "redirect:/auth/login";
     }
 
 

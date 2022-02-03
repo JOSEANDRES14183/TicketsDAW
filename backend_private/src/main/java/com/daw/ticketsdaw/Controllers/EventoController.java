@@ -50,18 +50,19 @@ public class EventoController {
 
     @GetMapping({"/", ""})
     public String show(ModelMap modelMap, HttpSession session){
-        if(session.getAttribute("usuario")!=null && session.getAttribute("usuario").getClass()== Organizador.class){
-            Organizador organizador = (Organizador) usuarioService.getById(((Usuario)session.getAttribute("usuario")).getId());
-            modelMap.addAttribute("eventos", organizador.getEventos());
-            return "eventos/index";
-        }
-        return "redirect:/login";
+        Organizador organizador = (Organizador) usuarioService.getById(((Usuario)session.getAttribute("usuario")).getId());
+        modelMap.addAttribute("eventos", organizador.getEventos());
+        return "eventos/index";
     }
 
     @GetMapping({"/{id}"})
-    public String showOne(ModelMap modelMap, @PathVariable(name="id") Integer eventoId){
-        modelMap.addAttribute("evento", eventosService.read(eventoId));
-        return "eventos/show";
+    public String showOne(ModelMap modelMap, @PathVariable(name="id") Integer eventoId, HttpSession session){
+        Evento evento = eventosService.read(eventoId);
+        if (checkOrganizador(evento, session)){
+            modelMap.addAttribute("evento", evento);
+            return "eventos/show";
+        }
+        return "redirect:/auth/login";
     }
 
     @GetMapping({"create"})
@@ -72,11 +73,14 @@ public class EventoController {
     }
 
     @GetMapping({"/{id}/update"})
-    public String showUpdateForm(ModelMap model, @PathVariable(name="id") Integer eventoId){
+    public String showUpdateForm(ModelMap model, @PathVariable(name="id") Integer eventoId, HttpSession session){
         Evento evento = eventosService.read(eventoId);
-        model.addAttribute("evento", evento);
-        model.addAttribute("categorias", categoriaService.read());
-        return "eventos/create";
+        if (checkOrganizador(evento, session)) {
+            model.addAttribute("evento", evento);
+            model.addAttribute("categorias", categoriaService.read());
+            return "eventos/create";
+        }
+        return "redirect:/auth/login";
     }
 
     @PostMapping({"/", ""})
@@ -128,61 +132,75 @@ public class EventoController {
     }
 
     @GetMapping({"/{id}/delete"})
-    public String deleteEvento(ModelMap map, @PathVariable(name="id") Integer eventoId){
-        Evento evento = new Evento();
-        evento.setId(eventoId);
-        eventosService.remove(evento);
-        return "redirect:/eventos";
+    public String deleteEvento(@PathVariable(name="id") Integer eventoId, HttpSession session){
+        Evento evento = eventosService.read(eventoId);
+        if (checkOrganizador(evento, session)) {
+            eventosService.remove(evento);
+            return "redirect:/eventos";
+        }
+        return "redirect:/auth/login";
     }
 
     @GetMapping({"/{id}/images/add"})
-    public String showImgForm(ModelMap model, @PathVariable(name="id") Integer eventoId){
-        model.addAttribute("evento", eventosService.read(eventoId));
-        model.addAttribute("galeria", new GaleriaDTO());
-        return "eventos/galerias/create";
+    public String showImgForm(ModelMap model, @PathVariable(name="id") Integer eventoId, HttpSession session){
+        Evento evento = eventosService.read(eventoId);
+        if (checkOrganizador(evento, session)) {
+            model.addAttribute("evento", evento);
+            model.addAttribute("galeria", new GaleriaDTO());
+            return "eventos/galerias/create";
+        }
+        return "redirect:/auth/login";
     }
 
     @PostMapping({"/{id}/images/add"})
     @Transactional(rollbackFor = {IOException.class})
-    public String addImage(@ModelAttribute @Valid GaleriaDTO galeriaDTO, @PathVariable(name="id") Integer eventoId, BindingResult bindingResult) throws IOException {
+    public String addImage(@ModelAttribute @Valid GaleriaDTO galeriaDTO, @PathVariable(name="id") Integer eventoId, BindingResult bindingResult, HttpSession session) throws IOException {
         if(bindingResult.hasErrors()){
             return "redirect:/eventos/" + eventoId + "/images/add?error=validation";
         }
 
-        RecursoMedia formSubmittedMedia = modelMapper.map(galeriaDTO, RecursoMedia.class);
-
-        RecursoMedia savedMedia = mediaService.saveImageGallery(galeriaDTO.getMedia(), formSubmittedMedia, eventosService.read(eventoId));
-
-        return "redirect:/eventos/" + eventoId;
+        Evento evento = eventosService.read(eventoId);
+        if (checkOrganizador(evento, session)) {
+            RecursoMedia formSubmittedMedia = modelMapper.map(galeriaDTO, RecursoMedia.class);
+            mediaService.saveImageGallery(galeriaDTO.getMedia(), formSubmittedMedia, eventosService.read(eventoId));
+            return "redirect:/eventos/" + eventoId;
+        }
+        return "redirect:/auth/login";
     }
 
     @PostMapping({"/{eventoId}/images/{mediaId}/update"})
     @Transactional(rollbackFor = {IOException.class})
-    public String changePriority(@PathVariable Integer eventoId, @PathVariable Integer mediaId, @RequestParam Integer prioridad) throws IOException {
+    public String changePriority(@PathVariable Integer eventoId, @PathVariable Integer mediaId, @RequestParam Integer prioridad, HttpSession session) throws IOException {
         Evento evento = eventosService.read(eventoId);
-        RecursoMedia media = mediaService.read(mediaId);
+        if (checkOrganizador(evento, session)) {
+            RecursoMedia media = mediaService.read(mediaId);
 
-        if(!media.getEventoGaleriaImagenes().equals(evento))
-            return "redirect:/eventos/" + eventoId + "?error=unauthorized";
+            if (!media.getEventoGaleriaImagenes().equals(evento))
+                return "redirect:/eventos/" + eventoId + "?error=unauthorized";
 
-        media.setPrioridad(prioridad);
+            media.setPrioridad(prioridad);
 
-        mediaService.save(media);
+            mediaService.save(media);
 
-        return "redirect:/eventos/" + eventoId;
+            return "redirect:/eventos/" + eventoId;
+        }
+        return "redirect:/auth/login";
     }
 
     @GetMapping({"/{eventoId}/images/{mediaId}/delete"})
-    public String deleteGallery(@PathVariable Integer eventoId, @PathVariable Integer mediaId){
+    public String deleteGallery(@PathVariable Integer eventoId, @PathVariable Integer mediaId, HttpSession session){
         Evento evento = eventosService.read(eventoId);
-        RecursoMedia media = mediaService.read(mediaId);
+        if (checkOrganizador(evento, session)) {
+            RecursoMedia media = mediaService.read(mediaId);
 
-        if(!media.getEventoGaleriaImagenes().equals(evento))
-            return "redirect:/eventos/" + eventoId + "?error=unauthorized";
+            if (!media.getEventoGaleriaImagenes().equals(evento))
+                return "redirect:/eventos/" + eventoId + "?error=unauthorized";
 
-        mediaService.delete(media);
+            mediaService.delete(media);
 
-        return "redirect:/eventos/" + eventoId;
+            return "redirect:/eventos/" + eventoId;
+        }
+        return "redirect:/auth/login";
     }
 
     @GetMapping({"/{eventoId}/sesiones_no_num/create"})
@@ -253,19 +271,27 @@ public class EventoController {
     }
 
     @GetMapping("/{eventoId}/sesiones_num/create")
-    public String showCreateSesionNumerada(ModelMap modelMap, @PathVariable int eventoId){
-        modelMap.addAttribute("sesion",new SesionNumerada());
-        modelMap.addAttribute("salasConButacas",salaService.getSalasWithButacas());
-        modelMap.addAttribute("evento",eventosService.read(eventoId));
-        return "eventos/sesiones/session-num-form";
+    public String showCreateSesionNumerada(ModelMap modelMap, @PathVariable int eventoId, HttpSession session){
+        Evento evento = eventosService.read(eventoId);
+        if (checkOrganizador(evento, session)) {
+            modelMap.addAttribute("sesion", new SesionNumerada());
+            modelMap.addAttribute("salasConButacas", salaService.getSalasWithButacas());
+            modelMap.addAttribute("evento", evento);
+            return "eventos/sesiones/session-num-form";
+        }
+        return "redirect:/auth/login";
     }
 
     @GetMapping("/{eventoId}/sesiones_num/{sesionId}/update")
-    public String showUpdateSesionNumerada(ModelMap modelMap, @PathVariable int sesionId, @PathVariable int eventoId){
-        modelMap.addAttribute("sesion",sesionService.read(sesionId));
-        modelMap.addAttribute("salasConButacas",salaService.getSalasWithButacas());
-        modelMap.addAttribute("evento",eventosService.read(eventoId));
-        return "eventos/sesiones/session-num-form";
+    public String showUpdateSesionNumerada(ModelMap modelMap, @PathVariable int sesionId, @PathVariable int eventoId, HttpSession session){
+        Evento evento = eventosService.read(eventoId);
+        if (checkOrganizador(evento, session)) {
+            modelMap.addAttribute("sesion", sesionService.read(sesionId));
+            modelMap.addAttribute("salasConButacas", salaService.getSalasWithButacas());
+            modelMap.addAttribute("evento", evento);
+            return "eventos/sesiones/session-num-form";
+        }
+        return "redirect:/auth/login";
     }
 
     @PostMapping("/{eventoId}/sesiones_num")
@@ -276,7 +302,7 @@ public class EventoController {
         SesionNumerada sesionNumerada = modelMapper.map(sesionNumeradaDTO, SesionNumerada.class);
         if (sesionNumerada.getId()!=null){
            Sesion sesionPrevState = sesionService.read(sesionNumerada.getId());
-           if (sesionPrevState.getEvento().getOrganizador() != session.getAttribute("usuario")){
+           if (checkOrganizador(sesionPrevState.getEvento(), session)){
                return "redirect:/eventos";
            }
         }
@@ -288,6 +314,11 @@ public class EventoController {
         sesionNumerada.setEvento(evento);
         sesionService.save(sesionNumerada);
         return "redirect:/eventos/"+sesionNumerada.getEvento().getId();
+    }
+
+    private boolean checkOrganizador(Evento evento, HttpSession session){
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        return evento.getOrganizador().getId() == usuario.getId();
     }
 
 }
