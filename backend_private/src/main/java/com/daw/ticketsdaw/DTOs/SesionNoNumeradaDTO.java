@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -44,9 +45,9 @@ public class SesionNoNumeradaDTO {
     @NotNull
     private Sala sala;
 
-    List<String> nombreTipo;
+    List<String> nombreTipo = new ArrayList<>();
 
-    List<Integer> maxEntradasTipo;
+    List<Integer> maxEntradasTipo = new ArrayList<>();
 
-    List<Float> precioTipo;
+    List<Float> precioTipo = new ArrayList<>();
 }
