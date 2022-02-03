@@ -37,11 +37,7 @@ public class LoginController {
     private final ModelMapper modelMapper = new ModelMapper();
 
     @GetMapping("/login")
-    public String showLogin(ModelMap modelMap, HttpSession session){
-        Usuario usuario = (Usuario) session.getAttribute("usuario");
-        if (usuario!=null){
-            modelMap.addAttribute("welcome","Welcome " + usuario.getNombreUsuario());
-        }
+    public String showLogin(){
         return "login/login";
     }
 
@@ -50,9 +46,9 @@ public class LoginController {
         Usuario usuario = usuarioService.getByNombreUsuario(username);
         if(passwordEncoder.matches(password,usuario.getPasswordHash())){
             request.getSession().setAttribute("usuario",usuario);
-            modelMap.addAttribute("welcome","Welcome " + usuario.getNombreUsuario());
+            return "redirect:/login";
         }
-        return "login/login";
+        return "redirect:/login?error=password";
     }
 
     @GetMapping("/register/propietario")
@@ -68,17 +64,18 @@ public class LoginController {
     }
 
     @PostMapping("/register/propietario")
-    public String savePropietario(@Valid @ModelAttribute PropietarioSala propietarioSala, BindingResult bindingResult){
+    public String savePropietario(@Valid @ModelAttribute PropietarioSala propietarioSala, BindingResult bindingResult, HttpServletRequest request){
         if (bindingResult.hasErrors()){
             return "redirect:/auth/register/propietario?error=validation";
         }
         propietarioSala.setPasswordHash(passwordEncoder.encode(propietarioSala.getPasswordHash()));
         usuarioService.create(propietarioSala);
+        request.getSession().setAttribute("usuario",propietarioSala);
         return "redirect:/salas";
     }
 
     @PostMapping("/register/organizador")
-    public String saveOrganizador(@Valid @ModelAttribute OrganizadorDTO organizadorDTO, BindingResult bindingResult) throws IOException {
+    public String saveOrganizador(@Valid @ModelAttribute OrganizadorDTO organizadorDTO, BindingResult bindingResult, HttpServletRequest request) throws IOException {
         if (bindingResult.hasErrors()){
             return "redirect:/auth/register/organizador?error=validation";
         }
@@ -89,7 +86,7 @@ public class LoginController {
         organizador.setFotoPerfil(mediaService.createFromFile(organizadorDTO.getFotoPerfil()));
 
         usuarioService.create(organizador);
-
+        request.getSession().setAttribute("usuario",organizador);
         return "redirect:/eventos";
     }
 
