@@ -8,29 +8,5 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data
-public class SesionNumeradaDTO {
-
-    @Transient
-    private final String dateTimeFormat = "yyyy-MM-dd'T'HH:mm";
-
-    private Integer id;
-
-    @NotNull
-    private int entradasMax;
-
-    @NotNull
-    @DateTimeFormat(pattern = dateTimeFormat)
-    private Date fechaFinVenta;
-
-    @NotNull
-    @DateTimeFormat(pattern = dateTimeFormat)
-    private Date fechaIni;
-
-    @NotNull
-    @DateTimeFormat(pattern = dateTimeFormat)
-    private Date fechaFin;
-
-    @NotNull
-    private Sala sala;
-
+public class SesionNumeradaDTO extends SesionDTO{
 }

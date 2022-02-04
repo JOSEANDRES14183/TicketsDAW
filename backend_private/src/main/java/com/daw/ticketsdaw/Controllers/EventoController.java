@@ -208,7 +208,7 @@ public class EventoController {
         model.addAttribute("sesion", new SesionNoNumerada());
         model.addAttribute("salas", salaService.read());
         model.addAttribute("evento", eventosService.read(eventoId));
-        return "eventos/sesiones/create-no-numerada";
+        return "eventos/sesiones/session-no-numerada-form";
     }
 
     @GetMapping({"/{eventoId}/sesiones_no_num/{sesionId}/update"})
@@ -216,7 +216,7 @@ public class EventoController {
         model.addAttribute("sesion", (SesionNoNumerada) sesionService.read(sesionId));
         model.addAttribute("salas", salaService.read());
         model.addAttribute("evento", eventosService.read(eventoId));
-        return "eventos/sesiones/create-no-numerada";
+        return "eventos/sesiones/session-no-numerada-form";
     }
 
     @PostMapping({"/{eventoId}/sesiones_no_num"})

@@ -29,8 +29,11 @@
             </div>
 
             <div class="mb-3">
-                <label th:for="*{fechaFin}" class="form-label">Fecha de final del evento</label>
-                <input type="datetime-local" class="form-control" th:field="*{fechaFin}">
+                <label th:for="*{estaOculto}" class="form-label">Esta oculto</label>
+                <select class="form-control w-25" th:field="*{estaOculto}">
+                    <option value="true">Oculto</option>
+                    <option value="false">No oculto</option>
+                </select>
             </div>
 
             <div class="mb-3">

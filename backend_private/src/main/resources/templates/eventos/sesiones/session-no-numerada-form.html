@@ -39,10 +39,6 @@
                 <label for="fechaIni" class="form-label">Fecha y hora de inicio del evento</label>
                 <input type="datetime-local" class="form-control w-25" th:field="*{fechaIni}">
             </div>
-            <div class="mb-3">
-                <label for="fechaFin" class="form-label">Fecha y hora de fin del evento</label>
-                <input type="datetime-local" class="form-control w-25" th:field="*{fechaFin}">
-            </div>
             <div id="tiposEntrada">
                 <a class="btn btn-primary" id="btnAddTipoEntrada">Añadir</a>
                 <fieldset th:each="tipoEntrada, iStat: ${sesion.tiposEntrada}">
