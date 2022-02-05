@@ -141,6 +141,20 @@ public class EventoController {
         return "redirect:/auth/login";
     }
 
+    @GetMapping({"/{id}/normas_evento/delete"})
+    @Transactional
+    public String deleteNormasEvento(@PathVariable(name="id") Integer eventoId, HttpSession session){
+        Evento evento = eventosService.read(eventoId);
+        if (checkOrganizador(evento, session)) {
+            var documentoNormas = evento.getDocumentoNormas();
+            evento.setDocumentoNormas(null);
+            eventosService.save(evento);
+            normasService.deleteNormas(documentoNormas);
+            return "redirect:/eventos/" + eventoId;
+        }
+        return "redirect:/auth/login";
+    }
+
     @GetMapping({"/{id}/images/add"})
     public String showImgForm(ModelMap model, @PathVariable(name="id") Integer eventoId, HttpSession session){
         Evento evento = eventosService.read(eventoId);
