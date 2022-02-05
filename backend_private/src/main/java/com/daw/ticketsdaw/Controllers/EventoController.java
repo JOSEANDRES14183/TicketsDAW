@@ -235,12 +235,17 @@ public class EventoController {
 
     @PostMapping({"/{eventoId}/sesiones_no_num"})
     @Transactional(rollbackFor = {Exception.class})
-    public String saveSesionNoNum(@Valid @ModelAttribute SesionNoNumeradaDTO sesionDTO, BindingResult bindingResult, @PathVariable Integer eventoId) throws IOException {
-        if(bindingResult.hasErrors()){
-            return "redirect:/eventos/" + eventoId + "/sesiones_no_num/create?error=validation";
-        }
-
+    public String saveSesionNoNum(ModelMap model, @Valid @ModelAttribute SesionNoNumeradaDTO sesionDTO, BindingResult bindingResult, @PathVariable Integer eventoId) throws IOException {
         SesionNoNumerada sesion = modelMapper.map(sesionDTO, SesionNoNumerada.class);
+
+        if(bindingResult.hasErrors()){
+            //TODO: Demo for error notifications, apply this to the rest of the forms
+            model.addAttribute("evento", eventosService.read(eventoId));
+            model.addAttribute("salas", salaService.read());
+            model.addAttribute("sesion", sesion);
+            model.addAttribute("error", "Validation error");
+            return "eventos/sesiones/session-no-numerada-form";
+        }
 
         Evento evento = eventosService.read(eventoId);
 

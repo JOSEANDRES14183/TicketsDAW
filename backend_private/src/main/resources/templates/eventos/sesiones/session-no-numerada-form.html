@@ -7,6 +7,9 @@
 
 <main>
     <section class="container-md">
+        <div id="errorBox">
+            <div th:if="${error != null}" class="alert alert-danger" role="alert" th:text="${error}"></div>
+        </div>
         <form method="POST" th:action="'/eventos/' + ${evento.id} + '/sesiones_no_num'" th:object="${sesion}">
             <div class="mb-3" th:unless="${sesion.getId() == null}">
                 <label for="id" class="form-label">Identificador</label>
