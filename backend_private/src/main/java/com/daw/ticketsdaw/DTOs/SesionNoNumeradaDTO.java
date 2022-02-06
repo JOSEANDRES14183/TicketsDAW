@@ -14,37 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-public class SesionNoNumeradaDTO {
-
-    @Transient
-    private final String dateTimeFormat = "yyyy-MM-dd'T'HH:mm";
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @NotNull
-    private int entradasMax;
-
-    @NotNull
-    @DateTimeFormat(pattern = dateTimeFormat)
-    private Date fechaFinVenta;
-
-    @NotNull
-    @DateTimeFormat(pattern = dateTimeFormat)
-    private Date fechaIni;
-
-    @NotNull
-    @DateTimeFormat(pattern = dateTimeFormat)
-    private Date fechaFin;
-
-    @NotNull
-    private boolean estaOculto;
-
-    @ToString.Exclude
-    @NotNull
-    private Sala sala;
-
+public class SesionNoNumeradaDTO extends SesionDTO{
     List<String> nombreTipo = new ArrayList<>();
 
     List<Integer> maxEntradasTipo = new ArrayList<>();
