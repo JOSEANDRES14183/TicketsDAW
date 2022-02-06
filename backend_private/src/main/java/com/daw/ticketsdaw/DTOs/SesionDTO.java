@@ -33,6 +33,9 @@ public class SesionDTO {
     private Date fechaIni;
 
     @NotNull
+    private int duracion;
+
+    @NotNull
     private boolean estaOculto;
 
     @ToString.Exclude

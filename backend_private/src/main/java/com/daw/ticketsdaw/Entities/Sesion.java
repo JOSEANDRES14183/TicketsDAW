@@ -37,6 +37,9 @@ public abstract class Sesion {
     private Date fechaIni;
 
     @NotNull
+    private int duracion;
+
+    @NotNull
     @Column(name = "esta_oculto")
     private boolean estaOculto = false;
 
