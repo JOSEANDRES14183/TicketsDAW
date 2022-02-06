@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<body>
+
+<div th:fragment="sesion-inputs">
+    <div th:unless="${sesion.id == null}">
+        <input type="hidden" th:field="*{id}">
+    </div>
+    <div class="mb-3">
+        <label th:for="*{entradasMax}" class="form-label">Entradas máximas</label>
+        <input type="number" class="form-control" th:field="*{entradasMax}">
+    </div>
+    <div class="mb-3">
+        <label th:for="*{sala}" class="form-label">Sala</label>
+        <select class="form-control" th:field="*{sala}">
+            <option th:each="sala: ${salas}"
+                    th:value="${sala.id}"
+                    th:text="${sala.nombre}"/>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label th:for="*{estaOculto}" class="form-label">Esta oculto</label>
+        <select class="form-control w-25" th:field="*{estaOculto}">
+            <option value="true">Oculto</option>
+            <option value="false">No oculto</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label th:for="*{fechaFinVenta}" class="form-label">Fecha y hora de fin de venta</label>
+        <input type="datetime-local" class="form-control w-25" th:field="*{fechaFinVenta}">
+    </div>
+    <div class="mb-3">
+        <label th:for="*{fechaIni}" class="form-label">Fecha y hora de inicio del evento</label>
+        <input type="datetime-local" class="form-control w-25" th:field="*{fechaIni}">
+    </div>
+    <div class="mb-3">
+        <label th:for="*{duracion}" class="form-label">Duración de la sesión</label>
+        <input type="number" class="form-control" th:field="*{duracion}">
+    </div>
+</div>
+
+</body>
+</html>

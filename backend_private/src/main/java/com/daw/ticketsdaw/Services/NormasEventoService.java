@@ -38,4 +38,8 @@ public class NormasEventoService extends AbstractFileService{
         final String[] validExtensions = {"png", "jpg", "webp", "pdf"};
         return Arrays.stream(validExtensions).anyMatch(fileExt::equals);
     }
+
+    public void deleteNormas(NormasEvento normas){
+        normasRepository.delete(normas);
+    }
 }

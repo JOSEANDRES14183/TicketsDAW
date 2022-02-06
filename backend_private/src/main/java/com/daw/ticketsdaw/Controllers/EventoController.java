@@ -141,6 +141,20 @@ public class EventoController {
         return "redirect:/auth/login";
     }
 
+    @GetMapping({"/{id}/normas_evento/delete"})
+    @Transactional
+    public String deleteNormasEvento(@PathVariable(name="id") Integer eventoId, HttpSession session){
+        Evento evento = eventosService.read(eventoId);
+        if (checkOrganizador(evento, session)) {
+            var documentoNormas = evento.getDocumentoNormas();
+            evento.setDocumentoNormas(null);
+            eventosService.save(evento);
+            normasService.deleteNormas(documentoNormas);
+            return "redirect:/eventos/" + eventoId;
+        }
+        return "redirect:/auth/login";
+    }
+
     @GetMapping({"/{id}/images/add"})
     public String showImgForm(ModelMap model, @PathVariable(name="id") Integer eventoId, HttpSession session){
         Evento evento = eventosService.read(eventoId);
@@ -208,7 +222,7 @@ public class EventoController {
         model.addAttribute("sesion", new SesionNoNumerada());
         model.addAttribute("salas", salaService.read());
         model.addAttribute("evento", eventosService.read(eventoId));
-        return "eventos/sesiones/create-no-numerada";
+        return "eventos/sesiones/session-no-numerada-form";
     }
 
     @GetMapping({"/{eventoId}/sesiones_no_num/{sesionId}/update"})
@@ -216,17 +230,22 @@ public class EventoController {
         model.addAttribute("sesion", (SesionNoNumerada) sesionService.read(sesionId));
         model.addAttribute("salas", salaService.read());
         model.addAttribute("evento", eventosService.read(eventoId));
-        return "eventos/sesiones/create-no-numerada";
+        return "eventos/sesiones/session-no-numerada-form";
     }
 
     @PostMapping({"/{eventoId}/sesiones_no_num"})
     @Transactional(rollbackFor = {Exception.class})
-    public String saveSesionNoNum(@Valid @ModelAttribute SesionNoNumeradaDTO sesionDTO, BindingResult bindingResult, @PathVariable Integer eventoId) throws IOException {
-        if(bindingResult.hasErrors()){
-            return "redirect:/eventos/" + eventoId + "/sesiones_no_num/create?error=validation";
-        }
-
+    public String saveSesionNoNum(ModelMap model, @Valid @ModelAttribute SesionNoNumeradaDTO sesionDTO, BindingResult bindingResult, @PathVariable Integer eventoId) throws IOException {
         SesionNoNumerada sesion = modelMapper.map(sesionDTO, SesionNoNumerada.class);
+
+        if(bindingResult.hasErrors()){
+            //TODO: Demo for error notifications, apply this to the rest of the forms
+            model.addAttribute("evento", eventosService.read(eventoId));
+            model.addAttribute("salas", salaService.read());
+            model.addAttribute("sesion", sesion);
+            model.addAttribute("error", "Validation error");
+            return "eventos/sesiones/session-no-numerada-form";
+        }
 
         Evento evento = eventosService.read(eventoId);
 
