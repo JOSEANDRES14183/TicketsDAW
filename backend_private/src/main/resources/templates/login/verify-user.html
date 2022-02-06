@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments/layout :: head('Verifica tu cuenta')"></head>
+
+<body>
+
+<header th:replace="fragments/layout :: header('Verifica tu cuenta')"></header>
+
+<main>
+  <section class="container-md">
+    <h2 class="text-center mb-4">Tu cuenta se ha creado con éxito. Para iniciar sesión, verifica tu cuenta desde el enlace que hemos
+    enviado a <span th:text="${usuario.email}" class="text-primary"></span></h2>
+
+    <h4 class="text-center">¿No has recibido el correo? <a href="">Haz click aquí para reenviarlo</a></h4>
+  </section>
+</main>
+
+<footer th:replace="fragments/layout :: footer"></footer>
+
+</body>
+</html>
