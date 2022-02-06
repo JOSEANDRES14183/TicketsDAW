@@ -1,6 +1,7 @@
 package com.daw.ticketsdaw.Controllers;
 
 import com.daw.ticketsdaw.DTOs.OrganizadorDTO;
+import com.daw.ticketsdaw.EmailSenders.UserConfirmationSender;
 import com.daw.ticketsdaw.Entities.Organizador;
 import com.daw.ticketsdaw.Entities.PropietarioSala;
 import com.daw.ticketsdaw.Entities.Usuario;
@@ -33,6 +34,8 @@ public class LoginController {
     NormasEventoService normasService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserConfirmationSender userConfirmationSender;
 
     private final ModelMapper modelMapper = new ModelMapper();
 
@@ -100,6 +103,12 @@ public class LoginController {
     @GetMapping("/logout")
     public String logout(HttpSession session){
         session.invalidate();
+        return "redirect:/auth/login";
+    }
+
+    @GetMapping("/email")
+    public String sendEmail(){
+        userConfirmationSender.sendMessage();
         return "redirect:/auth/login";
     }
 

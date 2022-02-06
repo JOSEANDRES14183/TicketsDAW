@@ -10,12 +10,14 @@ import org.springframework.stereotype.Component;
 public class UserConfirmationSender {
 
     @Autowired
-    private JavaMailSender emailSender;
+    private JavaMailSender mailSender;
 
-    public void sendMissage(){
+    public void sendMessage(){
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("noreply@ticketsdaw.me");
         message.setTo("joseandresreyessantiago1234@gmail.com");
-
+        message.setSubject("Hola tickets");
+        message.setText("texto");
+        mailSender.send(message);
     }
 }
