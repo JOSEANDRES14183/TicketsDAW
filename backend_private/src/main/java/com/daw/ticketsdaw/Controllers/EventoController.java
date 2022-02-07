@@ -294,7 +294,7 @@ public class EventoController {
         Evento evento = eventosService.read(eventoId);
         if (checkOrganizador(evento, session)) {
             modelMap.addAttribute("sesion", new SesionNumerada());
-            modelMap.addAttribute("salasConButacas", salaService.getSalasWithButacas());
+            modelMap.addAttribute("salas", salaService.getSalasWithButacas());
             modelMap.addAttribute("evento", evento);
             return "eventos/sesiones/session-num-form";
         }
@@ -306,7 +306,7 @@ public class EventoController {
         Evento evento = eventosService.read(eventoId);
         if (checkOrganizador(evento, session)) {
             modelMap.addAttribute("sesion", sesionService.read(sesionId));
-            modelMap.addAttribute("salasConButacas", salaService.getSalasWithButacas());
+            modelMap.addAttribute("salas", salaService.getSalasWithButacas());
             modelMap.addAttribute("evento", evento);
             return "eventos/sesiones/session-num-form";
         }

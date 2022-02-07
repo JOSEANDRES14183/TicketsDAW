@@ -10,14 +10,6 @@
         <input type="number" class="form-control" th:field="*{entradasMax}">
     </div>
     <div class="mb-3">
-        <label th:for="*{sala}" class="form-label">Sala</label>
-        <select class="form-control" th:field="*{sala}">
-            <option th:each="sala: ${salas}"
-                    th:value="${sala.id}"
-                    th:text="${sala.nombre}"/>
-        </select>
-    </div>
-    <div class="mb-3">
         <label th:for="*{estaOculto}" class="form-label">Esta oculto</label>
         <select class="form-control w-25" th:field="*{estaOculto}">
             <option value="true">Oculto</option>
@@ -35,6 +27,14 @@
     <div class="mb-3">
         <label th:for="*{duracion}" class="form-label">Duración de la sesión</label>
         <input type="number" class="form-control" th:field="*{duracion}">
+    </div>
+    <div class="mb-3">
+        <label th:for="*{sala}" class="form-label">Sala</label>
+        <select class="form-control" th:field="*{sala}">
+            <option th:each="sala: ${salas}"
+                    th:value="${sala.id}"
+                    th:text="${sala.nombre}"/>
+        </select>
     </div>
 </div>
 

@@ -11,6 +11,8 @@
 
             <div th:replace="fragments/sesion-form :: sesion-inputs"></div>
 
+            <div class="my-4" id="infoSala"></div>
+
             <div class="mb-3">
                 <label th:for="*{precio}" class="form-label">Precio</label>
                 <div class="input-group">
@@ -19,7 +21,6 @@
                 </div>
             </div>
 
-            <div class="my-4" id="infoSala"></div>
 
             <button type="submit" class="btn btn-primary" th:text="'Guardar'"></button>
         </form>

@@ -75,11 +75,80 @@
                     <th>Esta oculto</th>
                 </tr>
                 <tr th:each="sesion: ${evento.sesiones}">
-                    <td><a th:text="${sesion.id}" th:href="'/eventos/' + ${evento.id} + '/sesiones/' + ${sesion.id}"></a></td>
+                    <td><button class="btn btn-secondary"
+                           th:text="${sesion.id}"
+                           th:attr="data-sesion-index=${sesionStat.index}"
+                           data-bs-toggle="modal"
+                           data-bs-target="#modalSesion"></button></td>
                     <td th:text="${sesion.fechaIni}"></td>
                     <td th:text="${sesion.estaOculto}"></td>
                 </tr>
             </table>
+        </div>
+
+        <div class="modal fade" id="modalSesion">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-body">
+                      <div id="sesionInfo" class="d-flex flex-column gap-2 mb-3">
+                          <h5>Información de la sesión</h5>
+                          <table class="table table-borderless">
+                              <tbody>
+                                <tr>
+                                    <th>Duracion: </th>
+                                    <td id="duracion"></td>
+                                </tr>
+                                <tr>
+                                    <th>Máximo de entradas: </th>
+                                    <td id="entradasMax"></td>
+                                </tr>
+                                <tr>
+                                    <th>Fecha de fin de venta: </th>
+                                    <td id="fechaFinVenta"></td>
+                                </tr>
+                                <tr>
+                                    <th>Fecha de incio: </th>
+                                    <td id="fechaIni"></td>
+                                </tr>
+                                <tr>
+                                    <th>Esta oculto: </th>
+                                    <td id="estaOculto"></td>
+                                </tr>
+                              </tbody>
+                          </table>
+                      </div>
+                      <div id="salaInfo" class="d-flex flex-column gap-2">
+                          <h5>Información de la sala</h5>
+                          <table class="table table-borderless">
+                              <tbody>
+                              <tr>
+                                  <th>Nombre: </th>
+                                  <td id="nombre"></td>
+                              </tr>
+                              <tr>
+                                  <th>Dirección: </th>
+                                  <td id="direccion"></td>
+                              </tr>
+                              <tr>
+                                  <th>Ciudad: </th>
+                                  <td id="ciudad"></td>
+                              </tr>
+                              <tr>
+                                  <th>Aforo máximo: </th>
+                                  <td id="aforoMax"></td>
+                              </tr>
+                              </tbody>
+                          </table>
+                      </div>
+                      <div id="additionalInfo"></div>
+                  </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-info">Modificar</a>
+                        <a class="btn btn-danger">Eliminar</a>
+                        <button class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="mb-4">
@@ -136,6 +205,43 @@
 <script th:inline="javascript">
     /*<![CDATA[*/
     let galeriaModal = document.getElementById("modalGaleria");
+    let sesiones = [[${evento.sesiones}]];
+    let sesionModal = document.getElementById("modalSesion");
+    console.log(sesiones);
+
+    sesionModal.addEventListener('show.bs.modal',function (event){
+        let button = event.relatedTarget;
+        let sesion = sesiones[button.getAttribute("data-sesion-index")];
+        let sesionFields = document.querySelectorAll("div#sesionInfo td");
+        let salaFields = document.querySelectorAll("div#salaInfo td")
+
+        for(let i=0;i<sesionFields.length;i++){
+            sesionFields[i].innerHTML = sesion[sesionFields[i].id];
+        }
+
+        for(let i=0;i<salaFields.length;i++){
+            if (salaFields[i].id==="ciudad"){
+                salaFields[i].innerHTML = sesion["sala"]["ciudad"]["nombre"];
+            } else {
+                salaFields[i].innerHTML = sesion["sala"][salaFields[i].id];
+            }
+        }
+
+        if (sesion["tiposEntrada"]!==undefined){
+            let text = "";
+            text+="<div> <h5>Tipos de entrada</h5>";
+            if (sesion["tiposEntrada"].length()>0){
+                text+="<table> <tbody>";
+                sesion["tiposEntrada"].forEach();
+                text+="</tbody> </table>";
+            } else {
+                text+="<p class='text-center text-secondary'>No existen tipos de entrada disponibles</p>";
+            }
+            text+="</div>";
+            document.querySelector("#additionalInfo").innerHTML=text;
+        }
+    })
+
     galeriaModal.addEventListener('show.bs.modal', function (event) {
         let button = event.relatedTarget
         let prioridad = button.getAttribute("data-gallery-prioridad")

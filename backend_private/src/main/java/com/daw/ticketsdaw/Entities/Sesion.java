@@ -1,5 +1,6 @@
 package com.daw.ticketsdaw.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -47,6 +48,7 @@ public abstract class Sesion {
     @ManyToOne
     @JoinColumn(name = "id_evento", referencedColumnName = "id")
     @NotNull
+    @JsonIgnore
     private Evento evento;
 
     @ToString.Exclude
