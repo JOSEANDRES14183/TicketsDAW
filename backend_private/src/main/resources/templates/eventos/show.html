@@ -143,8 +143,8 @@
                       <div id="additionalInfo"></div>
                   </div>
                     <div class="modal-footer">
-                        <a class="btn btn-info">Modificar</a>
-                        <a class="btn btn-danger">Eliminar</a>
+                        <a class="btn btn-info" id="updateSesionBtn">Modificar</a>
+                        <a class="btn btn-danger" id="deleteSesionBtn">Eliminar</a>
                         <button class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </div>
@@ -227,19 +227,37 @@
             }
         }
 
+        document.querySelector("#additionalInfo").innerHTML="";
         if (sesion["tiposEntrada"]!==undefined){
             let text = "";
-            text+="<div> <h5>Tipos de entrada</h5>";
-            if (sesion["tiposEntrada"].length()>0){
-                text+="<table> <tbody>";
-                sesion["tiposEntrada"].forEach();
+            text+="<h5>Tipos de entrada</h5>";
+            if (sesion["tiposEntrada"].length>0){
+                text+="<table class='table'>" +
+                    "<thead> " +
+                    "<tr>" +
+                    "<th>Nombre</th>" +
+                    "<th>Entradas máximas</th>" +
+                    "<th>Precio</th>" +
+                    "</tr>" +
+                    "</thead>" +
+                    "<tbody>";
+                sesion["tiposEntrada"].forEach(function(tipoEntrada){
+                    text+="<tr>";
+                    text+="<td>"+tipoEntrada["primaryKey"]["nombre"]+"</td>";
+                    text+="<td>"+tipoEntrada["maxEntradas"]+"</td>";
+                    text+="<td>"+tipoEntrada["precio"]+"</td>";
+                    text+="</tr>";
+                }
+                );
                 text+="</tbody> </table>";
             } else {
                 text+="<p class='text-center text-secondary'>No existen tipos de entrada disponibles</p>";
             }
-            text+="</div>";
             document.querySelector("#additionalInfo").innerHTML=text;
         }
+
+        document.querySelector("#deleteSesionBtn").setAttribute("href", "/eventos/"+[[${evento.id}]]+"/sesiones/"+sesion["id"]+"/delete");
+        document.querySelector("#updateSesionBtn").setAttribute("href", "/eventos/"+[[${evento.id}]]+"/");
     })
 
     galeriaModal.addEventListener('show.bs.modal', function (event) {

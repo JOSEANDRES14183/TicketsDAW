@@ -225,6 +225,19 @@ public class EventoController {
         return "eventos/sesiones/session-no-numerada-form";
     }
 
+    @GetMapping("/{eventoId}/sesiones/{sesionId}/delete")
+    public String deleteSesion(@PathVariable int eventoId, @PathVariable int sesionId, HttpSession session){
+        Evento evento = eventosService.read(eventoId);
+        if (checkOrganizador(evento,session)){
+            Sesion sesion = sesionService.read(sesionId);
+            if (sesion.getEvento()==evento){
+                sesionService.delete(sesion);
+                return "redirect:/eventos/"+evento.getId();
+            }
+        }
+        return "redirect:/auth/login";
+    }
+
     @GetMapping({"/{eventoId}/sesiones_no_num/{sesionId}/update"})
     public String updateNoNum(ModelMap model, @PathVariable Integer eventoId, @PathVariable Integer sesionId){
         model.addAttribute("sesion", (SesionNoNumerada) sesionService.read(sesionId));
