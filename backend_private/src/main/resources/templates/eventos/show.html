@@ -254,10 +254,13 @@
                 text+="<p class='text-center text-secondary'>No existen tipos de entrada disponibles</p>";
             }
             document.querySelector("#additionalInfo").innerHTML=text;
+            document.querySelector("#updateSesionBtn").setAttribute("href", "/eventos/"+[[${evento.id}]]+"/sesiones_no_num/"+sesion["id"]+"/update");
+        } else {
+            document.querySelector("#updateSesionBtn").setAttribute("href", "/eventos/"+[[${evento.id}]]+"/sesiones_num/"+sesion["id"]+"/update");
         }
 
         document.querySelector("#deleteSesionBtn").setAttribute("href", "/eventos/"+[[${evento.id}]]+"/sesiones/"+sesion["id"]+"/delete");
-        document.querySelector("#updateSesionBtn").setAttribute("href", "/eventos/"+[[${evento.id}]]+"/");
+
     })
 
     galeriaModal.addEventListener('show.bs.modal', function (event) {
