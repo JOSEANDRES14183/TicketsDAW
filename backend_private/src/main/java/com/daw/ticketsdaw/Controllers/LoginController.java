@@ -1,6 +1,7 @@
 package com.daw.ticketsdaw.Controllers;
 
 import com.daw.ticketsdaw.DTOs.OrganizadorDTO;
+import com.daw.ticketsdaw.EmailSenders.UserConfirmationSender;
 import com.daw.ticketsdaw.Entities.Organizador;
 import com.daw.ticketsdaw.Entities.PropietarioSala;
 import com.daw.ticketsdaw.Entities.Usuario;
@@ -16,6 +17,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -33,6 +35,8 @@ public class LoginController {
     NormasEventoService normasService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserConfirmationSender userConfirmationSender;
 
     private final ModelMapper modelMapper = new ModelMapper();
 
@@ -42,9 +46,14 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam("username") String username, @RequestParam("password") String password, HttpServletRequest request, ModelMap modelMap){
+    public String login(@RequestParam("username") String username, @RequestParam("password") String password, HttpServletRequest request, ModelMap modelMap) throws MessagingException {
         Usuario usuario = usuarioService.getByNombreUsuario(username);
         if (usuario!=null) {
+            if (!usuario.isEstaValidado()){
+                modelMap.addAttribute("usuario", usuario);
+                sendVerificationMail(usuario.getEmail(), usuario.getId());
+                return "login/verify-user";
+            }
             if (passwordEncoder.matches(password, usuario.getPasswordHash())) {
                 request.getSession().setAttribute("usuario", usuario);
                 if (usuario.getClass() == PropietarioSala.class){
@@ -71,18 +80,20 @@ public class LoginController {
     }
 
     @PostMapping("/register/propietario")
-    public String savePropietario(@Valid @ModelAttribute PropietarioSala propietarioSala, BindingResult bindingResult, HttpServletRequest request){
+    public String savePropietario(@Valid @ModelAttribute PropietarioSala propietarioSala, BindingResult bindingResult, ModelMap modelMap) throws MessagingException {
         if (bindingResult.hasErrors()){
             return "redirect:/auth/register/propietario?error=validation";
         }
         propietarioSala.setPasswordHash(passwordEncoder.encode(propietarioSala.getPasswordHash()));
+
         usuarioService.create(propietarioSala);
-        request.getSession().setAttribute("usuario",propietarioSala);
-        return "redirect:/salas";
+        modelMap.addAttribute("usuario", propietarioSala);
+        sendVerificationMail(propietarioSala.getEmail(), propietarioSala.getId());
+        return "login/verify-user";
     }
 
     @PostMapping("/register/organizador")
-    public String saveOrganizador(@Valid @ModelAttribute OrganizadorDTO organizadorDTO, BindingResult bindingResult, HttpServletRequest request) throws IOException {
+    public String saveOrganizador(@Valid @ModelAttribute OrganizadorDTO organizadorDTO, BindingResult bindingResult, ModelMap modelMap) throws IOException, MessagingException {
         if (bindingResult.hasErrors()){
             return "redirect:/auth/register/organizador?error=validation";
         }
@@ -93,14 +104,27 @@ public class LoginController {
         organizador.setFotoPerfil(mediaService.createFromFile(organizadorDTO.getFotoPerfil()));
 
         usuarioService.create(organizador);
-        request.getSession().setAttribute("usuario",organizador);
-        return "redirect:/eventos";
+        modelMap.addAttribute("usuario", organizador);
+        sendVerificationMail(organizador.getEmail(), organizador.getId());
+        return "login/verify-user";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session){
         session.invalidate();
         return "redirect:/auth/login";
+    }
+
+    @GetMapping("/verify/{id}")
+    public String verifyUser(@PathVariable("id") int id){
+        Usuario usuario = usuarioService.getById(id);
+        usuario.setEstaValidado(true);
+        usuarioService.create(usuario);
+        return "redirect:/auth/login?verify=true";
+    }
+
+    private void sendVerificationMail(String mail, int userId) throws MessagingException {
+        userConfirmationSender.sendMessage(mail, String.valueOf(userId));
     }
 
 

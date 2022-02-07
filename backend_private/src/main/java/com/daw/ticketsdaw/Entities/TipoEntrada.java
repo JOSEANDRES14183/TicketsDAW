@@ -1,5 +1,6 @@
 package com.daw.ticketsdaw.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.ToString;
 
@@ -18,6 +19,7 @@ public class TipoEntrada {
     @MapsId("sesion")
     @ManyToOne
     @JoinColumn(name = "id_sesion", referencedColumnName = "id")
+    @JsonIgnore
     private SesionNoNumerada entitySesion;
 
     @NotNull

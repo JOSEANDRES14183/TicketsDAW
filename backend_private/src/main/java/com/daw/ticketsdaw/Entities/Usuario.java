@@ -27,4 +27,7 @@ public abstract class Usuario implements Serializable {
     @Column(name = "esta_deshabilitado")
     private boolean estaDeshabilitado  = true;
 
+    @Column(name = "esta_validado")
+    private boolean estaValidado = false;
+
 }
