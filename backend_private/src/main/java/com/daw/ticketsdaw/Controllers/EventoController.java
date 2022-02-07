@@ -269,7 +269,7 @@ public class EventoController {
 
         sesion.setEvento(evento);
 
-        sesionService.save(sesion);
+        boolean savedWithoutOverlap = sesionService.save(sesion);
 
         if(sesion.getTiposEntrada() != null){
             for (var tipoEntrada: sesion.getTiposEntrada()) {
@@ -286,7 +286,7 @@ public class EventoController {
             tipoEntradaService.save(tipo);
         }
 
-        return "redirect:/eventos/" + eventoId;
+        return "redirect:/eventos/" + eventoId + (savedWithoutOverlap ? "" : "?warning=overlap");
     }
 
     @GetMapping("/{eventoId}/sesiones_num/create")
@@ -331,8 +331,8 @@ public class EventoController {
             return "redirect:/eventos";
         }
         sesionNumerada.setEvento(evento);
-        sesionService.save(sesionNumerada);
-        return "redirect:/eventos/"+sesionNumerada.getEvento().getId();
+        boolean savedWithoutOverlap = sesionService.save(sesionNumerada);
+        return "redirect:/eventos/" + sesionNumerada.getEvento().getId() + (savedWithoutOverlap ? "" : "?warning=overlap");
     }
 
     private boolean checkOrganizador(Evento evento, HttpSession session){
