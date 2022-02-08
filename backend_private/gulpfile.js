@@ -33,6 +33,21 @@ function copyFullCalendarCss(){
         .pipe(gulp.dest('src/main/resources/static/css/fullcalendar'));
 }
 
+function copyJQuery(){
+    return gulp.src('node_modules/jquery/dist/jquery.min.js*')
+        .pipe(gulp.dest('src/main/resources/static/js'));
+}
+
+function copyDataTablesCss(){
+    return gulp.src('node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css')
+        .pipe(gulp.dest('src/main/resources/static/css'));
+}
+
+function copyDataTablesJs(){
+    return gulp.src(['node_modules/datatables.net/js/jquery.dataTables.min.js*', 'node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js*'])
+        .pipe(gulp.dest('src/main/resources/static/js'));
+}
+
 exports.compilaSass = buildStyles;
 exports.copy = copyBootstrapFiles;
-exports.build = parallel(buildStyles, copyBootstrapFiles, copyBootstrapIconsCss, copyBootstrapIconsFonts, copyFullCalendarJs, copyFullCalendarCss);
+exports.build = parallel(buildStyles, copyBootstrapFiles, copyBootstrapIconsCss, copyBootstrapIconsFonts, copyFullCalendarJs, copyFullCalendarCss, copyJQuery, copyDataTablesCss, copyDataTablesJs);
