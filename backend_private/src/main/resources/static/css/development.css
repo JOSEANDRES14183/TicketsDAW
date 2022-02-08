@@ -1,0 +1,11 @@
+.app-logo{
+    width: 150px;
+}
+
+header .btn:hover{
+    border: solid purple 2px;
+}
+
+.rounded-25{
+    border-radius: 25px;
+}

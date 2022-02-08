@@ -10,46 +10,37 @@
 <main>
 
     <section class="container-md">
-        <div class="mb-4 d-flex justify-content-between">
-            <div class="d-flex flex-column">
+
+        <p class="mt-3">
+            <a href="/salas" class="btn btn-primary">
+                <i class="bi bi-chevron-left"></i>
+                <span>Volver</span>
+            </a>
+        </p>
+
+        <div class="mt-4 d-flex justify-content-between">
+            <div class="d-flex flex-column gap-2">
                 <h3 th:text="${sala.nombre}"></h3>
-                <span th:text="${sala.direccion}"></span>
-                <span th:text="${sala.ciudad.nombre}"></span>
-                <span>Aforo máximo: <span th:text="${sala.aforoMax}"></span></span>
+                <span th:inline="text"><i class="bi bi-geo-alt-fill"></i> [[${sala.direccion}]]</span>
+                <span th:inline="text"><i class="bi bi-pin-map-fill"></i> [[${sala.ciudad.nombre}]]</span>
+                <span><i class="bi bi-people-fill"></i> Aforo máximo: <span th:text="${sala.aforoMax}"></span></span>
             </div>
-
-            <div class="sala-map border rounded" id="googleMap">
-
+            <div class="d-flex flex-column gap-1">
+                <h3  class="text-center text-decoration-underline">Mapa</h3>
+                <div class="sala-map border rounded-25 shadow-sm" id="googleMap"></div>
             </div>
         </div>
 
-        <div class="mb-4">
-            <h3>Distribución</h3>
-            <a th:href="@{'/salas/' + ${sala.id} + '/butacas'}" th:text="${sala.butacas.size()<=0} ? '+Añadir distribución' : '+Modificar distribución'"
-               class="d-inline-block text-secondary fst-italic text-decoration-none mt-2 mb-3">
+        <div class="mt-5">
+            <h3 class="text-center text-decoration-underline">Distribución</h3>
+            <p class="text-center mt-4">
+                <a th:href="@{'/salas/' + ${sala.id} + '/butacas'}"
+                   th:text="${sala.butacas.size()<=0} ? '+Añadir distribución' : '+Modificar distribución'"
+                  class="text-secondary fst-italic text-decoration-none h6">
                 +Añadir distribución</a>
-                <table id="layout"></table>
+            </p>
+                <table class="mx-auto" id="layout"></table>
         </div>
-
-        <div class="mb-4">
-            <h3 class="mb-3">Restricciones</h3>
-            <table class="table table-bordered table-striped">
-                <tr>
-                    <th>Estas</th>
-                    <th>son</th>
-                    <th>las</th>
-                    <th>restricciones</th>
-                </tr>
-                <tr>
-                    <td>Estos</td>
-                    <td>son</td>
-                    <td>los</td>
-                    <td>datos</td>
-                </tr>
-            </table>
-        </div>
-
-        <a href="/salas" class="btn btn-primary">Volver</a>
 
     </section>
 

@@ -25,7 +25,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/img/*")
+        registry.addResourceHandler("/media/*")
                 .addResourceLocations("file:" + env.getProperty("tickets.uploads.path"));
     }
 
@@ -36,7 +36,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        String [] excludedURLS = {"/auth/**","/error","/salas-api/**","/css/**","/js/**","/font/**","/img/**"};
+        String [] excludedURLS = {"/auth/**","/error","/salas-api/**","/css/**","/js/**","/font/**","/img/**","/media/**"};
         registry.addInterceptor(new LoginInterceptor())
                 .addPathPatterns("/**")
                 .excludePathPatterns(excludedURLS);

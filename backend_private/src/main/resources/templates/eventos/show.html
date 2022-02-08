@@ -21,6 +21,14 @@
 <main>
 
     <section class="container-md">
+
+        <p class="mt-3">
+            <a href="/eventos" class="btn btn-primary">
+                <i class="bi bi-chevron-left"></i>
+                <span>Volver</span>
+            </a>
+        </p>
+
         <div class="row">
             <div class="col">
                 <div class="mb-4 d-flex flex-column">
@@ -30,27 +38,25 @@
                         Edad mínima: <span th:text="${evento.edadMinima}"></span>
                     </span>
                     <span>
-                        Esta oculto: <span th:text="${evento.estaOculto}"></span>
+                        Esta oculto: <span th:text="${evento.estaOculto} ? 'Si' : 'No'"></span>
                     </span>
                     <span>
-                        Es nominativo: <span th:text="${evento.esNominativo}"></span>
+                        Es nominativo: <span th:text="${evento.esNominativo} ? 'Si' : 'No'"></span>
                     </span>
                     <span>
                         Duración estándar: <span th:text="${evento.duracionEstandar}"></span>
                     </span>
                     <span>
-                        Imagen de perfil: <span th:text="${evento.fotoPerfil.nombreArchivo}"></span>
-                    </span>
-                    <span>
                         Categoria: <span th:text="${evento.categoria.nombre}"></span>
-                    </span>
-                    <span>
-                        Galeria imagenes: <span th:text="${evento.galeriaImagenes}"></span>
                     </span>
                 </div>
             </div>
             <div class="col" style="height: 350px">
-                <img th:src="'/img/' + ${evento.fotoPerfil.nombreArchivo}" th:alt="${evento.fotoPerfil.nombreArchivo}" style="height: 100%">
+                <img
+                        class="rounded shadow-sm"
+                        th:src="'/media/' + ${evento.fotoPerfil.nombreArchivo}"
+                        th:alt="${evento.fotoPerfil.nombreArchivo}"
+                        style="height: 100%">
             </div>
         </div>
 
@@ -155,7 +161,7 @@
             <h3 class="mb-3">Normas del evento</h3>
             <p th:if="${evento.getDocumentoNormas() == null}">No hay ningún documento asignado</p>
             <div th:unless="${evento.getDocumentoNormas() == null}">
-                <a th:text="${evento.getDocumentoNormas().getNombrePdf()}" th:href="'/img/' + ${evento.getDocumentoNormas().getNombrePdf()}"></a>
+                <a th:text="${evento.getDocumentoNormas().getNombrePdf()}" th:href="'/media/' + ${evento.getDocumentoNormas().getNombrePdf()}"></a>
                 <a class="btn btn-light" th:href="'/eventos/' + ${evento.id} + '/normas_evento/delete'">
                     <i class="bi bi-trash-fill"></i>
                 </a>
@@ -167,9 +173,9 @@
             <h3 class="mb-3">Galeria de imágenes</h3>
             <div class="container-fluid d-flex gap-3">
                 <img th:each="imagen: ${evento.getGaleriaImagenes()}"
-                     th:src="'/img/' + ${imagen.nombreArchivo}"
+                     th:src="'/media/' + ${imagen.nombreArchivo}"
                      th:attr="data-gallery-id=${imagen.id}, data-gallery-prioridad=${imagen.prioridad}"
-                     class="galleryItem"
+                     class="galleryItem rounded-circle img-thumbnail"
                      data-bs-toggle="modal" data-bs-target="#modalGaleria">
             </div>
             <a th:href="'/eventos/' + ${evento.id} + '/images/add'">Añadir imágen</a>
@@ -195,8 +201,6 @@
                 </div>
             </div>
         </div>
-
-        <a href="/eventos" class="btn btn-primary">Volver</a>
     </section>
 
 </main>

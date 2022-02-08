@@ -17,7 +17,6 @@
                 <th>Ciudad</th>
                 <th>Aforo máximo</th>
                 <th>Oculto</th>
-                <th>Propietario</th>
                 <th>Acciones</th>
             </tr>
             <tr th:each="sala: ${salas}">
@@ -28,8 +27,7 @@
                 <td th:text="${sala.direccion}" />
                 <td th:text="${sala.ciudad.nombre}" />
                 <td th:text="${sala.aforoMax}" />
-                <td th:text="${sala.estaOculto}" />
-                <td th:text="${sala.propietarioSala.nombreUsuario}" />
+                <td th:text="${sala.estaOculto} ? 'Si' : 'No'" />
                 <td>
                     <a class="btn btn-light" th:href="@{'/salas/' + ${sala.id} + '/update'}">
                         <i class="bi bi-pencil-square"></i>
@@ -41,7 +39,7 @@
             </tr>
         </table>
 
-        <a href="/salas/create" class="btn btn-primary">Crear sala</a>
+        <a href="/salas/create" role="button" class="fst-italic text-secondary text-decoration-none">+Crea una sala nueva</a>
 
     </section>
 
