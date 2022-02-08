@@ -48,6 +48,16 @@ function copyDataTablesJs(){
         .pipe(gulp.dest('src/main/resources/static/js'));
 }
 
+function copyDataTablesResponsiveCss(){
+    return gulp.src('node_modules/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css')
+        .pipe(gulp.dest('src/main/resources/static/css'));
+}
+
+function copyDataTablesResponsiveJs(){
+    return gulp.src(['node_modules/datatables.net-responsive/js/dataTables.responsive.min.js*', 'node_modules/datatables.net-responsive-bs5/js/responsive.bootstrap5.js*'])
+        .pipe(gulp.dest('src/main/resources/static/js'));
+}
+
 exports.compilaSass = buildStyles;
 exports.copy = copyBootstrapFiles;
-exports.build = parallel(buildStyles, copyBootstrapFiles, copyBootstrapIconsCss, copyBootstrapIconsFonts, copyFullCalendarJs, copyFullCalendarCss, copyJQuery, copyDataTablesCss, copyDataTablesJs);
+exports.build = parallel(buildStyles, copyBootstrapFiles, copyBootstrapIconsCss, copyBootstrapIconsFonts, copyFullCalendarJs, copyFullCalendarCss, copyJQuery, copyDataTablesCss, copyDataTablesJs, copyDataTablesResponsiveCss, copyDataTablesResponsiveJs);

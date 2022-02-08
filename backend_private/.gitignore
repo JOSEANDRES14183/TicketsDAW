@@ -40,6 +40,9 @@ build/
 /src/main/resources/static/js/dataTables.bootstrap5.min.js
 /src/main/resources/static/js/jquery.dataTables.min.js
 /src/main/resources/static/css/dataTables.bootstrap5.min.css
+/src/main/resources/static/js/dataTables.responsive.min.js
+/src/main/resources/static/js/responsive.bootstrap5.js
+/src/main/resources/static/css/responsive.bootstrap5.min.css
 /src/main/resources/static/font/bootstrap-icons.css
 /src/main/resources/static/font/fonts/*
 
