@@ -23,6 +23,16 @@ function copyBootstrapIconsFonts(){
         .pipe(gulp.dest('src/main/resources/static/font/fonts'));
 }
 
+function copyFullCalendarJs(){
+    return gulp.src('node_modules/fullcalendar/*.js*')
+        .pipe(gulp.dest('src/main/resources/static/js/fullcalendar'));
+}
+
+function copyFullCalendarCss(){
+    return gulp.src('node_modules/fullcalendar/*.css')
+        .pipe(gulp.dest('src/main/resources/static/css/fullcalendar'));
+}
+
 exports.compilaSass = buildStyles;
 exports.copy = copyBootstrapFiles;
-exports.build = parallel(buildStyles, copyBootstrapFiles, copyBootstrapIconsCss, copyBootstrapIconsFonts);
+exports.build = parallel(buildStyles, copyBootstrapFiles, copyBootstrapIconsCss, copyBootstrapIconsFonts, copyFullCalendarJs, copyFullCalendarCss);

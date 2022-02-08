@@ -34,6 +34,8 @@ build/
 
 /src/main/resources/static/js/bootstrap.bundle.min.js*
 /src/main/resources/static/css/customBootstrap.css
+/src/main/resources/static/js/fullcalendar
+/src/main/resources/static/css/fullcalendar
 /src/main/resources/static/font/bootstrap-icons.css
 /src/main/resources/static/font/fonts/*
 
