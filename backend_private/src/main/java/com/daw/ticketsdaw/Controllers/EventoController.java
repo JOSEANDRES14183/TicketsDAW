@@ -347,9 +347,13 @@ public class EventoController {
     }
 
     @PostMapping("/{eventoId}/sesiones_num")
-    public String saveSesionNum(@Valid @ModelAttribute SesionNumeradaDTO sesionNumeradaDTO, BindingResult bindingResult , @PathVariable int eventoId, HttpSession session) {
+    public String saveSesionNum(ModelMap modelMap, @Valid @ModelAttribute SesionNumeradaDTO sesionNumeradaDTO, BindingResult bindingResult , @PathVariable int eventoId, HttpSession session) {
         if (bindingResult.hasErrors()){
-            return "redirect:/eventos";
+            modelMap.addAttribute("sesion", sesionNumeradaDTO);
+            modelMap.addAttribute("salas", salaService.getSalasWithButacas());
+            modelMap.addAttribute("evento", eventosService.read(eventoId));
+            modelMap.addAttribute("error", "Validation error");
+            return "eventos/sesiones/session-num-form";
         }
         SesionNumerada sesionNumerada = modelMapper.map(sesionNumeradaDTO, SesionNumerada.class);
         if (sesionNumerada.getId()!=null){
