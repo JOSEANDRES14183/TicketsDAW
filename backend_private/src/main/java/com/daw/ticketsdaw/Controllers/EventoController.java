@@ -249,6 +249,12 @@ public class EventoController {
     @PostMapping({"/{eventoId}/sesiones_no_num"})
     @Transactional(rollbackFor = {Exception.class})
     public String saveSesionNoNum(ModelMap model, @Valid @ModelAttribute SesionNoNumeradaDTO sesionDTO, BindingResult bindingResult, @PathVariable Integer eventoId) throws IOException {
+        //Check if TipoEntrada inputs have a valid structure
+        if(!(sesionDTO.getMaxEntradasTipo().size() == sesionDTO.getNombreTipo().size() &&
+                sesionDTO.getNombreTipo().size() == sesionDTO.getPrecioTipo().size())){
+            return "redirect:/eventos/" + eventoId + "/sesiones_no_num/create?error=validation";
+        }
+
         SesionNoNumerada sesion = modelMapper.map(sesionDTO, SesionNoNumerada.class);
 
         if(bindingResult.hasErrors()){
@@ -261,12 +267,6 @@ public class EventoController {
         }
 
         Evento evento = eventosService.read(eventoId);
-
-        //Check if TipoEntrada inputs have a valid structure
-        if(!(sesionDTO.getMaxEntradasTipo().size() == sesionDTO.getNombreTipo().size() &&
-                sesionDTO.getNombreTipo().size() == sesionDTO.getPrecioTipo().size())){
-            return "redirect:/eventos/" + eventoId + "/sesiones_no_num/create?error=validation";
-        }
 
         if(sesionDTO.getId() != null){
             //If Sesion had TiposEntrada previously, put them back before saving the object, if not a bug occurs and the TiposEntrada list appears empty even though they aren't dropped from the database
@@ -290,16 +290,27 @@ public class EventoController {
             }
         }
 
+        List<TipoEntrada> tipoEntradaList = generateTiposEntrada(sesion, sesionDTO);
+
+        for (var tipo :
+                tipoEntradaList) {
+            tipoEntradaService.save(tipo);
+        }
+
+        return "redirect:/eventos/" + eventoId + (savedWithoutOverlap ? "" : "?warning=overlap");
+    }
+
+    private List<TipoEntrada> generateTiposEntrada(SesionNoNumerada sesion, SesionNoNumeradaDTO sesionDTO){
+        List<TipoEntrada> tipoEntradaList = new ArrayList<>();
         for (int i = 0; i < sesionDTO.getMaxEntradasTipo().size(); i++){
             var tipo = new TipoEntrada();
             tipo.setPrimaryKey(new TipoEntradaId(sesion.getId(), sesionDTO.getNombreTipo().get(i)));
             tipo.setEntitySesion(sesion);
             tipo.setMaxEntradas(sesionDTO.getMaxEntradasTipo().get(i));
             tipo.setPrecio(sesionDTO.getPrecioTipo().get(i));
-            tipoEntradaService.save(tipo);
+            tipoEntradaList.add(tipo);
         }
-
-        return "redirect:/eventos/" + eventoId + (savedWithoutOverlap ? "" : "?warning=overlap");
+        return tipoEntradaList;
     }
 
     @GetMapping("/{eventoId}/sesiones_num/create")
