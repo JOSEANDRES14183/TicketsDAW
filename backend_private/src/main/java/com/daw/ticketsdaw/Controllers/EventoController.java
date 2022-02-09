@@ -85,24 +85,28 @@ public class EventoController {
 
     @PostMapping({"/", ""})
     @Transactional(rollbackFor = {IOException.class})
-    public String saveEvento(@ModelAttribute @Valid EventoDTO eventoDTO, BindingResult bindingResult, HttpSession session) throws IOException {
-        if(bindingResult.hasErrors()){
-            return "redirect:/eventos/create?error=validation";
-        }
-
+    public String saveEvento(ModelMap model, @ModelAttribute @Valid EventoDTO eventoDTO, BindingResult bindingResult, HttpSession session) throws IOException {
         Evento eventoPrevState;
         Evento evento = modelMapper.map(eventoDTO, Evento.class);
+
+        boolean fileInputCheckPassed = true;
 
         //If ID is null, this is a create operation, and all NonNull file inputs are mandatory
         if(eventoDTO.getId() == null){
             if(eventoDTO.getFotoPerfil().isEmpty())
-                return "redirect:/eventos/create?error=validation";
+                fileInputCheckPassed = false;
             eventoPrevState = new Evento();
         }
         else{
             eventoPrevState = eventosService.read(eventoDTO.getId());
         }
 
+        if(bindingResult.hasErrors() || !fileInputCheckPassed){
+            model.addAttribute("evento", evento);
+            model.addAttribute("categorias", categoriaService.read());
+            model.addAttribute("error", "Validation error");
+            return "eventos/create";
+        }
 
         RecursoMedia fotoPerfil = null;
         NormasEvento documentoNormas = null;
