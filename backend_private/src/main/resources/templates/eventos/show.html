@@ -61,7 +61,7 @@
 
         <div class="mb-4 mt-3">
             <h3 class="mb-3">Descripción</h3>
-            <p th:text="${evento.descripcion}"></p>
+            <p th:text="${evento.descripcion.length()<0} ? ${evento.descripcion} : 'No hay una descripción establecida'"></p>
         </div>
 
         <div class="mb-4">

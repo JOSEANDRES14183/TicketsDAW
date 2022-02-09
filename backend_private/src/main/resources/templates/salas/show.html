@@ -3,7 +3,7 @@
 
 <head th:replace="fragments/layout :: head(${sala.nombre})"></head>
 
-<body class="bg-secondary">
+<body>
 
 <header th:replace="fragments/layout :: header('Salas')"></header>
 
@@ -40,6 +40,20 @@
                 +Añadir distribución</a>
             </p>
                 <table class="mx-auto" id="layout"></table>
+        </div>
+
+        <div class="mt-5">
+            <h3 class="text-center text-decoration-underline">Sesiones</h3>
+            <table class="table table-bordered table-striped my-4">
+                <tbody>
+                    <tr>
+                        <th>Evento</th>
+                        <th>Tipo</th>
+                        <th>Fecha de inicio</th>
+                        <th>Fecha de fin</th>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
     </section>
