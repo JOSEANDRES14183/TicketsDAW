@@ -3,7 +3,7 @@
 
 <head th:replace="fragments/layout :: head(${sala.nombre})"></head>
 
-<body>
+<body class="bg-secondary">
 
 <header th:replace="fragments/layout :: header('Salas')"></header>
 
@@ -18,14 +18,14 @@
             </a>
         </p>
 
-        <div class="mt-4 d-flex justify-content-between">
-            <div class="d-flex flex-column gap-2">
+        <div class="mt-4 row">
+            <div class="col-7 d-flex flex-column gap-2">
                 <h3 th:text="${sala.nombre}"></h3>
                 <span th:inline="text"><i class="bi bi-geo-alt-fill"></i> [[${sala.direccion}]]</span>
                 <span th:inline="text"><i class="bi bi-pin-map-fill"></i> [[${sala.ciudad.nombre}]]</span>
                 <span><i class="bi bi-people-fill"></i> Aforo máximo: <span th:text="${sala.aforoMax}"></span></span>
             </div>
-            <div class="d-flex flex-column gap-1">
+            <div class="d-flex flex-column gap-1 col-5">
                 <h3  class="text-center text-decoration-underline">Mapa</h3>
                 <div class="sala-map border rounded-25 shadow-sm" id="googleMap"></div>
             </div>
