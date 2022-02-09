@@ -21,6 +21,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/eventos")
@@ -56,13 +57,30 @@ public class EventoController {
     }
 
     @GetMapping({"/{id}"})
-    public String showOne(ModelMap modelMap, @PathVariable(name="id") Integer eventoId, HttpSession session){
+    public String showOne(ModelMap modelMap, @PathVariable(name="id") Integer eventoId, HttpSession session, @RequestParam Map<String,String> requestParams){
         Evento evento = eventosService.read(eventoId);
         if (checkOrganizador(evento, session)){
             modelMap.addAttribute("evento", evento);
             return "eventos/show";
         }
         return "redirect:/auth/login";
+    }
+
+    private void applyErrorMessages(ModelMap modelMap, Map<String,String> requestParams){
+        switch (requestParams.get("error")){
+            case "validation":
+                modelMap.addAttribute("error", "Validation error");
+                break;
+            case "unauthorized":
+                modelMap.addAttribute("error", "You are not authorized to perform this action");
+                break;
+        }
+
+        switch (requestParams.get("warning")){
+            case "overlap":
+                modelMap.addAttribute("warning", "Your room was saved correctly, but an overlap has been detected");
+                break;
+        }
     }
 
     @GetMapping({"create"})
