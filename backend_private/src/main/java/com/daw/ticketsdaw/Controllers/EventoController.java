@@ -261,6 +261,11 @@ public class EventoController {
             //TODO: Demo for error notifications, apply this to the rest of the forms
             model.addAttribute("evento", eventosService.read(eventoId));
             model.addAttribute("salas", salaService.read());
+
+            //Parse current TiposEntrada to return to the form
+            List<TipoEntrada> tipoEntradaList = generateTiposEntrada(sesion, sesionDTO);
+            sesion.setTiposEntrada(tipoEntradaList);
+
             model.addAttribute("sesion", sesion);
             model.addAttribute("error", "Validation error");
             return "eventos/sesiones/session-no-numerada-form";
