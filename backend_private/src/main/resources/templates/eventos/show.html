@@ -25,7 +25,7 @@
         <p class="mt-3">
             <a href="/eventos" class="btn btn-primary">
                 <i class="bi bi-chevron-left"></i>
-                <span>Volver</span>
+                <span th:text="#{back}">Volver</span>
             </a>
         </p>
 
@@ -33,20 +33,20 @@
             <div class="col">
                 <div class="mb-4 d-flex flex-column">
                     <h3 th:text="${evento.titulo}"></h3>
-                    <span>
-                        Edad mínima: <span th:text="${evento.edadMinima}"></span>
+                    <span th:inline="text">
+                        [[#{min-age}]]: <span th:text="${evento.edadMinima}"></span>
                     </span>
-                    <span>
-                        Esta oculto: <span th:text="${evento.estaOculto} ? 'Si' : 'No'"></span>
+                    <span th:inline="text">
+                        [[#{hidden}]]: <span th:text="${evento.estaOculto} ? 'Si' : 'No'"></span>
                     </span>
-                    <span>
-                        Es nominativo: <span th:text="${evento.esNominativo} ? 'Si' : 'No'"></span>
+                    <span th:inline="text">
+                        [[#{nominative}]]: <span th:text="${evento.esNominativo} ? 'Si' : 'No'"></span>
                     </span>
-                    <span>
-                        Duración estándar: <span th:text="${evento.duracionEstandar}"></span>
+                    <span th:inline="text">
+                        [[#{duration}]]: <span th:text="${evento.duracionEstandar}"></span>
                     </span>
-                    <span>
-                        Categoria: <span th:text="${evento.categoria.nombre}"></span>
+                    <span th:inline="text">
+                        [[#{category}]]: <span th:text="${evento.categoria.nombre}"></span>
                     </span>
                 </div>
             </div>
@@ -60,21 +60,26 @@
         </div>
 
         <div class="mb-4 mt-3">
-            <h3 class="mb-3">Descripción</h3>
-            <p th:text="${evento.descripcion.length()<0} ? ${evento.descripcion} : 'No hay una descripción establecida'"></p>
+            <h3 class="mb-3" th:text="#{description}">Descripción</h3>
+            <p th:text="${evento.descripcion.length()<0} ? ${evento.descripcion} : #{no-desc}"></p>
         </div>
 
         <div class="mb-4">
-            <h3 class="mb-3">Sesiones</h3>
+            <h3 class="mb-3" th:text="#{sesiones}">Sesiones</h3>
             <div class="dropdown mb-2">
                 <a class="text-secondary mb-2 dropdown-toggle"
                    type="button" id="crearSesion"
                    data-bs-toggle="dropdown"
                    aria-expanded="false"
+                   th:text="#{create-sesion}"
                 >Crear sesión</a>
                 <ul class="dropdown-menu" aria-labelledby="crearSesion">
-                    <li><a class="dropdown-item" th:href="'/eventos/' + ${evento.id} + '/sesiones_no_num/create'">Sesión no numerada</a></li>
-                    <li><a class="dropdown-item" th:href="'/eventos/' + ${evento.id} + '/sesiones_num/create'">Sesión numerada</a></li>
+                    <li><a class="dropdown-item"
+                           th:href="'/eventos/' + ${evento.id} + '/sesiones_no_num/create'"
+                           th:text="#{sesion-no-num}">Sesión no numerada</a></li>
+                    <li><a class="dropdown-item"
+                           th:href="'/eventos/' + ${evento.id} + '/sesiones_num/create'"
+                           th:text="#{sesion-num}">Sesión numerada</a></li>
                 </ul>
             </div>
             <table class="table table-bordered table-striped">
@@ -161,8 +166,8 @@
         </div>
 
         <div class="mb-4">
-            <h3 class="mb-3">Normas del evento</h3>
-            <p th:if="${evento.getDocumentoNormas() == null}">No hay ningún documento asignado</p>
+            <h3 class="mb-3" th:text="#{rules-doc}">Normas del evento</h3>
+            <p th:if="${evento.getDocumentoNormas() == null}" th:text="#{no-rules-doc}">No hay ningún documento asignado</p>
             <div th:unless="${evento.getDocumentoNormas() == null}">
                 <a th:text="${evento.getDocumentoNormas().getNombrePdf()}" th:href="'/media/' + ${evento.getDocumentoNormas().getNombrePdf()}"></a>
                 <a class="btn btn-light" th:href="'/eventos/' + ${evento.id} + '/normas_evento/delete'">

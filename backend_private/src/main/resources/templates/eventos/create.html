@@ -97,7 +97,7 @@
                     <p class="small text-secondary fst-italic" th:inline="text">*[[#{allowed-formats}]] .jpg, .png, .webp</p>
                 </div>
                 <div class="mb-3">
-                    <label for="documentoNormas" class="form-label text-primary h6">Documento de normas (Opcional)</label>
+                    <label for="documentoNormas" class="form-label text-primary h6" th:inline="text">[[#{rules-doc}]] ([[#{optional}]])</label>
                     <input type="file" class="form-control w-75" id="documentoNormas" name="documentoNormas">
                     <p class="small text-secondary fst-italic" th:inline="text">*[[#{allowed-formats}]] .jpg, .png, .webp, .pdf</p>
                 </div>
