@@ -31,7 +31,7 @@
               <div class="mb-3">
                 <label th:text="#{profile-pic}" for="fotoPerfil" class="form-label">Foto de perfil</label>
                 <input type="file" class="form-control" th:field="*{fotoPerfil}">
-                <p class="small text-secondary fst-italic" th:inline="text" >[[#{allowed-formats}]] .jpg, .png, .webp</p>
+                <p class="small text-secondary fst-italic" th:inline="text" >*[[#{allowed-formats}]] .jpg, .png, .webp</p>
               </div>
               <button th:text="#{register-action}" type="submit" class="btn btn-primary">Regístrate</button>
             </form>
