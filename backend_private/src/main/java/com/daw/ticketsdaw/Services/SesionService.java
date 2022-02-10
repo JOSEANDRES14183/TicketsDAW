@@ -24,17 +24,15 @@ public class SesionService {
      * @return          returns false if the Sesion has been saved, but it overlaps with another Sesion on the DB
      */
     public boolean save(Sesion sesion){
-        //Save date availability before saving the Sesion to the DB, if not, it will collide with itself when checking availability
-        boolean isDateAvailable = checkDateAvailability(sesion);
         sesionRepository.save(sesion);
-        return isDateAvailable;
+        return checkDateAvailability(sesion);
     }
 
     private boolean checkDateAvailability(Sesion newSesion){
         //Possible optimization https://stackoverflow.com/questions/22007341/spring-jpa-selecting-specific-columns
         List<Sesion> sesiones = sesionRepository.findAll();
         for (var sesion : sesiones) {
-            if(checkSesionOverlap(sesion, newSesion))
+            if(sesion.getId() != newSesion.getId() && checkSesionOverlap(sesion, newSesion))
                 return false;
         }
         return true;
