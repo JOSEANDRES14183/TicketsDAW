@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/layout :: head('Log In')"></head>
+<head th:replace="fragments/layout :: head(#{login})"></head>
 
 <body class="bg-secondary">
 
@@ -11,19 +11,19 @@
 
     <div class="w-50 mx-auto card bg-white rounded-25 shadow-sm">
         <div class="card-body">
-            <h4 class="card-title my-4 text-center">Inicia Sesión</h4>
+            <h4 th:text="#{login}" class="card-title my-4 text-center"></h4>
             <div class="p-5">
                 <form method="POST" class="mb-3">
                     <div class="mb-3">
-                        <label for="username" class="form-label">Nombre de usuario</label>
+                        <label th:text="#{username}" for="username" class="form-label">Nombre de usuario</label>
                         <input type="text" class="form-control" id="username" name="username" aria-describedby="NombreField">
                     </div>
                     <div class="mb-3">
-                        <label for="password" class="form-label">Contraseña</label>
+                        <label th:text="#{password}" for="password" class="form-label">Contraseña</label>
                         <input type="password" class="form-control" id="password" name="password" aria-describedby="NombreField">
                     </div>
                     <div>
-                        <button type="submit" class="btn btn-primary">Inicia</button>
+                        <button th:text="#{start}" type="submit" class="btn btn-primary">Inicia</button>
                     </div>
                 </form>
                 <div class="dropdown">
@@ -31,10 +31,11 @@
                        type="button" id="register"
                        data-bs-toggle="dropdown"
                        aria-expanded="false"
+                       th:text="#{register}"
                     >¿No tienes una cuenta? Regístrate</a>
                     <ul class="dropdown-menu" aria-labelledby="register">
-                        <li><a class="dropdown-item" th:href="@{'/auth/register/propietario'}">Regístrate como propietario</a></li>
-                        <li><a class="dropdown-item" th:href="@{'/auth/register/organizador'}">Regístrate como organizador</a></li>
+                        <li><a th:text="#{register-propietario}" class="dropdown-item" th:href="@{'/auth/register/propietario'}">Regístrate como propietario</a></li>
+                        <li><a th:text="#{register-organizador}" class="dropdown-item" th:href="@{'/auth/register/organizador'}">Regístrate como organizador</a></li>
                     </ul>
                 </div>
                 <a class="d-block text-secondary" href="#">He olvidado mi contraseña</a>

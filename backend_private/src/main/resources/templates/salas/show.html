@@ -14,7 +14,7 @@
         <p class="mt-3">
             <a href="/salas" class="btn btn-primary">
                 <i class="bi bi-chevron-left"></i>
-                <span>Volver</span>
+                <span th:text="#{back}">Volver</span>
             </a>
         </p>
 
@@ -26,16 +26,16 @@
                 <span><i class="bi bi-people-fill"></i> Aforo máximo: <span th:text="${sala.aforoMax}"></span></span>
             </div>
             <div class="d-flex flex-column gap-1 col-5">
-                <h3  class="text-center text-decoration-underline">Mapa</h3>
+                <h3  class="text-center text-decoration-underline" th:text="#{map}">Mapa</h3>
                 <div class="sala-map border rounded-25 shadow-sm" id="googleMap"></div>
             </div>
         </div>
 
         <div class="mt-5">
-            <h3 class="text-center text-decoration-underline">Distribución</h3>
+            <h3 class="text-center text-decoration-underline" th:text="#{layout}">Distribución</h3>
             <p class="text-center mt-4">
                 <a th:href="@{'/salas/' + ${sala.id} + '/butacas'}"
-                   th:text="${sala.butacas.size()<=0} ? '+Añadir distribución' : '+Modificar distribución'"
+                   th:text="${sala.butacas.size()<=0} ? '+' + #{layout-create} : '+' + #{layout-modify}"
                   class="text-secondary fst-italic text-decoration-none h6">
                 +Añadir distribución</a>
             </p>
@@ -43,7 +43,7 @@
         </div>
 
         <div class="mt-5">
-            <h3 class="text-center text-decoration-underline">Sesiones</h3>
+            <h3 class="text-center text-decoration-underline" th:text="#{sesiones}">Sesiones</h3>
             <table class="table table-bordered table-striped my-4">
                 <tbody>
                     <tr>
@@ -64,11 +64,10 @@
 
 <script th:inline="javascript">
 
-    /*<![CDATA[*/
     const butacasJSON = [[${butacas}]];
     const latitud = [[${sala.latitud}]];
     const longitud = [[${sala.longitud}]];
-    /*]]>*/
+
 
     function myMap(){
 
@@ -103,8 +102,6 @@
     // console.log(butacas);
 
 </script>
-
-<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 
 <script src="https://maps.googleapis.com/maps/api/js?
 key=AIzaSyCIBWMOCC_XY2ia1tPFUKYjY4ACzhqbEA0&callback=myMap"></script>

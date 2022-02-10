@@ -17,23 +17,23 @@
           </div>
 
           <div class="col-5 p-5 card-body">
-            <h5 class="card-title mb-4">Registrate como organizador</h5>
+            <h5 th:text="#{register-organizador}" class="card-title mb-4">Registrate como organizador</h5>
             <form method="POST" th:object="${organizador}" enctype="multipart/form-data">
               <div class="mb-3">
-                <label for="nombre" class="form-label">Nombre</label>
+                <label th:text="#{name}" for="nombre" class="form-label">Nombre</label>
                 <input type="text" th:field="*{nombre}" class="form-control" aria-describedby="NombreField">
               </div>
               <div th:replace="fragments/user-form :: user-inputs"></div>
               <div class="mb-3">
-                <label for="descripcion" class="form-label">Descripcion</label>
+                <label th:text="#{description}" for="descripcion" class="form-label">Descripcion</label>
                 <textarea th:field="*{descripcion}" class="form-control" aria-describedby="DescripcionField"></textarea>
               </div>
               <div class="mb-3">
-                <label for="fotoPerfil" class="form-label">Foto de perfil</label>
+                <label th:text="#{profile-pic}" for="fotoPerfil" class="form-label">Foto de perfil</label>
                 <input type="file" class="form-control" th:field="*{fotoPerfil}">
-                <p class="small text-secondary fst-italic">*Sólo se admiten formatos .jpg, .png y .webp</p>
+                <p class="small text-secondary fst-italic" th:inline="text" >[[#{allowed-formats}]] .jpg, .png, .webp</p>
               </div>
-              <button type="submit" class="btn btn-primary">Regístrate</button>
+              <button th:text="#{register-action}" type="submit" class="btn btn-primary">Regístrate</button>
             </form>
           </div>
         </div>
