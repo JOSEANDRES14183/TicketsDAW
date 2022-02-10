@@ -8,10 +8,15 @@
 
 <main>
   <section class="container-md">
-    <h2 class="text-center mb-4">Tu cuenta se ha creado con éxito. Para iniciar sesión, verifica tu cuenta desde el enlace que hemos
-    enviado a <span th:text="${usuario.email}" class="text-primary"></span></h2>
 
-    <h4 class="text-center">¿No has recibido el correo? <a href="">Haz click aquí para reenviarlo</a></h4>
+    <p class="text-center mb-4">Tu cuenta se ha creado con éxito. Para iniciar sesión, verifica tu cuenta
+      desde el enlace que hemos enviado a <span th:text="${usuario.email}" class="text-primary"></span></p>
+
+    <form method="post" action="#">
+      <p class="text-center">¿No has recibido el correo? <a role="button">Haz click aquí para reenviarlo</a></p>
+      <input class="form-control rounded-pill w-25 mx-auto" type="email" placeholder="Escribe aquí tu correo">
+    </form>
+  
   </section>
 </main>
 

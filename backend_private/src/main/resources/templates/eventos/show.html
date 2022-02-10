@@ -21,39 +21,48 @@
 <main>
 
     <section class="container-md">
+
+        <p class="mt-3">
+            <a href="/eventos" class="btn btn-primary">
+                <i class="bi bi-chevron-left"></i>
+                <span>Volver</span>
+            </a>
+        </p>
+
         <div class="row">
             <div class="col">
                 <div class="mb-4 d-flex flex-column">
                     <h3 th:text="${evento.titulo}"></h3>
-                    <span th:text="${evento.descripcion}"></span>
                     <span>
                         Edad mínima: <span th:text="${evento.edadMinima}"></span>
                     </span>
                     <span>
-                        Esta oculto: <span th:text="${evento.estaOculto}"></span>
+                        Esta oculto: <span th:text="${evento.estaOculto} ? 'Si' : 'No'"></span>
                     </span>
                     <span>
-                        Es nominativo: <span th:text="${evento.esNominativo}"></span>
+                        Es nominativo: <span th:text="${evento.esNominativo} ? 'Si' : 'No'"></span>
                     </span>
                     <span>
                         Duración estándar: <span th:text="${evento.duracionEstandar}"></span>
                     </span>
                     <span>
-                        Imagen de perfil: <span th:text="${evento.fotoPerfil.nombreArchivo}"></span>
-                    </span>
-                    <span>
                         Categoria: <span th:text="${evento.categoria.nombre}"></span>
-                    </span>
-                    <span>
-                        Galeria imagenes: <span th:text="${evento.galeriaImagenes}"></span>
                     </span>
                 </div>
             </div>
             <div class="col" style="height: 350px">
-                <img th:src="'/img/' + ${evento.fotoPerfil.nombreArchivo}" th:alt="${evento.fotoPerfil.nombreArchivo}" style="height: 100%">
+                <img
+                        class="rounded shadow-sm"
+                        th:src="'/media/' + ${evento.fotoPerfil.nombreArchivo}"
+                        th:alt="${evento.fotoPerfil.nombreArchivo}"
+                        style="height: 100%">
             </div>
         </div>
 
+        <div class="mb-4 mt-3">
+            <h3 class="mb-3">Descripción</h3>
+            <p th:text="${evento.descripcion.length()<0} ? ${evento.descripcion} : 'No hay una descripción establecida'"></p>
+        </div>
 
         <div class="mb-4">
             <h3 class="mb-3">Sesiones</h3>
@@ -155,7 +164,7 @@
             <h3 class="mb-3">Normas del evento</h3>
             <p th:if="${evento.getDocumentoNormas() == null}">No hay ningún documento asignado</p>
             <div th:unless="${evento.getDocumentoNormas() == null}">
-                <a th:text="${evento.getDocumentoNormas().getNombrePdf()}" th:href="'/img/' + ${evento.getDocumentoNormas().getNombrePdf()}"></a>
+                <a th:text="${evento.getDocumentoNormas().getNombrePdf()}" th:href="'/media/' + ${evento.getDocumentoNormas().getNombrePdf()}"></a>
                 <a class="btn btn-light" th:href="'/eventos/' + ${evento.id} + '/normas_evento/delete'">
                     <i class="bi bi-trash-fill"></i>
                 </a>
@@ -167,9 +176,9 @@
             <h3 class="mb-3">Galeria de imágenes</h3>
             <div class="container-fluid d-flex gap-3">
                 <img th:each="imagen: ${evento.getGaleriaImagenes()}"
-                     th:src="'/img/' + ${imagen.nombreArchivo}"
-                     th:attr="data-gallery-id=${imagen.id}, data-gallery-prioridad=${imagen.prioridad}"
-                     class="galleryItem"
+                     th:src="'/media/' + ${imagen.nombreArchivo}"
+                     th:attr="data-gallery-id=${imagen.id}, data-gallery-prioridad=${imagen.prioridad}, data-gallery-name=${imagen.nombreArchivo}"
+                     class="galleryItem rounded-circle img-thumbnail"
                      data-bs-toggle="modal" data-bs-target="#modalGaleria">
             </div>
             <a th:href="'/eventos/' + ${evento.id} + '/images/add'">Añadir imágen</a>
@@ -183,6 +192,7 @@
                             <h5 class="modal-title">Establecer prioridad</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
+                        <img class="d-block img-fluid mx-auto my-4" src="" alt="" id="imagenGaleria">
                         <div class="modal-body">
                             <input type="number" name="prioridad" id="prioridad">
                         </div>
@@ -195,13 +205,12 @@
                 </div>
             </div>
         </div>
-
-        <a href="/eventos" class="btn btn-primary">Volver</a>
     </section>
 
 </main>
 
 <footer th:replace="fragments/layout :: footer"></footer>
+
 <script th:inline="javascript">
     /*<![CDATA[*/
     let galeriaModal = document.getElementById("modalGaleria");
@@ -265,11 +274,14 @@
 
     galeriaModal.addEventListener('show.bs.modal', function (event) {
         let button = event.relatedTarget
-        let prioridad = button.getAttribute("data-gallery-prioridad")
-        let recursoMediaId = button.getAttribute("data-gallery-id")
+        let prioridad = button.getAttribute("data-gallery-prioridad");
+        let nombre = button.getAttribute("data-gallery-name");
+        let recursoMediaId = button.getAttribute("data-gallery-id");
         let eventoId = [[${evento.id}]]
         document.getElementById("galeriaForm").setAttribute("action", "/eventos/" + eventoId + "/images/" + recursoMediaId + "/update")
         document.getElementById("prioridad").setAttribute("value", prioridad)
+        document.getElementById("imagenGaleria").setAttribute("src","/media/"+nombre);
+        document.getElementById("imagenGaleria").setAttribute("alt",nombre);
         document.getElementById("deleteGalleryBtn").setAttribute("href", "/eventos/" + eventoId + "/images/" + recursoMediaId + "/delete")
     })
     /*]]>*/
