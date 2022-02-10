@@ -38,3 +38,26 @@ $utilities-text-colors: map-merge($utilities-text-colors, $colors-personalitzats
   width: 100%;
   height: 300px;
 }
+
+body{
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: space-between;
+}
+
+main{
+  margin-bottom: 20px;
+}
+
+.app-logo{
+  width: 150px;
+}
+
+header .btn:hover{
+  border: solid purple 2px;
+}
+
+.rounded-25{
+  border-radius: 25px;
+}
