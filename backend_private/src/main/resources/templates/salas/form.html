@@ -15,14 +15,14 @@
                 <div th:unless="${sala.id == null}">
                     <input type="hidden" th:field="*{id}">
                 </div>
-                <h5 class="form-label text-primary">General</h5>
+                <h5 class="form-label text-primary" th:text="#{general}">General</h5>
                 <div class="mb-3">
                     <div class="input-group">
                         <span class="input-group-text" id="nombreIcon">
                             <i class="bi bi-building"></i>
                         </span>
                         <input type="text" th:field="*{nombre}" class="form-control"
-                               id="nombre" name="nombre" placeholder="Nombre"
+                               id="nombre" name="nombre" th:placeholder="#{name}"
                                aria-describedby="nombreIcon">
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                             <i class="bi bi-geo-alt"></i>
                         </span>
                         <input type="text" th:field="*{direccion}" class="form-control"
-                               id="direccion" name="direccion" placeholder="Dirección"
+                               id="direccion" name="direccion" th:placeholder="#{address}"
                                aria-describedby="direccionIcon">
                     </div>
                 </div>
@@ -50,13 +50,13 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <h5 class="form-label text-primary">Mapa</h5>
+                    <h5 class="form-label text-primary" th:text="#{map}">Mapa</h5>
                     <div class="sala-map border rounded" id="googleMap"></div>
                     <input type="hidden" th:field="*{latitud}" />
                     <input type="hidden" th:field="*{longitud}" />
                 </div>
                 <div class="mb-3">
-                    <h5 class="form-label text-primary">Aforo máximo</h5>
+                    <h5 class="form-label text-primary" th:text="#{max-capacity}">Aforo máximo</h5>
                     <div class="input-group w-25">
                         <span class="input-group-text" id="aforoIcon">
                             <i class="bi bi-people-fill"></i>
@@ -65,8 +65,8 @@
                                id="aforoMax" name="aforoMax" aria-describedby="aforoIcon">
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary mt-3">Guardar</button>
-                <a href="/salas" class="btn btn-secondary mt-3">Volver</a>
+                <button type="submit" class="btn btn-primary mt-3" th:text="#{save}">Guardar</button>
+                <a href="/salas" class="btn btn-secondary mt-3" th:text="#{back}">Volver</a>
             </form>
         </div>
     </section>
@@ -107,8 +107,6 @@
     }
 
 </script>
-
-<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 
 <script src="https://maps.googleapis.com/maps/api/js?
 key=AIzaSyCIBWMOCC_XY2ia1tPFUKYjY4ACzhqbEA0&callback=myMap"></script>

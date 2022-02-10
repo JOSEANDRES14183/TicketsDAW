@@ -7,15 +7,15 @@
     <section class="container-md">
         <table class="table table-bordered table-striped">
             <tr>
-                <th>Título</th>
-                <th>Oculto</th>
-                <th>Nominativo</th>
-                <th>Acciones</th>
+                <th th:text="#{title}">Título</th>
+                <th th:text="#{hidden}">Oculto</th>
+                <th th:text="#{nominative}">Nominativo</th>
+                <th th:text="#{actions}">Acciones</th>
             </tr>
             <tr th:each="evento: ${eventos}">
                 <td><a th:text="${evento.titulo}" th:href="'/eventos/' + ${evento.id}"></a></td>
-                <td th:text="${evento.estaOculto} ? 'Si' : 'No'"></td>
-                <td th:text="${evento.esNominativo} ? 'Si' : 'No'"></td>
+                <td th:text="${evento.estaOculto} ? #{yes} : #{no}"></td>
+                <td th:text="${evento.esNominativo} ? #{yes} : #{no}"></td>
                 <td>
                     <a class="btn btn-light" th:href="@{'/eventos/' + ${evento.id} + '/update'}">
                         <i class="bi bi-pencil-square"></i>
@@ -27,7 +27,10 @@
             </tr>
         </table>
 
-        <a href="/eventos/create" role="button" class="fst-italic text-secondary text-decoration-none">+Crea un evento nuevo</a>
+        <a href="/eventos/create" th:text="'+'+#{evento-create}"
+           role="button"
+           class="fst-italic text-secondary text-decoration-none"
+        >+Crea un evento nuevo</a>
     </section>
 </main>
 

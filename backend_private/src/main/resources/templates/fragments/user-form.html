@@ -3,19 +3,19 @@
 
 <div th:fragment="user-inputs">
     <div class="mb-3">
-        <label for="nombreUsuario" class="form-label">Nombre de usuario</label>
+        <label th:text="#{username}" for="nombreUsuario" class="form-label">Nombre de usuario</label>
         <input type="text" th:field="*{nombreUsuario}" class="form-control" aria-describedby="NombreUsuarioField">
     </div>
     <div class="mb-3">
-        <label for="email" class="form-label">Correo electrónico</label>
+        <label th:text="#{email}" for="email" class="form-label">Correo electrónico</label>
         <input type="text" class="form-control" th:field="*{email}" aria-describedby="EmailField">
     </div>
     <div class="mb-3">
-        <label for="passwordHash" class="form-label">Contraseña</label>
+        <label th:text="#{password}" for="passwordHash" class="form-label">Contraseña</label>
         <input type="password" class="form-control" th:field="*{passwordHash}" aria-describedby="PasswordField">
     </div>
     <div class="mb-3">
-        <label for="passwordHashRepeat" class="form-label">Repetir contraseña</label>
+        <label th:text="#{repeat-password}" for="passwordHashRepeat" class="form-label">Repetir contraseña</label>
         <input type="password" class="form-control" id="passwordHashRepeat" aria-describedby="PasswordRepeatField">
     </div>
 </div>
