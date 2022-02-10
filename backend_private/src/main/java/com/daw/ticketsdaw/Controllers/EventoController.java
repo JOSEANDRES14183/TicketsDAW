@@ -67,20 +67,7 @@ public class EventoController {
     }
 
     private void applyErrorMessages(ModelMap modelMap, Map<String,String> requestParams){
-        switch (requestParams.get("error")){
-            case "validation":
-                modelMap.addAttribute("error", "Validation error");
-                break;
-            case "unauthorized":
-                modelMap.addAttribute("error", "You are not authorized to perform this action");
-                break;
-        }
 
-        switch (requestParams.get("warning")){
-            case "overlap":
-                modelMap.addAttribute("warning", "Your room was saved correctly, but an overlap has been detected");
-                break;
-        }
     }
 
     @GetMapping({"create"})
