@@ -57,17 +57,13 @@ public class EventoController {
     }
 
     @GetMapping({"/{id}"})
-    public String showOne(ModelMap modelMap, @PathVariable(name="id") Integer eventoId, HttpSession session, @RequestParam Map<String,String> requestParams){
+    public String showOne(ModelMap modelMap, @PathVariable(name="id") Integer eventoId, HttpSession session){
         Evento evento = eventosService.read(eventoId);
         if (checkOrganizador(evento, session)){
             modelMap.addAttribute("evento", evento);
             return "eventos/show";
         }
         return "redirect:/auth/login";
-    }
-
-    private void applyErrorMessages(ModelMap modelMap, Map<String,String> requestParams){
-
     }
 
     @GetMapping({"create"})

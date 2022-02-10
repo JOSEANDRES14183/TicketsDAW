@@ -1,5 +1,6 @@
 package com.daw.ticketsdaw;
 
+import com.daw.ticketsdaw.Interceptors.AlertInterceptor;
 import com.daw.ticketsdaw.Interceptors.LoginInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -40,6 +41,8 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoginInterceptor())
                 .addPathPatterns("/**")
                 .excludePathPatterns(excludedURLS);
+        registry.addInterceptor(new AlertInterceptor())
+                .addPathPatterns("/**");
         WebMvcConfigurer.super.addInterceptors(registry);
     }
 
