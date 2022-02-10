@@ -46,7 +46,7 @@ public class SalaController {
             modelMap.addAttribute("butacas",salaService.getButacasJson(sala));
             return "salas/show";
         }
-        return "redirect:/auth/login";
+        return "redirect:/auth/login?error=unauthorized";
     }
 
     @GetMapping("{id}/delete")
@@ -56,7 +56,7 @@ public class SalaController {
             salaService.delete(sala);
             return "redirect:/salas";
         }
-        return "redirect:/auth/login";
+        return "redirect:/auth/login?error=unauthorized";
     }
 
     @GetMapping({"create"})
@@ -76,7 +76,7 @@ public class SalaController {
             modelMap.addAttribute("ciudades", ciudadService.read());
             return "salas/form";
         }
-        return "redirect:/auth/login";
+        return "redirect:/auth/login?error=unauthorized";
     }
 
     @PostMapping({"/",""})
@@ -93,11 +93,11 @@ public class SalaController {
         if(sala.getId()!=null){
             Sala salaPrevState = salaService.read(sala.getId());
             if(!checkPropietarioSala(salaPrevState,session)){
-                return "redirect:/auth/login";
+                return "redirect:/auth/login?error=unauthorized";
             }
         }
 
-        PropietarioSala propietarioSala = (PropietarioSala) usuarioService.getById(((Usuario) session.getAttribute("usuario")).getId());
+        PropietarioSala propietarioSala = getPropietario(session);
         sala.setPropietarioSala(propietarioSala);
 
         salaService.create(sala);
@@ -105,8 +105,12 @@ public class SalaController {
     }
 
     @GetMapping("{id}/butacas")
-    public String showButacasForm(ModelMap modelMap, @PathVariable("id") int salaId){
+    public String showButacasForm(ModelMap modelMap, @PathVariable("id") int salaId, HttpSession session){
         Sala sala = salaService.read(salaId);
+
+        if(!checkPropietarioSala(sala, session))
+            return "redirect:/auth/login?error=unauthorized";
+
         modelMap.addAttribute("sala",sala);
         modelMap.addAttribute("butacas",salaService.getButacasJson(sala));
         return "salas/butacas-form";
@@ -115,6 +119,12 @@ public class SalaController {
     private boolean checkPropietarioSala(Sala sala, HttpSession session){
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         return sala.getPropietarioSala().getId() == usuario.getId();
+    }
+
+    private PropietarioSala getPropietario(HttpSession session){
+        return (PropietarioSala) usuarioService.getById(
+                ((Usuario) session.getAttribute("usuario")).getId()
+        );
     }
 
 }
