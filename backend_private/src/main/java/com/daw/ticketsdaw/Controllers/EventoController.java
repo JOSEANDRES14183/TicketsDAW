@@ -379,7 +379,6 @@ public class EventoController {
 
     @PostMapping("/{eventoId}/sesiones_num")
     public String saveSesionNum(ModelMap modelMap, @Valid @ModelAttribute SesionNumeradaDTO sesionNumeradaDTO, BindingResult bindingResult , @PathVariable int eventoId, HttpSession session) {
-//TODO: Falta verificar accesos en este metodo
         Evento evento = eventosService.read(eventoId);
 
         if(!checkOrganizador(evento, session))
@@ -388,25 +387,26 @@ public class EventoController {
         if (bindingResult.hasErrors()){
             modelMap.addAttribute("sesion", sesionNumeradaDTO);
             modelMap.addAttribute("salas", salaService.getSalasWithButacas());
-            modelMap.addAttribute("evento", eventosService.read(eventoId));
+            modelMap.addAttribute("evento", evento);
             modelMap.addAttribute("error", "Validation error");
             return "eventos/sesiones/session-num-form";
         }
         SesionNumerada sesionNumerada = modelMapper.map(sesionNumeradaDTO, SesionNumerada.class);
         if (sesionNumerada.getId()!=null){
            Sesion sesionPrevState = sesionService.read(sesionNumerada.getId());
-           if (checkOrganizador(sesionPrevState.getEvento(), session)){
-               return "redirect:/eventos";
-           }
+
+            //Check if evento id has changed since last submission
+            if(sesionPrevState.getEvento().getId() != eventoId)
+                return "redirect:/eventos?error=validation";
+
+            if(!sesionPrevState.getEvento().equals(evento))
+                return "redirect:/auth/login?error=unauthorized";
         }
 
-        Organizador loggedOrganizador = getOrganizador(session);
-        if (evento.getOrganizador().getId() != loggedOrganizador.getId()){
-            return "redirect:/eventos";
-        }
         sesionNumerada.setEvento(evento);
+
         boolean savedWithoutOverlap = sesionService.save(sesionNumerada);
-        return "redirect:/eventos/" + sesionNumerada.getEvento().getId() + (savedWithoutOverlap ? "" : "?warning=overlap");
+        return "redirect:/eventos/" + eventoId + (savedWithoutOverlap ? "" : "?warning=overlap");
     }
 
     private boolean checkOrganizador(Evento evento, HttpSession session){
