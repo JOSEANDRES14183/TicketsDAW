@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <body>
 
 <div th:fragment="sesion-inputs">
@@ -7,7 +8,7 @@
     </div>
     <h5 class="form-label text-primary mb-3">General</h5>
     <div class="mb-3">
-        <label th:for="*{entradasMax}" class="form-label h6 text-primary">Entradas máximas</label>
+        <label th:for="*{entradasMax}" class="form-label h6 text-primary" th:text="#{max-entradas}">Entradas máximas</label>
         <div class="input-group w-75">
             <span class="input-group-text">
                 <i class="bi bi-ticket-detailed"></i>
@@ -16,19 +17,19 @@
         </div>
     </div>
     <div class="mb-3 form-check form-switch">
-        <label for="estaOculto" class="form-check-label">Esta oculto</label>
+        <label for="estaOculto" class="form-check-label" th:text="#{hidden}">Esta oculto</label>
         <input type="checkbox" class="form-check-input" th:field="*{estaOculto}">
     </div>
     <div class="mb-3">
-        <label th:for="*{fechaFinVenta}" class="form-label h6 text-primary">Fecha y hora de fin de venta</label>
+        <label th:for="*{fechaFinVenta}" class="form-label h6 text-primary" th:text="#{fecha-fin-venta}">Fecha y hora de fin de venta</label>
         <input type="datetime-local" class="form-control w-50" th:field="*{fechaFinVenta}">
     </div>
     <div class="mb-3">
-        <label th:for="*{fechaIni}" class="form-label h6 text-primary">Fecha y hora de inicio del evento</label>
+        <label th:for="*{fechaIni}" class="form-label h6 text-primary" th:text="#{fecha-inicio}">Fecha y hora de inicio del evento</label>
         <input type="datetime-local" class="form-control w-50" th:field="*{fechaIni}">
     </div>
     <div class="mb-3">
-        <label th:for="*{duracion}" class="form-label h6 text-primary">Duración de la sesión (min.)</label>
+        <label th:for="*{duracion}" class="form-label h6 text-primary" th:text="#{duration}+' (min.)'">Duración de la sesión (min.)</label>
         <div class="input-group w-50">
             <span class="input-group-text">
                 <i class="bi bi-clock"></i>
@@ -38,7 +39,7 @@
     </div>
 
     <div class="row mb-3">
-        <h5 class="form-label text-primary mb-3">Información de la sala</h5>
+        <h5 class="form-label text-primary mb-3" th:text="#{sala-info}">Información de la sala</h5>
         <div class="col-6">
             <select class="form-select" th:field="*{sala}">
                 <option th:each="sala: ${salas}"

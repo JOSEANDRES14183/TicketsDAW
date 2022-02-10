@@ -105,50 +105,50 @@
                 <div class="modal-content">
                   <div class="modal-body">
                       <div id="sesionInfo" class="d-flex flex-column gap-2 mb-3">
-                          <h5>Información de la sesión</h5>
+                          <h5 th:text="#{sesion-info}">Información de la sesión</h5>
                           <table class="table table-borderless">
                               <tbody>
                                 <tr>
-                                    <th>Duracion: </th>
+                                    <th th:text="#{duration}+':'">Duracion: </th>
                                     <td id="duracion"></td>
                                 </tr>
                                 <tr>
-                                    <th>Máximo de entradas: </th>
+                                    <th th:text="#{max-entradas}+':'">Máximo de entradas: </th>
                                     <td id="entradasMax"></td>
                                 </tr>
                                 <tr>
-                                    <th>Fecha de fin de venta: </th>
+                                    <th th:text="#{fecha-fin-venta}+':'">Fecha de fin de venta: </th>
                                     <td id="fechaFinVenta"></td>
                                 </tr>
                                 <tr>
-                                    <th>Fecha de incio: </th>
+                                    <th th:text="#{fecha-inicio}+':'">Fecha de incio: </th>
                                     <td id="fechaIni"></td>
                                 </tr>
                                 <tr>
-                                    <th>Esta oculto: </th>
+                                    <th th:text="#{hidden}+':'">Esta oculto: </th>
                                     <td id="estaOculto"></td>
                                 </tr>
                               </tbody>
                           </table>
                       </div>
                       <div id="salaInfo" class="d-flex flex-column gap-2">
-                          <h5>Información de la sala</h5>
+                          <h5 th:text="#{sala-info}">Información de la sala</h5>
                           <table class="table table-borderless">
                               <tbody>
                               <tr>
-                                  <th>Nombre: </th>
+                                  <th th:text="#{name}+':'">Nombre: </th>
                                   <td id="nombre"></td>
                               </tr>
                               <tr>
-                                  <th>Dirección: </th>
+                                  <th th:text="#{address}+':'">Dirección: </th>
                                   <td id="direccion"></td>
                               </tr>
                               <tr>
-                                  <th>Ciudad: </th>
+                                  <th th:text="#{city}+':'">Ciudad: </th>
                                   <td id="ciudad"></td>
                               </tr>
                               <tr>
-                                  <th>Aforo máximo: </th>
+                                  <th th:text="#{max-capacity}+':'">Aforo máximo: </th>
                                   <td id="aforoMax"></td>
                               </tr>
                               </tbody>
@@ -157,9 +157,9 @@
                       <div id="additionalInfo"></div>
                   </div>
                     <div class="modal-footer">
-                        <a class="btn btn-info" id="updateSesionBtn">Modificar</a>
-                        <a class="btn btn-danger" id="deleteSesionBtn">Eliminar</a>
-                        <button class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <a class="btn btn-info" id="updateSesionBtn" th:text="#{modify}">Modificar</a>
+                        <a class="btn btn-danger" id="deleteSesionBtn" th:text="#{delete}">Eliminar</a>
+                        <button class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{close}">Cerrar</button>
                     </div>
                 </div>
             </div>
@@ -178,7 +178,7 @@
         </div>
 
         <div class="mb-4">
-            <h3 class="mb-3">Galeria de imágenes</h3>
+            <h3 class="mb-3" th:text="#{gallery}">Galeria de imágenes</h3>
             <div class="container-fluid d-flex gap-3">
                 <img th:each="imagen: ${evento.getGaleriaImagenes()}"
                      th:src="'/media/' + ${imagen.nombreArchivo}"
@@ -186,7 +186,7 @@
                      class="galleryItem rounded-circle img-thumbnail"
                      data-bs-toggle="modal" data-bs-target="#modalGaleria">
             </div>
-            <a th:href="'/eventos/' + ${evento.id} + '/images/add'">Añadir imágen</a>
+            <a th:href="'/eventos/' + ${evento.id} + '/images/add'" th:text="#{add-img}">Añadir imágen</a>
         </div>
 
         <div class="modal" tabindex="-1" id="modalGaleria">
@@ -194,7 +194,7 @@
                 <div class="modal-content">
                     <form method="post" action="#PLACEHOLDER" id="galeriaForm">
                         <div class="modal-header">
-                            <h5 class="modal-title">Establecer prioridad</h5>
+                            <h5 class="modal-title" th:text="#{set-prioridad}">Establecer prioridad</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <img class="d-block img-fluid mx-auto my-4" src="" alt="" id="imagenGaleria">
@@ -202,9 +202,9 @@
                             <input type="number" name="prioridad" id="prioridad">
                         </div>
                         <div class="modal-footer">
-                            <a href="#PLACEHOLDER" class="btn btn-danger" id="deleteGalleryBtn">Eliminar</a>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <input type="submit" class="btn btn-primary" value="Guardar">
+                            <a href="#PLACEHOLDER" class="btn btn-danger" id="deleteGalleryBtn" th:text="#{delete}">Eliminar</a>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{close}">Cancelar</button>
+                            <button type="submit" class="btn btn-primary" th:text="#{save}">
                         </div>
                     </form>
                 </div>
@@ -244,14 +244,14 @@
         document.querySelector("#additionalInfo").innerHTML="";
         if (sesion["tiposEntrada"]!==undefined){
             let text = "";
-            text+="<h5>Tipos de entrada</h5>";
+            text+="<h5>"+[[#{tipos-entrada}]]+"</h5>";
             if (sesion["tiposEntrada"].length>0){
                 text+="<table class='table'>" +
                     "<thead> " +
                     "<tr>" +
-                    "<th>Nombre</th>" +
-                    "<th>Entradas máximas</th>" +
-                    "<th>Precio</th>" +
+                    "<th>"+[[#{name}]]+"</th>" +
+                    "<th>"+[[#{max-entradas}]]+"</th>" +
+                    "<th>"+[[#{price}]]+"</th>" +
                     "</tr>" +
                     "</thead>" +
                     "<tbody>";
