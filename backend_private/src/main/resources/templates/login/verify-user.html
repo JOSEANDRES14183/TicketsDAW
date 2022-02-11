@@ -9,14 +9,19 @@
 <main>
   <section class="container-md">
 
-    <p class="text-center mb-4">Tu cuenta se ha creado con éxito. Para iniciar sesión, verifica tu cuenta
-      desde el enlace que hemos enviado a <span th:text="${usuario.email}" class="text-primary"></span></p>
+    <div class="m-auto w-50 shadow-sm border border-dark p-5 rounded-25">
+      <p class="text-center mb-4">Tu cuenta se ha creado con éxito. Para iniciar sesión, verifica tu cuenta
+        desde el enlace que hemos enviado a <span th:text="${usuario.email}" class="text-primary"></span></p>
 
-    <form method="post" action="#">
-      <p class="text-center">¿No has recibido el correo? <a role="button">Haz click aquí para reenviarlo</a></p>
-      <input class="form-control rounded-pill w-25 mx-auto" type="email" placeholder="Escribe aquí tu correo">
-    </form>
-  
+      <form method="post" action="#">
+        <p class="text-center">
+          ¿No has recibido el correo?
+          <a class="h6 text-primary" role="button" type="submit">Haz click aquí para reenviarlo</a>
+        </p>
+        <input class="form-control rounded-pill w-75 mx-auto" type="email" placeholder="Escribe aquí tu correo">
+      </form>
+    </div>
+
   </section>
 </main>
 

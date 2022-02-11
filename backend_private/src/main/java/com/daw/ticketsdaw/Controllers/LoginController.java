@@ -48,13 +48,13 @@ public class LoginController {
     @PostMapping("/login")
     public String login(@RequestParam("username") String username, @RequestParam("password") String password, HttpServletRequest request, ModelMap modelMap) throws MessagingException {
         Usuario usuario = usuarioService.getByNombreUsuario(username);
-        if (usuario!=null) {
+        if (usuario!=null && passwordEncoder.matches(password, usuario.getPasswordHash())) {
             if (!usuario.isEstaValidado()){
                 modelMap.addAttribute("usuario", usuario);
+                request.getSession().setAttribute("usuario");
                 sendVerificationMail(usuario.getEmail(), usuario.getId());
-                return "login/verify-user";
+                return "redirect:/auth/pending-verification/"+usuario.getId();
             }
-            if (passwordEncoder.matches(password, usuario.getPasswordHash())) {
                 request.getSession().setAttribute("usuario", usuario);
                 if (usuario.getClass() == PropietarioSala.class){
                     return "redirect:/salas";
@@ -62,7 +62,6 @@ public class LoginController {
                 if (usuario.getClass() == Organizador.class){
                     return "redirect:/eventos";
                 }
-            }
         }
         return "redirect:/auth/login?error=password";
     }
@@ -113,6 +112,11 @@ public class LoginController {
     public String logout(HttpSession session){
         session.invalidate();
         return "redirect:/auth/login";
+    }
+
+    @GetMapping("/pending-verification/{id}")
+    public String showPendingVerificaction(){
+        return "login/verify-user";
     }
 
     @GetMapping("/verify/{id}")

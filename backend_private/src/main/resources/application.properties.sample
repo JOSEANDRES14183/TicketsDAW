@@ -12,6 +12,7 @@ spring.servlet.multipart.max-file-size=25MB
 tickets.uploads.path=C:/This/Is/An/Example/
 
 #Mail Properties
+tickets.host=<hostname>
 spring.mail.host=smtp.gmail.com
 spring.mail.port=587
 spring.mail.username=<login user to smtp server>
