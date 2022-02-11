@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/layout :: head('Modificar usuario')"></head>
+
+<body class="bg-secondary">
+
+<header th:replace="fragments/layout :: header('Formulario evento')"></header>
+
+<main>
+    <div class="w-50 mx-auto bg-white shadow-sm rounded-25 p-4">
+
+        <h1 class="mb-4 border-bottom text-primary pb-2" th:text="#{modify-user}">Modificar usuario</h1>
+
+        <form method="post" th:object="${usuario}" enctype="multipart/form-data">
+
+            <input type="hidden" th:field="*{id}">
+
+            <div th:if="${tipoUsuario}=='organizador'" class="mb-3">
+                <div class="input-group">
+                        <span class="input-group-text" id="nameIcon">
+                            <i class="bi bi-person-badge"></i>
+                        </span>
+                    <input type="text" th:field="*{nombre}" class="form-control"
+                           th:placeholder="#{name}" aria-describedby="nameIcon">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="input-group">
+                        <span class="input-group-text" id="usernameIcon">
+                            <i class="bi bi-person-fill"></i>
+                        </span>
+                    <input type="text" th:field="*{nombreUsuario}" class="form-control"
+                           th:placeholder="#{username}" aria-describedby="usernameIcon">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="input-group">
+                        <span class="input-group-text" id="emailIcon">
+                            <i class="bi bi-envelope"></i>
+                        </span>
+                    <input type="email" th:field="*{email}" class="form-control"
+                           th:placeholder="#{email}" aria-describedby="emailIcon">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="input-group">
+                        <span class="input-group-text" id="passwordIcon">
+                            <i class="bi bi-key"></i>
+                        </span>
+                    <input type="password" id="passwordHash" name="passwordHash" class="form-control"
+                           th:placeholder="#{password}" aria-describedby="passwordIcon">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="input-group">
+                        <span class="input-group-text" id="passwordRepeatIcon">
+                            <i class="bi bi-key-fill"></i>
+                        </span>
+                    <input type="password" id="repeatPasswordHash" name="repeatPasswordHash" class="form-control"
+                           th:placeholder="#{repeat-password}" aria-describedby="passwordIcon">
+                </div>
+            </div>
+
+            <div th:if="${tipoUsuario}=='organizador'" class="mb-3">
+                <label th:text="#{description}" for="descripcion" class="form-label h6 text-primary">Descripcion</label>
+                <textarea th:field="*{descripcion}" class="form-control" th:placeholder="#{description}"></textarea>
+            </div>
+
+            <div th:if="${tipoUsuario}=='organizador'" class="mb-3">
+                <label th:text="#{profile-pic}" for="fotoPerfil" class="form-label h6 text-primary">Foto de perfil</label>
+                <input type="file" class="form-control" th:field="*{fotoPerfil}">
+                <p class="small text-secondary fst-italic" th:inline="text" >*[[#{allowed-formats}]] .jpg, .png, .webp</p>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3" th:text="#{save}">Guardar</button>
+            <a th:href="${tipoUsuario}=='propietario' ? '/salas' : '/eventos'" class="btn btn-secondary mt-3" th:text="#{back}">Volver</a>
+
+        </form>
+    </div>
+</main>
+
+<footer th:replace="fragments/layout :: footer"></footer>
+
+</body>
+</html>

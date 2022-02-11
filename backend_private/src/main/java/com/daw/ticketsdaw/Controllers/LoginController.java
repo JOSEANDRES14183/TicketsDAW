@@ -115,12 +115,8 @@ public class LoginController {
         return "redirect:/auth/login";
     }
 
-    @GetMapping("/pending-verification/{id}")
-    public String showPendingVerificaction(@PathVariable int id, HttpSession session, ModelMap modelMap){
-        if (id==(Integer)session.getAttribute("usuario-id")){
-            modelMap.addAttribute("usuario", usuarioService.getById(id));
-            return "login/verify-user";
-        }
+    @GetMapping("/pending-verification")
+    public String showPendingVerificaction(){
         return "redirect:/auth/login?error=unauthorized";
     }
 
