@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -51,7 +52,7 @@ public class LoginController {
         if (usuario!=null && passwordEncoder.matches(password, usuario.getPasswordHash())) {
             if (!usuario.isEstaValidado()){
                 modelMap.addAttribute("usuario", usuario);
-                request.getSession().setAttribute("usuario");
+                request.getSession().setAttribute("usuario-id",usuario.getId());
                 sendVerificationMail(usuario.getEmail(), usuario.getId());
                 return "redirect:/auth/pending-verification/"+usuario.getId();
             }
@@ -115,8 +116,12 @@ public class LoginController {
     }
 
     @GetMapping("/pending-verification/{id}")
-    public String showPendingVerificaction(){
-        return "login/verify-user";
+    public String showPendingVerificaction(@PathVariable int id, HttpSession session, ModelMap modelMap){
+        if (id==(Integer)session.getAttribute("usuario-id")){
+            modelMap.addAttribute("usuario", usuarioService.getById(id));
+            return "login/verify-user";
+        }
+        return "redirect:/auth/login?error=unauthorized";
     }
 
     @GetMapping("/verify/{id}")
