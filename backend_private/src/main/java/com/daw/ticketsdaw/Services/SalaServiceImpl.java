@@ -23,6 +23,16 @@ public class SalaServiceImpl implements SalaService{
     public void create(Sala sala){ salaRepository.save(sala); }
 
     @Override
+    public List<Sala> readVisible() {
+        return salaRepository.findByEstaOcultoIsFalse();
+    }
+
+    @Override
+    public Sala readVisible(int id) {
+        return salaRepository.findByIdAndEstaOcultoIsFalse(id).get();
+    }
+
+    @Override
     public List<Sala> read() {
         return salaRepository.findAll();
     }
@@ -35,11 +45,6 @@ public class SalaServiceImpl implements SalaService{
     @Override
     public void delete(Sala sala){
         salaRepository.delete(sala);
-    }
-
-    @Override
-    public boolean checkById(int id) {
-        return salaRepository.existsById(id);
     }
 
     @Override

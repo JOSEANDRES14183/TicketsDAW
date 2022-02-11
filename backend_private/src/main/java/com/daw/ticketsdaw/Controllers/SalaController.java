@@ -32,7 +32,7 @@ public class SalaController {
 
     @GetMapping({"/",""})
     public String index(ModelMap modelMap, HttpSession session){
-        PropietarioSala propietarioSala = (PropietarioSala) usuarioService.getById(((Usuario) session.getAttribute("usuario")).getId());
+        PropietarioSala propietarioSala = getPropietario(session);
         modelMap.addAttribute("salas", propietarioSala.getSalas());
         return "salas/index";
 
