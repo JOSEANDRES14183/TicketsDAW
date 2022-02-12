@@ -53,6 +53,10 @@ public class SalaController {
     @GetMapping("{id}/delete")
     public String delete(@PathVariable("id") int salaId, HttpSession session){
         Sala sala = salaService.read(salaId);
+
+        if(!sala.isEstaOculto())
+            return "redirect:/salas?error=edit_visible";
+
         if (checkPropietarioSala(sala,session)) {
             salaService.delete(sala);
             return "redirect:/salas";
