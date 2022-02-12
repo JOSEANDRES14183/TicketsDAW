@@ -76,6 +76,10 @@ public class EventoController {
     @GetMapping({"/{id}/update"})
     public String showUpdateForm(ModelMap model, @PathVariable(name="id") Integer eventoId, HttpSession session){
         Evento evento = eventosService.read(eventoId);
+
+        if(!evento.isEstaOculto())
+            return "redirect:/salas?error=edit_visible";
+
         if (checkOrganizador(evento, session)) {
             model.addAttribute("evento", evento);
             model.addAttribute("categorias", categoriaService.read());
@@ -92,6 +96,10 @@ public class EventoController {
 
         //If this is an update operation, check if the user is allowed to update this event
         if(evento.getId() != null){
+
+            if(!evento.isEstaOculto())
+                return "redirect:/salas?error=edit_visible";
+
             if(!checkOrganizador(evento, session)){
                 return "redirect:/auth/login?error=unauthorized";
             }
@@ -145,6 +153,10 @@ public class EventoController {
     @GetMapping({"/{id}/delete"})
     public String deleteEvento(@PathVariable(name="id") Integer eventoId, HttpSession session){
         Evento evento = eventosService.read(eventoId);
+
+        if(!evento.isEstaOculto())
+            return "redirect:/salas?error=edit_visible";
+
         if (checkOrganizador(evento, session)) {
             eventosService.remove(evento);
             return "redirect:/eventos";
@@ -156,6 +168,10 @@ public class EventoController {
     @Transactional
     public String deleteNormasEvento(@PathVariable(name="id") Integer eventoId, HttpSession session){
         Evento evento = eventosService.read(eventoId);
+
+        if(!evento.isEstaOculto())
+            return "redirect:/salas?error=edit_visible";
+
         if (checkOrganizador(evento, session)) {
             var documentoNormas = evento.getDocumentoNormas();
             evento.setDocumentoNormas(null);
