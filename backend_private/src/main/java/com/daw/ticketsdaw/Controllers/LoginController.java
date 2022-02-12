@@ -8,12 +8,14 @@ import com.daw.ticketsdaw.Entities.Usuario;
 import com.daw.ticketsdaw.Services.NormasEventoService;
 import com.daw.ticketsdaw.Services.RecursoMediaService;
 import com.daw.ticketsdaw.Services.UsuarioService;
-import org.aspectj.weaver.ast.Or;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +26,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.Date;
 
 @Controller
 @RequestMapping("/auth")
@@ -52,10 +55,12 @@ public class LoginController {
         Usuario usuario = usuarioService.getByNombreUsuario(username);
         if (usuario!=null && passwordEncoder.matches(password, usuario.getPasswordHash())) {
             if (!usuario.isEstaValidado()){
-                modelMap.addAttribute("usuario", usuario);
-                request.getSession().setAttribute("usuario-id",usuario.getId());
-                sendVerificationMail(usuario.getEmail(), usuario.getId());
-                return "redirect:/auth/pending-verification/"+usuario.getId();
+                String token = Jwts.builder().setIssuedAt(new Date(System.currentTimeMillis()))
+                        .setSubject(usuario.getNombreUsuario())
+                        .signWith(SignatureAlgorithm.HS512,"hola").compact();
+
+                sendVerificationMail(usuario.getEmail(), token);
+                return "redirect:/auth/pending-verification/";
             }
                 request.getSession().setAttribute("usuario", usuario);
                 if (usuario.getClass() == PropietarioSala.class){
@@ -88,9 +93,14 @@ public class LoginController {
         propietarioSala.setPasswordHash(passwordEncoder.encode(propietarioSala.getPasswordHash()));
 
         usuarioService.create(propietarioSala);
-        modelMap.addAttribute("usuario", propietarioSala);
-        sendVerificationMail(propietarioSala.getEmail(), propietarioSala.getId());
-        return "login/verify-user";
+
+        String token = Jwts.builder().setIssuedAt(new Date(System.currentTimeMillis()))
+                .setSubject(propietarioSala.getNombreUsuario())
+                .signWith(SignatureAlgorithm.HS512,"hola").compact();
+
+        sendVerificationMail(propietarioSala.getEmail(), token);
+
+        return "redirect:/auth/pending-verification";
     }
 
     @PostMapping("/register/organizador")
@@ -105,9 +115,14 @@ public class LoginController {
         organizador.setFotoPerfil(mediaService.createFromFile(organizadorDTO.getFotoPerfil()));
 
         usuarioService.create(organizador);
-        modelMap.addAttribute("usuario", organizador);
-        sendVerificationMail(organizador.getEmail(), organizador.getId());
-        return "login/verify-user";
+
+        String token = Jwts.builder().setIssuedAt(new Date(System.currentTimeMillis()))
+                .setSubject(organizador.getNombreUsuario())
+                .signWith(SignatureAlgorithm.HS512,"hola").compact();
+
+        sendVerificationMail(organizador.getEmail(), token);
+
+        return "redirect:/auth/pending-verification";
     }
 
     @GetMapping("/logout")
@@ -118,19 +133,23 @@ public class LoginController {
 
     @GetMapping("/pending-verification")
     public String showPendingVerificaction(){
-        return "redirect:/auth/login?error=unauthorized";
+        return "login/verify-user";
     }
 
-    @GetMapping("/verify/{id}")
-    public String verifyUser(@PathVariable("id") int id) throws SQLIntegrityConstraintViolationException {
-        Usuario usuario = usuarioService.getById(id);
+    @GetMapping("/verify")
+    public String verifyUser(@RequestParam("token") String token) throws SQLIntegrityConstraintViolationException {
+        Claims body = Jwts.parser()
+                .setSigningKey("hola")
+                .parseClaimsJws(token)
+                .getBody();
+        Usuario usuario = usuarioService.getByNombreUsuario((String) body.get("sub"));
         usuario.setEstaValidado(true);
         usuarioService.create(usuario);
         return "redirect:/auth/login?verify=true";
     }
 
-    private void sendVerificationMail(String mail, int userId) throws MessagingException {
-        userConfirmationSender.sendMessage(mail, String.valueOf(userId));
+    private void sendVerificationMail(String mail, String token) throws MessagingException {
+        userConfirmationSender.sendMessage(mail, token);
     }
 
 
