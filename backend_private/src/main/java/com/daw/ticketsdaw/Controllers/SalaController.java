@@ -10,6 +10,7 @@ import com.daw.ticketsdaw.Services.UsuarioService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -69,9 +70,14 @@ public class SalaController {
     }
 
     @GetMapping({"{id}/update"})
-        public String update(@PathVariable("id") Integer id, ModelMap modelMap, HttpSession session){
+    @Transactional
+    public String update(@PathVariable("id") Integer id, ModelMap modelMap, HttpSession session){
         Sala sala = salaService.read(id);
-        if (checkPropietarioSala(sala,session)) {
+
+        if(!sala.isEstaOculto())
+            return "redirect:/salas?error=edit_visible";
+
+        if (checkPropietarioSala(sala,session) && sala.isEstaOculto()) {
             modelMap.addAttribute("sala", sala);
             modelMap.addAttribute("ciudades", ciudadService.read());
             return "salas/form";
@@ -80,6 +86,7 @@ public class SalaController {
     }
 
     @PostMapping({"/",""})
+    @Transactional
     public String saveSala(ModelMap modelMap, @ModelAttribute @Valid SalaDTO salaDTO, BindingResult bindingResult, HttpSession session){
         if(bindingResult.hasErrors()){
             modelMap.addAttribute("sala",salaDTO);
@@ -92,6 +99,10 @@ public class SalaController {
 
         if(sala.getId()!=null){
             Sala salaPrevState = salaService.read(sala.getId());
+
+            if(!salaPrevState.isEstaOculto())
+                return "redirect:/salas?error=edit_visible";
+
             if(!checkPropietarioSala(salaPrevState,session)){
                 return "redirect:/auth/login?error=unauthorized";
             }
@@ -106,6 +117,7 @@ public class SalaController {
 
     @GetMapping("{id}/butacas")
     public String showButacasForm(ModelMap modelMap, @PathVariable("id") int salaId, HttpSession session){
+        //TODO: Visibility check for butacas
         Sala sala = salaService.read(salaId);
 
         if(!checkPropietarioSala(sala, session))

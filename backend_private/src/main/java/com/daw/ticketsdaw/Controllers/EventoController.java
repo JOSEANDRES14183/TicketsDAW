@@ -236,7 +236,7 @@ public class EventoController {
             return "redirect:/auth/login?error=unauthorized";
 
         model.addAttribute("sesion", new SesionNoNumerada());
-        model.addAttribute("salas", salaService.read());
+        model.addAttribute("salas", salaService.readVisible());
         model.addAttribute("evento", evento);
         return "eventos/sesiones/session-no-numerada-form";
     }
@@ -267,7 +267,7 @@ public class EventoController {
             return "redirect:/auth/login?error=unauthorized";
 
         model.addAttribute("sesion", sesion);
-        model.addAttribute("salas", salaService.read());
+        model.addAttribute("salas", salaService.readVisible());
         model.addAttribute("evento", evento);
         return "eventos/sesiones/session-no-numerada-form";
     }
@@ -288,9 +288,9 @@ public class EventoController {
 
         SesionNoNumerada sesion = modelMapper.map(sesionDTO, SesionNoNumerada.class);
 
-        if(bindingResult.hasErrors()){
+        if(bindingResult.hasErrors() || sesionDTO.getSala().isEstaOculto()){
             model.addAttribute("evento", evento);
-            model.addAttribute("salas", salaService.read());
+            model.addAttribute("salas", salaService.readVisible());
 
             //Parse current TiposEntrada to return to the form
             List<TipoEntrada> tipoEntradaList = generateTiposEntrada(sesion, sesionDTO);
@@ -384,7 +384,7 @@ public class EventoController {
         if(!checkOrganizador(evento, session))
             return "redirect:/auth/login?error=unauthorized";
 
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors() || sesionNumeradaDTO.getSala().isEstaOculto() || !sesionNumeradaDTO.getSala().hasButacas()){
             modelMap.addAttribute("sesion", sesionNumeradaDTO);
             modelMap.addAttribute("salas", salaService.getSalasWithButacas());
             modelMap.addAttribute("evento", evento);

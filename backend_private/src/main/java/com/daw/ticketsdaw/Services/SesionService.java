@@ -1,6 +1,7 @@
 package com.daw.ticketsdaw.Services;
 
 import com.daw.ticketsdaw.Entities.Sesion;
+import com.daw.ticketsdaw.Exceptions.InvalidSaveException;
 import com.daw.ticketsdaw.Repositories.SesionRepository;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class SesionService {
      * @return          returns false if the Sesion has been saved, but it overlaps with another Sesion on the DB
      */
     public boolean save(Sesion sesion){
+        if(sesion.getSala().isEstaOculto())
+            throw new InvalidSaveException("Tried to save a new session with a hidden room assigned");
+
         sesionRepository.save(sesion);
         return checkDateAvailability(sesion);
     }

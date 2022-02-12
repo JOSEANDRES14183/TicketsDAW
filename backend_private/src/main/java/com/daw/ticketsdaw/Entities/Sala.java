@@ -58,4 +58,10 @@ public class Sala implements Serializable {
     @OneToMany(mappedBy = "sala")
     @JsonManagedReference
     private List<Butaca> butacas = new ArrayList<>();
+
+    public boolean hasButacas(){
+        if(butacas == null || butacas.isEmpty() || butacas.size() < 1)
+            return false;
+        return true;
+    }
 }

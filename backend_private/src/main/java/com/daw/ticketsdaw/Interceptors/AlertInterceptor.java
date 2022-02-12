@@ -24,6 +24,9 @@ public class AlertInterceptor implements HandlerInterceptor {
             case "password":
                 modelAndView.addObject("error", "The password entered isn't valid");
                 break;
+            case "edit_visible":
+                modelAndView.addObject("error", "You can't update data that is flagged as 'visible'");
+                break;
         }
 
         String warningParam = request.getParameter("warning");
