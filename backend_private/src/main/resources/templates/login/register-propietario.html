@@ -1,19 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-<head th:replace="fragments/layout :: head('Registro de propetario')"></head>
+<head th:replace="fragments/layout :: head(#{register-propietario})"></head>
 
-<body>
+<body class="bg-secondary">
 
 <header th:replace="fragments/layout :: header('Registro de propetario')"></header>
 
 <main>
     <section class="container-md">
-        <form method="POST" th:object="${propietario}">
-            <div th:replace="fragments/user-form :: user-inputs"></div>
-            <button type="submit" class="btn btn-primary">Regístrate</button>
-        </form>
+
+        <div class="card border-0 rounded-25 shadow-sm">
+            <div style="height: 700px" class="row">
+                <div class="col-8 overflow-hidden h-100">
+                    <img class="h-100 rounded-25" src="/img/cine.jpg" alt="Cinema Image">
+                </div>
+                <div class="col-4 p-5 card-body">
+                    <h5 th:text="#{register-propietario}" class="card-title mb-4">Registrate como propietario</h5>
+                    <form method="POST" th:object="${propietario}">
+                        <div th:replace="fragments/user-form :: user-inputs"></div>
+                        <button th:text="#{register-action}" type="submit" class="btn btn-primary">Regístrate</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </section>
 </main>
+
+
 
 <footer th:replace="fragments/layout :: footer"></footer>
 

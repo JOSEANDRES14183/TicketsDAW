@@ -3,48 +3,72 @@
 
 <head th:replace="fragments/layout :: head('Formulario')"></head>
 
-<body>
+<body class="bg-secondary">
 
 <header th:replace="fragments/layout :: header('Salas')"></header>
 
 <main>
     <section class="container-md">
-        <form method="POST" th:action="'/salas'" th:object="${sala}">
 
-            <div th:unless="${sala.id == null}">
-                <input type="hidden" th:field="*{id}">
-            </div>
-
-            <div class="mb-3">
-                <label for="nombre" class="form-label">Nombre</label>
-                <input type="text" th:field="*{nombre}" class="form-control" id="nombre" name="nombre" aria-describedby="NombreField">
-            </div>
-            <div class="mb-3">
-                <label for="direccion" class="form-label">Dirección</label>
-                <input type="text" th:field="*{direccion}" class="form-control" id="direccion" name="direccion">
-            </div>
-            <div class="mb-3">
-                <label for="ciudad" class="form-label">Ciudad</label>
-                <select class="form-control" th:field="*{ciudad}" id="ciudad" name="ciudad">
-                    <option th:each="ciudad: ${ciudades}"
-                            th:value="${ciudad.id}"
-                            th:text="${ciudad.nombre}"/>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="aforoMax" class="form-label">Mapa</label>
-                <div class="sala-map border rounded" id="googleMap"></div>
-                <input type="hidden" th:field="*{latitud}" />
-                <input type="hidden" th:field="*{longitud}" />
-            </div>
-            <div class="mb-3">
-                <label for="aforoMax" class="form-label">Aforo máximo</label>
-                <input type="number" th:field="*{aforoMax}" class="form-control w-25" id="aforoMax" name="aforoMax">
-            </div>
-            <button th:text="Submit" type="submit" class="btn btn-primary"/>
-        </form>
-
-        <a href="/salas" class="btn btn-secondary mt-3">Volver</a>
+        <div class="w-50 mx-auto bg-white shadow-sm rounded-25 p-4">
+            <form method="POST" th:action="'/salas'" th:object="${sala}">
+                <div th:unless="${sala.id == null}">
+                    <input type="hidden" th:field="*{id}">
+                </div>
+                <h5 class="form-label text-primary" th:text="#{general}">General</h5>
+                <div class="mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text" id="nombreIcon">
+                            <i class="bi bi-building"></i>
+                        </span>
+                        <input type="text" th:field="*{nombre}" class="form-control"
+                               id="nombre" name="nombre" th:placeholder="#{name}"
+                               aria-describedby="nombreIcon">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text" id="direccionIcon">
+                            <i class="bi bi-geo-alt"></i>
+                        </span>
+                        <input type="text" th:field="*{direccion}" class="form-control"
+                               id="direccion" name="direccion" th:placeholder="#{address}"
+                               aria-describedby="direccionIcon">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="bi bi-geo"></i>
+                        </span>
+                        <select class="form-select" th:field="*{ciudad}"
+                                id="ciudad" name="ciudad" aria-describedby="ciudadIcon">
+                            <option th:each="ciudad: ${ciudades}"
+                                    th:value="${ciudad.id}"
+                                    th:text="${ciudad.nombre}"/>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <h5 class="form-label text-primary" th:text="#{map}">Mapa</h5>
+                    <div class="sala-map border rounded" id="googleMap"></div>
+                    <input type="hidden" th:field="*{latitud}" />
+                    <input type="hidden" th:field="*{longitud}" />
+                </div>
+                <div class="mb-3">
+                    <h5 class="form-label text-primary" th:text="#{max-capacity}">Aforo máximo</h5>
+                    <div class="input-group w-25">
+                        <span class="input-group-text" id="aforoIcon">
+                            <i class="bi bi-people-fill"></i>
+                        </span>
+                        <input type="number" th:field="*{aforoMax}" class="form-control"
+                               id="aforoMax" name="aforoMax" aria-describedby="aforoIcon">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3" th:text="#{save}">Guardar</button>
+                <a href="/salas" class="btn btn-secondary mt-3" th:text="#{back}">Volver</a>
+            </form>
+        </div>
     </section>
 </main>
 
@@ -83,8 +107,6 @@
     }
 
 </script>
-
-<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 
 <script src="https://maps.googleapis.com/maps/api/js?
 key=AIzaSyCIBWMOCC_XY2ia1tPFUKYjY4ACzhqbEA0&callback=myMap"></script>

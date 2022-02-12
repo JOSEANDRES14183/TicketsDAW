@@ -2,48 +2,87 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/layout :: head('Crear sesion no numerada')"></head>
 
-<body>
+<body class="bg-secondary">
 <header th:replace="fragments/layout :: header('Crear sesion no numerada')"></header>
 
 <main>
     <section class="container-md">
-        <div id="errorBox">
-            <div th:if="${error != null}" class="alert alert-danger" role="alert" th:text="${error}"></div>
-        </div>
-        <form method="POST" th:action="'/eventos/' + ${evento.id} + '/sesiones_no_num'" th:object="${sesion}">
-            <div th:replace="fragments/sesion-form :: sesion-inputs"></div>
-            <div id="tiposEntrada">
-                <a class="btn btn-primary" id="btnAddTipoEntrada">Añadir</a>
-                <fieldset th:each="tipoEntrada, iStat: ${sesion.tiposEntrada}">
-                    <div class="d-flex justify-content-start">
-                        <a class="btn btn-light btnRemoveTipoEntrada">
-                            <i class="bi bi-trash-fill"></i>
-                        </a>
-                        <legend>Tipo de entrada</legend>
-                    </div>
-                    <div class="mb-3">
-                        <label th:for="'nombreTipo' + ${iStat.index}" class="form-label">Nombre del tipo</label>
-                        <input type="text" class="form-control w-25" th:value="${tipoEntrada.getPrimaryKey().nombre}" name="nombreTipo" th:id="'nombreTipo' + ${iStat.index}">
-                    </div>
-                    <div class="mb-3">
-                        <label th:for="'maxEntradasTipo' + ${iStat.index}" class="form-label">Entradas máximas</label>
-                        <input type="number" class="form-control w-25" th:value="${tipoEntrada.maxEntradas}" name="maxEntradasTipo" th:id="'maxEntradasTipo' + ${iStat.index}">
-                    </div>
-                    <div class="mb-3">
-                        <label th:for="'precioTipo' + ${iStat.index}" class="form-label">Precio por entrada</label>
-                        <div class="input-group w-25">
-                            <input type="number" class="form-control" th:value="${tipoEntrada.precio}" name="precioTipo" th:id="'precioTipo' + ${iStat.index}">
-                            <span class="input-group-text">€</span>
-                        </div>
-                    </div>
-                </fieldset>
+
+        <div class="w-50 mx-auto bg-white shadow-sm rounded-25 p-4">
+            <div id="errorBox">
+                <div th:if="${error != null}" class="alert alert-danger" role="alert" th:text="${error}"></div>
             </div>
-            <button type="submit" class="btn btn-primary" th:text="'Guardar'"></button>
-        </form>
+            <form method="POST" th:action="'/eventos/' + ${evento.id} + '/sesiones_no_num'" th:object="${sesion}">
+                <div th:replace="fragments/sesion-form :: sesion-inputs"></div>
+
+                <h5 class="form-label text-primary mb-2" th:text="#{tipos-entrada}">Tipos de entrada</h5>
+
+                <div class="mb-4">
+                    <a role="button" class="text-secondary fst-italic text-decoration-none" id="btnAddTipoEntrada" th:text="'+'+#{add-tipo-entrada}">+Añadir tipo de entrada</a>
+                    <div class="row mt-3" id="tiposEntrada">
+                        <fieldset class="col-6 mb-3" th:each="tipoEntrada, iStat: ${sesion.tiposEntrada}">
+                            <div class="d-flex justify-content-start">
+                                <a class="btn btn-light btnRemoveTipoEntrada">
+                                    <i class="bi bi-trash-fill"></i>
+                                </a>
+                                <legend th:text="#{tipo-entrada}">Tipo de entrada</legend>
+                            </div>
+                            <div class="mb-3">
+                                <label th:for="'nombreTipo' + ${iStat.index}" class="form-label" th:text="#{tipo-nombre}">Nombre del tipo</label>
+                                <input type="text" class="form-control w-75" th:value="${tipoEntrada.getPrimaryKey().nombre}" name="nombreTipo" th:id="'nombreTipo' + ${iStat.index}">
+                            </div>
+                            <div class="mb-3">
+                                <label th:for="'maxEntradasTipo' + ${iStat.index}" class="form-label" th:text="#{max-entradas}">Entradas máximas</label>
+                                <input type="number" class="form-control w-75" th:value="${tipoEntrada.maxEntradas}" name="maxEntradasTipo" th:id="'maxEntradasTipo' + ${iStat.index}">
+                            </div>
+                            <div class="mb-3">
+                                <label th:for="'precioTipo' + ${iStat.index}" class="form-label" th:text="#{price-per-ticket}">Precio por entrada</label>
+                                <div class="input-group w-75">
+                                    <input type="number" class="form-control" th:value="${tipoEntrada.precio}" name="precioTipo" th:id="'precioTipo' + ${iStat.index}">
+                                    <span class="input-group-text">€</span>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" th:text="#{save}"></button>
+                <a th:href="'/eventos/'+${evento.id}" class="btn btn-secondary" th:text="#{back}"></a>
+
+            </form>
+        </div>
+
     </section>
 </main>
 <footer th:replace="fragments/layout :: footer"></footer>
-<script>
+
+<script th:inline="javascript">
+    showSalaInfo();
+    document.querySelector("#sala").addEventListener("change",showSalaInfo,true);
+
+    function showSalaInfo(){
+        let salaId = document.querySelector("#sala").value;
+        fetch('/salas-api/' + salaId)
+            .then(response => response.json())
+            .then(function (data){
+                printSalaInfo(data);
+            });
+    }
+
+    function printSalaInfo(sala){
+        let container = document.querySelector("#infoSala");
+        let text = "";
+
+        text+="<div class=\"d-flex flex-column\">" +
+            "<h4>"+sala["nombre"]+"</h4>" +
+            "<span>"+[[#{address}]]+": "+sala["direccion"]+"</span>" +
+            "<span>"+sala["ciudad"]["nombre"]+"</span>" +
+            "<span>"+[[#{max-capacity}]]+": "+sala["aforoMax"]+"</span>" +
+            "</div>"
+
+        container.innerHTML = text;
+    }
+
     document.getElementById("btnAddTipoEntrada").addEventListener("click", addTipoEntrada)
 
     let buttonsArray = document.getElementsByClassName("btnRemoveTipoEntrada")
@@ -56,6 +95,7 @@
         iteration++
         let iterationText = iteration + "G"
         let fieldset = document.createElement('fieldset')
+        fieldset.classList.add("col-6", "mb-3")
         let divLegend = document.createElement("div")
         divLegend.classList.add("d-flex", "justify-content-start")
             let buttonDelete = document.createElement("a")
@@ -66,7 +106,7 @@
             buttonDelete.appendChild(trashIcon)
         divLegend.appendChild(buttonDelete)
             let legend = document.createElement("legend")
-            legend.appendChild(document.createTextNode("Tipo de entrada"))
+            legend.appendChild(document.createTextNode([[#{tipo-entrada}]]))
         divLegend.appendChild(legend)
         fieldset.appendChild(divLegend)
 
@@ -75,11 +115,11 @@
                 let labelNombre = document.createElement("label")
                 labelNombre.htmlFor = "nombreTipo" + iterationText
                 labelNombre.classList.add("form-label")
-                labelNombre.appendChild(document.createTextNode("Nombre del tipo"))
+                labelNombre.appendChild(document.createTextNode([[#{tipo-nombre}]]))
             divNombre.appendChild(labelNombre)
                 let inputNombre = document.createElement("input")
                 inputNombre.type = "text"
-                inputNombre.classList.add("form-control", "w-25")
+                inputNombre.classList.add("form-control", "w-75")
                 inputNombre.name = "nombreTipo"
                 inputNombre.id = "nombreTipo" + iterationText
             divNombre.appendChild(inputNombre)
@@ -90,11 +130,11 @@
                 let labelMaxEntradas = document.createElement("label")
                 labelMaxEntradas.htmlFor = "maxEntradasTipo" + iterationText
                 labelMaxEntradas.classList.add("form-label")
-                labelMaxEntradas.appendChild(document.createTextNode("Entradas máximas"))
+                labelMaxEntradas.appendChild(document.createTextNode([[#{max-entradas}]]))
             divMaxEntradas.appendChild(labelMaxEntradas)
                 let inputMaxEntradas = document.createElement("input")
                 inputMaxEntradas.type = "number"
-                inputMaxEntradas.classList.add("form-control", "w-25")
+                inputMaxEntradas.classList.add("form-control", "w-75")
                 inputMaxEntradas.name = "maxEntradasTipo"
                 inputMaxEntradas.id = "maxEntradasTipo" + iterationText
             divMaxEntradas.appendChild(inputMaxEntradas)
@@ -105,13 +145,13 @@
                 let labelPrecio = document.createElement("label")
                 labelPrecio.htmlFor = "precioTipo" + iterationText
                 labelPrecio.classList.add("form-label")
-                labelPrecio.appendChild(document.createTextNode("Precio por entrada"))
+                labelPrecio.appendChild(document.createTextNode([[#{price-per-ticket}]]))
             divPrecio.appendChild(labelPrecio)
                 let inputGroupPrecio = document.createElement("div")
-                inputGroupPrecio.classList.add("input-group", "w-25")
+                inputGroupPrecio.classList.add("input-group", "w-75")
                     let inputPrecio = document.createElement("input")
                     inputPrecio.type = "number"
-                    inputPrecio.classList.add("form-control", "w-25")
+                    inputPrecio.classList.add("form-control")
                     inputPrecio.name = "precioTipo"
                     inputPrecio.id = "precioTipo" + iterationText
                 inputGroupPrecio.appendChild(inputPrecio)

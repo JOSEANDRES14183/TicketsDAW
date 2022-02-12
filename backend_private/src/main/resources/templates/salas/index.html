@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-
 <head th:replace="fragments/layout :: head('Salas')"></head>
-
 <body>
-
 <header th:replace="fragments/layout :: header('Salas')"></header>
 
 <main>
@@ -12,13 +9,12 @@
     <section class="container-md">
         <table class="table table-bordered table-striped">
             <tr>
-                <th>Nombre</th>
-                <th>Dirección</th>
-                <th>Ciudad</th>
-                <th>Aforo máximo</th>
-                <th>Oculto</th>
-                <th>Propietario</th>
-                <th>Acciones</th>
+                <th th:text="#{name}">Nombre</th>
+                <th th:text="#{address}">Dirección</th>
+                <th th:text="#{city}">Ciudad</th>
+                <th th:text="#{max-capacity}">Aforo máximo</th>
+                <th th:text="#{hidden}">Oculto</th>
+                <th th:text="#{actions}">Acciones</th>
             </tr>
             <tr th:each="sala: ${salas}">
                 <td>
@@ -28,8 +24,7 @@
                 <td th:text="${sala.direccion}" />
                 <td th:text="${sala.ciudad.nombre}" />
                 <td th:text="${sala.aforoMax}" />
-                <td th:text="${sala.estaOculto}" />
-                <td th:text="${sala.propietarioSala.nombreUsuario}" />
+                <td th:text="${sala.estaOculto} ? #{yes} : #{no}" />
                 <td>
                     <a class="btn btn-light" th:href="@{'/salas/' + ${sala.id} + '/update'}">
                         <i class="bi bi-pencil-square"></i>
@@ -41,7 +36,9 @@
             </tr>
         </table>
 
-        <a href="/salas/create" class="btn btn-primary">Crear sala</a>
+        <a href="/salas/create" role="button"
+           th:inline="text"
+           class="fst-italic text-secondary text-decoration-none">+[[#{sala-create}]]</a>
 
     </section>
 
@@ -49,6 +46,5 @@
 
 <footer th:replace="fragments/layout :: footer"></footer>
 
-<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>

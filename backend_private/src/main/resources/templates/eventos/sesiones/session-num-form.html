@@ -2,34 +2,35 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/layout :: head('Crear sesion numerada')"></head>
 
-<body>
+<body class="bg-secondary">
 <header th:replace="fragments/layout :: header('Formulario sesion numerada')"></header>
 
 <main>
     <section class="container-md">
-        <form method="POST" th:action="'/eventos/'+${evento.id}+'/sesiones_num'" th:object="${sesion}">
 
-            <div th:replace="fragments/sesion-form :: sesion-inputs"></div>
+        <div class="w-50 mx-auto bg-white shadow-sm rounded-25 p-4">
+            <form method="POST" th:action="'/eventos/'+${evento.id}+'/sesiones_num'" th:object="${sesion}">
+                <div th:replace="fragments/sesion-form :: sesion-inputs"></div>
 
-            <div class="my-4" id="infoSala"></div>
-
-            <div class="mb-3">
-                <label th:for="*{precio}" class="form-label">Precio</label>
-                <div class="input-group">
-                    <input type="number" min="0.00" max="10000.00" step="0.1" class="form-control" th:field="*{precio}">
-                    <span class="input-group-text">€</span>
+                <div class="mb-4">
+                    <label th:for="*{precio}" class="form-label text-primary h5" th:text="#{price}">Precio</label>
+                    <div class="input-group w-25">
+                        <input type="number" min="0.00" max="10000.00" step="0.1" class="form-control" th:field="*{precio}">
+                        <span class="input-group-text">€</span>
+                    </div>
                 </div>
-            </div>
 
 
-            <button type="submit" class="btn btn-primary" th:text="'Guardar'"></button>
-        </form>
+                <button type="submit" class="btn btn-primary" th:text="#{save}"></button>
+                <a th:href="'/eventos/'+${evento.id}" class="btn btn-secondary" th:text="#{back}"></a>
+            </form>
+        </div>
     </section>
 </main>
 
 <footer th:replace="fragments/layout :: footer"></footer>
 
-<script>
+<script th:inline="javascript">
 
     showSalaInfo();
     document.querySelector("#sala").addEventListener("change",showSalaInfo,true);
@@ -49,9 +50,9 @@
 
         text+="<div class=\"d-flex flex-column\">" +
             "<h4>"+sala["nombre"]+"</h4>" +
-            "<span>Dirección: "+sala["direccion"]+"</span>" +
+            "<span>"+[[#{address}]]+": "+sala["direccion"]+"</span>" +
             "<span>"+sala["ciudad"]["nombre"]+"</span>" +
-            "<span>Aforo máximo: "+sala["aforoMax"]+"</span>" +
+            "<span>"+[[#{max-capacity}]]+": "+sala["aforoMax"]+"</span>" +
             "</div>"
 
         container.innerHTML = text;

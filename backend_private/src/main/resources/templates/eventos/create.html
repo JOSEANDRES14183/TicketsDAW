@@ -2,64 +2,111 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/layout :: head(${evento.titulo})"></head>
 
-<body>
+<body class="bg-secondary">
+
 <header th:replace="fragments/layout :: header('Formulario evento')"></header>
 
 <main>
     <section class="container-md">
-        <form method="POST" th:action="'/eventos'" th:object="${evento}" enctype="multipart/form-data">
-            <div class="mb-3" th:unless="${evento.getId() == null}">
-                <label for="id" class="form-label">Identificador</label>
-                <input type="number" class="form-control" readonly th:field="*{id}">
-            </div>
-            <div class="mb-3">
-                <label th:for="*{titulo}" class="form-label">Título</label>
-                <input type="text" class="form-control" th:field="*{titulo}">
-            </div>
-            <div class="mb-3">
-                <label for="descripcion" class="form-label">Descripción (Opcional)</label>
-                <input type="text" class="form-control" th:field="*{descripcion}">
-            </div>
-            <div class="mb-3">
-                <label for="categoria" class="form-label">Categoria</label>
-                <select class="form-control" th:field="*{categoria}">
-                    <option th:each="categoria: ${categorias}"
-                            th:value="${categoria.id}"
-                            th:text="${categoria.nombre}"/>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="estaOculto" class="form-label">Esta oculto</label>
-                <select class="form-control w-25" th:field="*{estaOculto}">
-                    <option value="true">Oculto</option>
-                    <option value="false">No oculto</option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="esNominativo" class="form-label">Es nominativo</label>
-                <select class="form-control w-25" th:field="*{esNominativo}">
-                    <option value="true">Nominativo</option>
-                    <option value="false">No nominativo</option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="edadMinima" class="form-label">Edad mínima</label>
-                <input type="number" class="form-control w-25" th:field="*{edadMinima}">
-            </div>
-            <div class="mb-3">
-                <label for="duracionEstandar" class="form-label">Duración estándar</label>
-                <input type="number" class="form-control w-25" th:field="*{duracionEstandar}">
-            </div>
-            <div class="mb-3">
-                <label for="fotoPerfil" class="form-label">Foto de perfil</label>
-                <input type="file" class="form-control w-25" id="fotoPerfil" name="fotoPerfil">
-            </div>
-            <div class="mb-3">
-                <label for="documentoNormas" class="form-label">Documento de normas (Opcional)</label>
-                <input type="file" class="form-control w-25" id="documentoNormas" name="documentoNormas">
-            </div>
-            <button type="submit" class="btn btn-primary" th:text="'Guardar'"></button>
-        </form>
+
+        <div class="w-50 mx-auto bg-white shadow-sm rounded-25 p-4">
+
+            <form method="POST" th:action="'/eventos'" th:object="${evento}" enctype="multipart/form-data">
+                <div th:unless="${evento.getId() == null}">
+                    <input type="hidden" th:field="*{id}">
+                </div>
+
+                <h5 class="form-label text-primary" th:text="#{general}">General</h5>
+
+                <div class="mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text" id="tituloIcon">
+                            <i class="bi bi-building"></i>
+                        </span>
+                        <input type="text" th:field="*{titulo}" class="form-control"
+                               th:placeholder="#{title}" aria-describedby="tituloIcon">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text" id="descripcionIcon">
+                            <i class="bi bi-book-half"></i>
+                        </span>
+                        <textarea th:field="*{descripcion}" class="form-control"
+                                  th:placeholder="#{description}+' ('+ #{optional} +')'"
+                                  aria-describedby="descripcionIcon">
+                        </textarea>
+                    </div>
+                </div>
+
+                <h5 class="form-label text-primary" th:text="#{category}">Categoría</h5>
+
+                <div class="mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text" id="categoria Icon">
+                            <i class="bi bi-bookmarks"></i>
+                        </span>
+                        <select class="form-select" th:field="*{categoria}"
+                                id="ciudad" name="ciudad" aria-describedby="categoriaIcon">
+                            <option th:each="categoria: ${categorias}"
+                                    th:value="${categoria.id}"
+                                    th:text="${categoria.nombre}"/>
+                        </select>
+                    </div>
+                </div>
+
+                <h5 class="form-label text-primary" th:text="#{additional-info}">Información adicional</h5>
+
+                <div class="mb-3 form-check form-switch">
+                    <label for="estaOculto" class="form-check-label" th:text="#{hidden}">Esta oculto</label>
+                    <input type="checkbox" class="form-check-input" th:field="*{estaOculto}">
+                </div>
+                <div class="mb-3 form-check form-switch">
+                    <label for="esNominativo" class="form-check-label" th:text="#{nominative}">Es nominativo</label>
+                    <input type="checkbox" class="form-check-input" th:field="*{esNominativo}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="edadMinima" class="form-label text-primary h6" th:text="#{min-age}">Edad mínima</label>
+                    <div class="input-group w-25">
+                        <span class="input-group-text" id="edadIcon">
+                            <i class="bi bi-people-fill"></i>
+                        </span>
+                        <input type="number" th:field="*{edadMinima}" class="form-control"
+                               placeholder="Edad mínima"
+                               aria-describedby="edadIcon">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="duracionEstandar" class="form-label text-primary h6" th:text="#{duration}+' (min.)'">Duración (min.)</label>
+                    <div class="input-group w-25">
+                        <span class="input-group-text" id="duracionIcon">
+                            <i class="bi bi-clock"></i>
+                        </span>
+                        <input type="number" th:field="*{duracionEstandar}" class="form-control"
+                               placeholder="Duración"
+                               aria-describedby="duracionIcon">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="fotoPerfil" class="form-label text-primary h6" th:text="#{profile-pic}">Foto de perfil</label>
+                    <input type="file" class="form-control w-75" id="fotoPerfil" name="fotoPerfil">
+                    <p class="small text-secondary fst-italic" th:inline="text">*[[#{allowed-formats}]] .jpg, .png, .webp</p>
+                </div>
+                <div class="mb-3">
+                    <label for="documentoNormas" class="form-label text-primary h6" th:inline="text">[[#{rules-doc}]] ([[#{optional}]])</label>
+                    <input type="file" class="form-control w-75" id="documentoNormas" name="documentoNormas">
+                    <p class="small text-secondary fst-italic" th:inline="text">*[[#{allowed-formats}]] .jpg, .png, .webp, .pdf</p>
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-3" th:text="#{save}">Guardar</button>
+                <a href="/eventos" class="btn btn-secondary mt-3" th:text="#{back}">Volver</a>
+
+            </form>
+        </div>
     </section>
 </main>
 

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/layout :: head('Cambiar contraseña')"></head>
+
+<body class="bg-secondary">
+
+<header th:replace="fragments/layout :: header(#{change-pass})"></header>
+
+<main>
+  <div class="w-50 mx-auto bg-white shadow-sm rounded-25 p-4">
+    <h1 class="mb-4 border-bottom text-primary pb-2" th:text="#{change-pass}">Cambiar contraseña</h1>
+    <form method="post">
+      <div class="mb-3">
+        <label th:text="#{prev-password}" for="prevPasswordHash" class="form-label">Contraseña anterior</label>
+        <input type="password" class="form-control" id="prevPasswordHash" name="prevPasswordHash" aria-describedby="PasswordField">
+      </div>
+      <div class="mb-3">
+        <label th:text="#{password}" for="passwordHash" class="form-label">Contraseña</label>
+        <input type="password" class="form-control" id="passwordHash" name="passwordHash" aria-describedby="PasswordField">
+      </div>
+      <div class="mb-3">
+        <label th:text="#{repeat-password}" for="passwordHashRepeat" class="form-label">Repetir contraseña</label>
+        <input type="password" class="form-control" id="passwordHashRepeat" aria-describedby="PasswordRepeatField">
+      </div>
+
+     <button type="submit" class="btn btn-primary mt-3" th:text="#{save}">Guardar</button>
+      <a th:href="${tipoUsuario}=='propietario' ? '/salas' : '/eventos'" class="btn btn-secondary mt-3" th:text="#{back}">Volver</a>
+
+    </form>
+  </div>
+</main>
+
+
+<footer th:replace="fragments/layout :: footer"></footer>
+
+</body>
+</html>

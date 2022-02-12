@@ -3,6 +3,7 @@
 
 <head th:fragment="head(title)">
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${title}">Placeholder</title>
     <link rel="stylesheet" th:href="@{/css/customBootstrap.css}">
     <link rel="stylesheet" th:href="@{/font/bootstrap-icons.css}">
@@ -10,20 +11,70 @@
 </head>
 <body>
 
-<header th:fragment="header(name)" class="mb-4 py-4 border-bottom bg-white">
+<header th:fragment="header(name)" class="navbar mb-4 border-bottom bg-white">
     <div class="container-md d-flex justify-content-between">
-        <h1 th:text="${name}"></h1>
-        <div>
-            <a th:if="${session.usuario==null}" th:href="@{'/auth/login'}">Log In</a>
-            <div th:if="${session.usuario!=null}">
-                <span th:inline="text">Welcome [[${session.usuario.nombreUsuario}]]!</span>
-                <a th:href="@{'/auth/logout'}">Log Out</a>
-            </div>
+        <div class="navbar-brand">
+            <img class="app-logo" th:src="@{/img/iesmanacor_logo.png}" alt="App Logo">
+            <span class="h2">Tickets DAW</span>
         </div>
+
+        <div class="d-flex gap-1">
+
+            <div class="dropdown">
+                <button th:text="#{lang}" class="btn dropdown-toggle text-uppercase" id="changeLang" data-bs-toggle="dropdown" aria-expanded="false">
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="changeLang">
+                    <li><a class="dropdown-item" href="?lang">Español</a></li>
+                    <li><a class="dropdown-item" href="?lang=ca">Català</a></li>
+                    <li><a class="dropdown-item" href="?lang=en">English</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <a class="btn" th:text="#{login}" th:if="${session.usuario==null}" th:href="@{'/auth/login'}"></a>
+                <a class="btn" th:text="#{logout}" th:if="${session.usuario!=null}" th:href="@{'/auth/logout'}"></a>
+            </div>
+
+            <div th:if="${session.usuario!=null}" class="dropdown">
+                <button th:text="#{welcome}+' '+${session.usuario.nombreUsuario}+'!'"
+                        class="btn dropdown-toggle"
+                        id="userMenu"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="userMenu">
+                    <li><a class="dropdown-item" href="/user/update" th:text="#{modify-user}">Modificar usuario</a></li>
+                    <li><a class="dropdown-item" href="/user/change-password" th:text="#{change-pass}">Cambiar contraseña</a></li>
+                    <li><a class="dropdown-item"
+                           id="deleteUser"
+                           data-bs-toggle="modal" data-bs-target="#deleteUserModal"
+                           th:text="#{delete-user}">Eliminar usuario</a>
+                    </li>
+                </ul>
+
+                <div th:if="${session.usuario!=null}" class="modal fade" id="deleteUserModal"
+                     aria-labelledby="deleteUser" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div th:text="#{confirm-del-user}" class="modal-body p-5 text-center h5"></div>
+                            <div class="modal-footer">
+                                <a th:text="#{yes}" href="/user/delete" class="btn btn-danger"></a>
+                                <button th:text="#{no}" type="button" class="btn btn-secondary" data-bs-dismiss="modal"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
     </div>
 </header>
 
-<footer th:fragment="footer"></footer>
+<footer class="mt-auto w-100 bg-black text-white p-4" th:fragment="footer">
+    <p class="text-center">Ⓒ 2021-2022, all rights reserved</p>
+</footer>
 
 </body>
 </html>
