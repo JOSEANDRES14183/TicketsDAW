@@ -23,7 +23,7 @@ public class Evento {
     @Column(name = "edad_minima", nullable = false)
     private byte edadMinima;
     @Column(name = "esta_oculto", nullable = false)
-    private boolean estaOculto;
+    private boolean estaOculto = true;
     @Column(name = "es_nominativo", nullable = false)
     private boolean esNominativo;
     @Column(name = "duracion_estandar", nullable = false)

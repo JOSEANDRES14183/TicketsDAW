@@ -42,7 +42,7 @@ public abstract class Sesion {
 
     @NotNull
     @Column(name = "esta_oculto")
-    private boolean estaOculto = false;
+    private boolean estaOculto = true;
 
     @ToString.Exclude
     @ManyToOne
