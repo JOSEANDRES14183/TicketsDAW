@@ -49,6 +49,10 @@
                         </select>
                     </div>
                 </div>
+                <div class="mb-3 form-check form-switch">
+                    <label for="estaOculto" class="form-check-label" th:text="#{hidden}">Esta oculto</label>
+                    <input type="checkbox" class="form-check-input" th:field="*{estaOculto}">
+                </div>
                 <div class="mb-3">
                     <h5 class="form-label text-primary" th:text="#{map}">Mapa</h5>
                     <div class="sala-map border rounded" id="googleMap"></div>
