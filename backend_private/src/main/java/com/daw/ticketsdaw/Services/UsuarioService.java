@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLIntegrityConstraintViolationException;
+
 @Service
 @Transactional
 public class UsuarioService {
@@ -13,7 +15,7 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public void create(Usuario usuario){
+    public void create(Usuario usuario) throws SQLIntegrityConstraintViolationException{
         usuarioRepository.save(usuario);
     }
 

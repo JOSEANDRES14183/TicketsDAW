@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 @Controller
 @RequestMapping("/auth")
@@ -80,7 +81,7 @@ public class LoginController {
     }
 
     @PostMapping("/register/propietario")
-    public String savePropietario(@Valid @ModelAttribute PropietarioSala propietarioSala, BindingResult bindingResult, ModelMap modelMap) throws MessagingException {
+    public String savePropietario(@Valid @ModelAttribute PropietarioSala propietarioSala, BindingResult bindingResult, ModelMap modelMap) throws MessagingException, SQLIntegrityConstraintViolationException {
         if (bindingResult.hasErrors()){
             return "redirect:/auth/register/propietario?error=validation";
         }
@@ -93,7 +94,7 @@ public class LoginController {
     }
 
     @PostMapping("/register/organizador")
-    public String saveOrganizador(@Valid @ModelAttribute OrganizadorDTO organizadorDTO, BindingResult bindingResult, ModelMap modelMap) throws IOException, MessagingException {
+    public String saveOrganizador(@Valid @ModelAttribute OrganizadorDTO organizadorDTO, BindingResult bindingResult, ModelMap modelMap) throws IOException, MessagingException, SQLIntegrityConstraintViolationException {
         if (bindingResult.hasErrors()){
             return "redirect:/auth/register/organizador?error=validation";
         }
@@ -121,7 +122,7 @@ public class LoginController {
     }
 
     @GetMapping("/verify/{id}")
-    public String verifyUser(@PathVariable("id") int id){
+    public String verifyUser(@PathVariable("id") int id) throws SQLIntegrityConstraintViolationException {
         Usuario usuario = usuarioService.getById(id);
         usuario.setEstaValidado(true);
         usuarioService.create(usuario);

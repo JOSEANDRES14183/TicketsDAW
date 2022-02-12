@@ -2,7 +2,7 @@
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/layout :: head('Modificar usuario')"></head>
+<head th:replace="fragments/layout :: head(#{modify-user})"></head>
 
 <body class="bg-secondary">
 
@@ -44,26 +44,6 @@
                         </span>
                     <input type="email" th:field="*{email}" class="form-control"
                            th:placeholder="#{email}" aria-describedby="emailIcon">
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <div class="input-group">
-                        <span class="input-group-text" id="passwordIcon">
-                            <i class="bi bi-key"></i>
-                        </span>
-                    <input type="password" id="passwordHash" name="passwordHash" class="form-control"
-                           th:placeholder="#{password}" aria-describedby="passwordIcon">
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <div class="input-group">
-                        <span class="input-group-text" id="passwordRepeatIcon">
-                            <i class="bi bi-key-fill"></i>
-                        </span>
-                    <input type="password" id="repeatPasswordHash" name="repeatPasswordHash" class="form-control"
-                           th:placeholder="#{repeat-password}" aria-describedby="passwordIcon">
                 </div>
             </div>
 

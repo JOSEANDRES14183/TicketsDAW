@@ -26,9 +26,6 @@ public class UsuarioDTO {
     @Email
     private String email;
 
-    @NotNull
-    private String passwordHash;
-
     @Size(max = 300)
     private String descripcion;
 
