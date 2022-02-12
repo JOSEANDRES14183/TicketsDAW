@@ -16,16 +16,19 @@ public class UserConfirmationSender {
 
     @Autowired
     private JavaMailSender mailSender;
+  
+    @Autowired
+    private Environment env;
 
-    public void sendMessage(String to, String userId) throws MessagingException {
+    public void sendMessage(String to, String token) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message,false);
 
         helper.setFrom("noreply@ticketsdaw.me");
         helper.setTo(to);
         helper.setSubject("Verifica tu cuenta");
-        helper.setText("Haz click <a href='http://localhost:8080/auth/verify/"+ userId +"'>aqui</a> para verificar tu cuenta",true);
 
+        helper.setText("Haz click <a href='http://"+env.getProperty("tickets.host")+"/auth/verify?token="+ token +"'>aqui</a> para verificar tu cuenta",true);
         mailSender.send(message);
     }
 }

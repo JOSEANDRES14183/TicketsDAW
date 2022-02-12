@@ -28,6 +28,10 @@ public class LoginInterceptor implements HandlerInterceptor {
             return false;
         }
 
+        if (request.getRequestURI().startsWith("/user")){
+            return true;
+        }
+
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
 
         if (request.getRequestURI().startsWith("/salas") && usuario.getClass() == PropietarioSala.class){

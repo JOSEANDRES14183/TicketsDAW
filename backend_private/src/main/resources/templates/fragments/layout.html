@@ -35,7 +35,37 @@
                 <a class="btn" th:text="#{logout}" th:if="${session.usuario!=null}" th:href="@{'/auth/logout'}"></a>
             </div>
 
-            <p class="align-middle my-auto" th:if="${session.usuario!=null}" th:text="#{welcome}+' '+${session.usuario.nombreUsuario}+'!'"></p>
+            <div th:if="${session.usuario!=null}" class="dropdown">
+                <button th:text="#{welcome}+' '+${session.usuario.nombreUsuario}+'!'"
+                        class="btn dropdown-toggle"
+                        id="userMenu"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="userMenu">
+                    <li><a class="dropdown-item" href="/user/update" th:text="#{modify-user}">Modificar usuario</a></li>
+                    <li><a class="dropdown-item" href="/user/change-password" th:text="#{change-pass}">Cambiar contraseña</a></li>
+                    <li><a class="dropdown-item"
+                           id="deleteUser"
+                           data-bs-toggle="modal" data-bs-target="#deleteUserModal"
+                           th:text="#{delete-user}">Eliminar usuario</a>
+                    </li>
+                </ul>
+
+                <div th:if="${session.usuario!=null}" class="modal fade" id="deleteUserModal"
+                     aria-labelledby="deleteUser" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div th:text="#{confirm-del-user}" class="modal-body p-5 text-center h5"></div>
+                            <div class="modal-footer">
+                                <a th:text="#{yes}" href="/user/delete" class="btn btn-danger"></a>
+                                <button th:text="#{no}" type="button" class="btn btn-secondary" data-bs-dismiss="modal"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
 
         </div>
 
