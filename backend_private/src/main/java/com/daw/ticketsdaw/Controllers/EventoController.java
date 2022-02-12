@@ -78,7 +78,7 @@ public class EventoController {
         Evento evento = eventosService.read(eventoId);
 
         if(!evento.isEstaOculto())
-            return "redirect:/salas?error=edit_visible";
+            return "redirect:/eventos?error=edit_visible";
 
         if (checkOrganizador(evento, session)) {
             model.addAttribute("evento", evento);
@@ -94,27 +94,24 @@ public class EventoController {
         Evento eventoPrevState;
         Evento evento = modelMapper.map(eventoDTO, Evento.class);
 
+        boolean fileInputCheckPassed = true;
+
         //If this is an update operation, check if the user is allowed to update this event
         if(evento.getId() != null){
+            eventoPrevState = eventosService.read(eventoDTO.getId());
 
-            if(!evento.isEstaOculto())
-                return "redirect:/salas?error=edit_visible";
+            if(!eventoPrevState.isEstaOculto())
+                return "redirect:/eventos?error=edit_visible";
 
             if(!checkOrganizador(evento, session)){
                 return "redirect:/auth/login?error=unauthorized";
             }
         }
-
-        boolean fileInputCheckPassed = true;
-
-        //If ID is null, this is a create operation, and all NonNull file inputs are mandatory
-        if(eventoDTO.getId() == null){
+        //If this is a create operation, check all NonNull file inputs
+        else{
             if(eventoDTO.getFotoPerfil().isEmpty())
                 fileInputCheckPassed = false;
             eventoPrevState = new Evento();
-        }
-        else{
-            eventoPrevState = eventosService.read(eventoDTO.getId());
         }
 
         if(bindingResult.hasErrors() || !fileInputCheckPassed){
@@ -155,7 +152,7 @@ public class EventoController {
         Evento evento = eventosService.read(eventoId);
 
         if(!evento.isEstaOculto())
-            return "redirect:/salas?error=edit_visible";
+            return "redirect:/eventos?error=edit_visible";
 
         if (checkOrganizador(evento, session)) {
             eventosService.remove(evento);
@@ -170,7 +167,7 @@ public class EventoController {
         Evento evento = eventosService.read(eventoId);
 
         if(!evento.isEstaOculto())
-            return "redirect:/salas?error=edit_visible";
+            return "redirect:/eventos?error=edit_visible";
 
         if (checkOrganizador(evento, session)) {
             var documentoNormas = evento.getDocumentoNormas();
@@ -262,6 +259,10 @@ public class EventoController {
         Evento evento = eventosService.read(eventoId);
         if (checkOrganizador(evento,session)){
             Sesion sesion = sesionService.read(sesionId);
+
+            if(!sesion.isEstaOculto())
+                return "redirect:/eventos/" + evento.getId() + "?error=edit_visible";
+
             if (sesion.getEvento().equals(evento)){
                 sesionService.delete(sesion);
                 return "redirect:/eventos/"+evento.getId();
@@ -278,6 +279,9 @@ public class EventoController {
             return "redirect:/auth/login?error=unauthorized";
 
         SesionNoNumerada sesion = (SesionNoNumerada) sesionService.read(sesionId);
+
+        if(!sesion.isEstaOculto())
+            return "redirect:/eventos/" + evento.getId() + "?error=edit_visible";
 
         if (!sesion.getEvento().equals(evento))
             return "redirect:/auth/login?error=unauthorized";
@@ -321,6 +325,9 @@ public class EventoController {
             //If Sesion had TiposEntrada previously, put them back before saving the object, if not a bug occurs and the TiposEntrada list appears empty even though they aren't dropped from the database
             SesionNoNumerada sesionPrevState = (SesionNoNumerada) sesionService.read(sesionDTO.getId());
             sesion.setTiposEntrada(sesionPrevState.getTiposEntrada());
+
+            if(!sesionPrevState.isEstaOculto())
+                return "redirect:/eventos/" + evento.getId() + "?error=edit_visible";
 
             //Check if evento id has changed since last submission
             if(sesionPrevState.getEvento().getId() != eventoId)
@@ -382,6 +389,9 @@ public class EventoController {
 
             SesionNumerada sesion = (SesionNumerada) sesionService.read(sesionId);
 
+            if(!sesion.isEstaOculto())
+                return "redirect:/eventos/" + evento.getId() + "?error=edit_visible";
+
             if (!sesion.getEvento().equals(evento))
                 return "redirect:/auth/login?error=unauthorized";
 
@@ -410,6 +420,9 @@ public class EventoController {
         SesionNumerada sesionNumerada = modelMapper.map(sesionNumeradaDTO, SesionNumerada.class);
         if (sesionNumerada.getId()!=null){
            Sesion sesionPrevState = sesionService.read(sesionNumerada.getId());
+
+            if(!sesionPrevState.isEstaOculto())
+                return "redirect:/eventos/" + evento.getId() + "?error=edit_visible";
 
             //Check if evento id has changed since last submission
             if(sesionPrevState.getEvento().getId() != eventoId)
