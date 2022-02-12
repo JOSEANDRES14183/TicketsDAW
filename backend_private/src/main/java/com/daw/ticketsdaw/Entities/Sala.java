@@ -38,6 +38,7 @@ public class Sala implements Serializable {
     @NotNull
     private double longitud;
 
+    @NotNull
     @Column(name = "esta_oculto")
     private boolean estaOculto = true;
 
