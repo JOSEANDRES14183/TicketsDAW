@@ -72,6 +72,11 @@
     </div>
 </header>
 
+<div id="errorBox" th:fragment="errorBox">
+    <div th:if="${error != null}" class="alert alert-danger" role="alert" th:text="${error}"></div>
+    <div th:if="${warning != null}" class="alert alert-warning" role="alert" th:text="${warning}"></div>
+</div>
+
 <footer class="mt-auto w-100 bg-black text-white p-4" th:fragment="footer">
     <p class="text-center">Ⓒ 2021-2022, all rights reserved</p>
 </footer>

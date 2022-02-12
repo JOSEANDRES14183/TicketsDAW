@@ -19,6 +19,9 @@
         </p>
 
         <div class="mt-4 row">
+            <div class="col-12">
+                <div th:replace="fragments/layout :: errorBox"></div>
+            </div>
             <div class="col-7 d-flex flex-column gap-2">
                 <h3 th:text="${sala.nombre}"></h3>
                 <span th:inline="text"><i class="bi bi-geo-alt-fill"></i> [[${sala.direccion}]]</span>

@@ -9,6 +9,7 @@
     <section class="container-md">
 
         <div class="w-50 mx-auto bg-white shadow-sm rounded-25 p-4">
+            <div th:replace="fragments/layout :: errorBox"></div>
             <form method="POST" th:action="'/eventos/'+${evento.id}+'/sesiones_num'" th:object="${sesion}">
                 <div th:replace="fragments/sesion-form :: sesion-inputs"></div>
 

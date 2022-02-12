@@ -5,6 +5,7 @@
 <header th:replace="fragments/layout :: header('Eventos')"></header>
 <main>
     <section class="container-md">
+        <div th:replace="fragments/layout :: errorBox"></div>
         <table class="table table-bordered table-striped">
             <tr>
                 <th th:text="#{title}">Título</th>

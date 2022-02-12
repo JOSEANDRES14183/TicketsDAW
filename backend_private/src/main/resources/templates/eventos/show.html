@@ -30,6 +30,9 @@
         </p>
 
         <div class="row">
+            <div class="col-12">
+                <div th:replace="fragments/layout :: errorBox"></div>
+            </div>
             <div class="col">
                 <div class="mb-4 d-flex flex-column">
                     <h3 th:text="${evento.titulo}"></h3>
