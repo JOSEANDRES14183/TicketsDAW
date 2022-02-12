@@ -2,7 +2,6 @@ package com.daw.ticketsdaw.EmailSenders;
 
 import org.apache.logging.log4j.message.SimpleMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMailMessage;
@@ -17,7 +16,7 @@ public class UserConfirmationSender {
 
     @Autowired
     private JavaMailSender mailSender;
-
+  
     @Autowired
     private Environment env;
 
@@ -28,8 +27,8 @@ public class UserConfirmationSender {
         helper.setFrom("noreply@ticketsdaw.me");
         helper.setTo(to);
         helper.setSubject("Verifica tu cuenta");
-        helper.setText("Haz click <a href='http://"+env.getProperty("tickets.host")+"/auth/verify?token="+ token +"'>aqui</a> para verificar tu cuenta",true);
 
+        helper.setText("Haz click <a href='http://"+env.getProperty("tickets.host")+"/auth/verify?token="+ token +"'>aqui</a> para verificar tu cuenta",true);
         mailSender.send(message);
     }
 }

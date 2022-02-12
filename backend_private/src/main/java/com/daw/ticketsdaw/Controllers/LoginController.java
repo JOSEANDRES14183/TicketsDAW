@@ -53,7 +53,7 @@ public class LoginController {
     @PostMapping("/login")
     public String login(@RequestParam("username") String username, @RequestParam("password") String password, HttpServletRequest request, ModelMap modelMap) throws MessagingException {
         Usuario usuario = usuarioService.getByNombreUsuario(username);
-        if (usuario!=null && passwordEncoder.matches(password, usuario.getPasswordHash())) {
+        if (usuario!=null) {
             if (!usuario.isEstaValidado()){
                 String token = Jwts.builder().setIssuedAt(new Date(System.currentTimeMillis()))
                         .setSubject(usuario.getNombreUsuario())
@@ -62,6 +62,7 @@ public class LoginController {
                 sendVerificationMail(usuario.getEmail(), token);
                 return "redirect:/auth/pending-verification/";
             }
+            if (passwordEncoder.matches(password, usuario.getPasswordHash())) {
                 request.getSession().setAttribute("usuario", usuario);
                 if (usuario.getClass() == PropietarioSala.class){
                     return "redirect:/salas";
@@ -69,6 +70,7 @@ public class LoginController {
                 if (usuario.getClass() == Organizador.class){
                     return "redirect:/eventos";
                 }
+            }
         }
         return "redirect:/auth/login?error=password";
     }
