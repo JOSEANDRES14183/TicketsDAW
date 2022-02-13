@@ -6,6 +6,7 @@ import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -25,6 +26,7 @@ public abstract class Sesion {
 
     @NotNull
     @Column(name = "entradas_max")
+    @Min(1)
     private int entradasMax;
 
     @NotNull
@@ -38,6 +40,7 @@ public abstract class Sesion {
     private Date fechaIni;
 
     @NotNull
+    @Min(1)
     private int duracion;
 
     @NotNull

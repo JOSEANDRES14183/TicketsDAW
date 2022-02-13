@@ -10,7 +10,7 @@
 
         <div class="w-50 mx-auto bg-white shadow-sm rounded-25 p-4">
             <div th:replace="fragments/layout :: errorBox"></div>
-            <form method="POST" th:action="'/eventos/' + ${evento.id} + '/sesiones_no_num'" th:object="${sesion}">
+            <form method="POST" th:action="'/eventos/' + ${evento.id} + '/sesiones_no_num'" th:object="${sesion}" class="needs-validation" novalidate>
                 <div th:replace="fragments/sesion-form :: sesion-inputs"></div>
 
                 <h5 class="form-label text-primary mb-2" th:text="#{tipos-entrada}">Tipos de entrada</h5>
@@ -27,16 +27,16 @@
                             </div>
                             <div class="mb-3">
                                 <label th:for="'nombreTipo' + ${iStat.index}" class="form-label" th:text="#{tipo-nombre}">Nombre del tipo</label>
-                                <input type="text" class="form-control w-75" th:value="${tipoEntrada.getPrimaryKey().nombre}" name="nombreTipo" th:id="'nombreTipo' + ${iStat.index}">
+                                <input type="text" class="form-control w-75" th:value="${tipoEntrada.getPrimaryKey().nombre}" name="nombreTipo" th:id="'nombreTipo' + ${iStat.index}" required>
                             </div>
                             <div class="mb-3">
                                 <label th:for="'maxEntradasTipo' + ${iStat.index}" class="form-label" th:text="#{max-entradas}">Entradas máximas</label>
-                                <input type="number" class="form-control w-75" th:value="${tipoEntrada.maxEntradas}" name="maxEntradasTipo" th:id="'maxEntradasTipo' + ${iStat.index}">
+                                <input type="number" class="form-control w-75" th:value="${tipoEntrada.maxEntradas}" name="maxEntradasTipo" th:id="'maxEntradasTipo' + ${iStat.index}" min="1" required>
                             </div>
                             <div class="mb-3">
                                 <label th:for="'precioTipo' + ${iStat.index}" class="form-label" th:text="#{price-per-ticket}">Precio por entrada</label>
                                 <div class="input-group w-75">
-                                    <input type="number" class="form-control" th:value="${tipoEntrada.precio}" name="precioTipo" th:id="'precioTipo' + ${iStat.index}">
+                                    <input type="number" class="form-control" th:value="${tipoEntrada.precio}" name="precioTipo" th:id="'precioTipo' + ${iStat.index}" min="0" step=".01" required>
                                     <span class="input-group-text">€</span>
                                 </div>
                             </div>
@@ -53,6 +53,8 @@
     </section>
 </main>
 <footer th:replace="fragments/layout :: footer"></footer>
+
+<script th:src="@{/js/clientValidation.js}"></script>
 
 <script th:inline="javascript">
     showSalaInfo();
@@ -118,6 +120,7 @@
                 let inputNombre = document.createElement("input")
                 inputNombre.type = "text"
                 inputNombre.classList.add("form-control", "w-75")
+                inputNombre.setAttribute("required", "")
                 inputNombre.name = "nombreTipo"
                 inputNombre.id = "nombreTipo" + iterationText
             divNombre.appendChild(inputNombre)
@@ -133,6 +136,8 @@
                 let inputMaxEntradas = document.createElement("input")
                 inputMaxEntradas.type = "number"
                 inputMaxEntradas.classList.add("form-control", "w-75")
+                inputMaxEntradas.setAttribute("required", "")
+                inputMaxEntradas.setAttribute("min", "1")
                 inputMaxEntradas.name = "maxEntradasTipo"
                 inputMaxEntradas.id = "maxEntradasTipo" + iterationText
             divMaxEntradas.appendChild(inputMaxEntradas)
@@ -150,6 +155,9 @@
                     let inputPrecio = document.createElement("input")
                     inputPrecio.type = "number"
                     inputPrecio.classList.add("form-control")
+                    inputPrecio.setAttribute("required", "")
+                    inputPrecio.setAttribute("min", "0")
+                    inputPrecio.setAttribute("step", ".01")
                     inputPrecio.name = "precioTipo"
                     inputPrecio.id = "precioTipo" + iterationText
                 inputGroupPrecio.appendChild(inputPrecio)
