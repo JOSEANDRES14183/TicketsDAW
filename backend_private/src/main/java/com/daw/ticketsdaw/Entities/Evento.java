@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -21,12 +22,14 @@ public class Evento {
     @Size(max = 300)
     private String descripcion;
     @Column(name = "edad_minima", nullable = false)
+    @Min(0)
     private byte edadMinima;
     @Column(name = "esta_oculto", nullable = false)
     private boolean estaOculto = true;
     @Column(name = "es_nominativo", nullable = false)
     private boolean esNominativo;
     @Column(name = "duracion_estandar", nullable = false)
+    @Min(1)
     private int duracionEstandar;
 
     @ManyToOne

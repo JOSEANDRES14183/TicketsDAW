@@ -7,14 +7,15 @@
 
 <main>
     <section class="container-md">
-        <form method="POST" th:action="'/eventos/' + ${evento.id} + '/images/add'" th:object="${galeria}" enctype="multipart/form-data">
+        <form method="POST" th:action="'/eventos/' + ${evento.id} + '/images/add'" th:object="${galeria}" enctype="multipart/form-data" class="needs-validation" novalidate>
             <div class="mb-3">
                 <label for="media" class="form-label" th:text="#{image}">Imagen</label>
-                <input type="file" class="form-control w-25" id="media" name="media">
+                <input type="file" class="form-control w-25" id="media" name="media" required>
+                <p class="small text-secondary fst-italic" th:inline="text" >*[[#{allowed-formats}]] .jpg, .png, .webp</p>
             </div>
             <div class="mb-3">
                 <label th:for="prioridad" class="form-label" th:text="#{prioridad}">Prioridad</label>
-                <input type="number" class="form-control w-25" th:field="*{prioridad}">
+                <input type="number" class="form-control w-25" th:field="*{prioridad}" required>
             </div>
             <button type="submit" class="btn btn-primary" th:text="#{save}"></button>
             <a class="btn btn-secondary" th:href="'/eventos/' + ${evento.id}" th:text="#{back}">Volver</a>
@@ -23,6 +24,8 @@
 </main>
 
 <footer th:replace="fragments/layout :: footer"></footer>
+
+<script th:src="@{/js/clientValidation.js}"></script>
 
 </body>
 </html>
