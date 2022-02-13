@@ -4,12 +4,16 @@ import com.daw.ticketsdaw.Entities.Butaca;
 import com.daw.ticketsdaw.Entities.Sala;
 import com.daw.ticketsdaw.Repositories.SalaRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -60,11 +64,11 @@ public class SalaServiceImpl implements SalaService{
         List<ArrayList<Butaca>> layout = new ArrayList<>();
 
         while(layout.size()<rows+1){
-            layout.add(new ArrayList<>(columns+1));
+            layout.add(new ArrayList<>(Arrays.asList(new Butaca[columns+1])));
         }
 
         for (Butaca butaca: butacas){
-            layout.get(butaca.getPosY()).add(butaca.getPosX(),butaca);
+            layout.get(butaca.getPosY()).set(butaca.getPosX(),butaca);
         }
 
         ObjectMapper mapper = new ObjectMapper();
@@ -82,4 +86,10 @@ public class SalaServiceImpl implements SalaService{
     public List<Sala> getSalasWithButacas() {
         return salaRepository.getSalasWithButacas();
     }
+
+    @Override
+    public void setButacasJson(Sala sala, String json) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+    }
+
 }

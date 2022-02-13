@@ -22,18 +22,18 @@ public class Butaca {
 
     @Id
     @Column(name = "pos_x")
-    @JsonIgnore
     private int posX;
 
     @Id
     @Column(name = "pos_y")
-    @JsonIgnore
     private int posY;
 
     @Column(name = "num_butaca")
+    @JsonIgnore
     private int numButaca;
 
     @ManyToOne
     @JoinColumn(name = "tipo_butaca", referencedColumnName = "id")
+    @JsonIgnore
     private TipoButaca tipoButaca;
 }
