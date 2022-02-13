@@ -16,7 +16,7 @@
       <button class="btn btn-primary" onclick="addColumn()">Añadir columna</button>
       <button class="btn btn-primary" onclick="deleteColumn()">Eliminar columna</button>
       <button class="btn-primary btn" onclick="submitButacas()">Guardar cambios</button>
-      <a th:href="@{'/salas/' + ${sala.id}}" class="btn btn-secondary">Volver</a>
+      <a th:href="@{'/salas/' + ${sala.id}}" th:text="#{back}" class="btn btn-secondary">Volver</a>
     </div>
 
     <table class="table-bordered mx-auto" id="layout">
@@ -67,10 +67,10 @@
   }
 
   function toggleButaca(){
-    var x = Array.from(this.parentNode.children).indexOf(this);
-    var y = Array.from(this.parentNode.parentNode.children).indexOf(this.parentNode);
-    var casilla = butacas[y][x];
-    if (casilla!=null){f
+    let x = Array.from(this.parentNode.children).indexOf(this);
+    let y = Array.from(this.parentNode.parentNode.children).indexOf(this.parentNode);
+    let casilla = butacas[y][x];
+    if (casilla!=null){
       butacas[y][x] = null;
       this.innerHTML=" ";
     } else {
@@ -80,7 +80,8 @@
   }
 
   function addRow(){
-    butacas.push(new Array(butacas[0].length).fill(null));
+    let length = butacas[0]===undefined ? 10 : butacas[0].length;
+    butacas.push(new Array(length).fill(null));
     printLayout();
     document.querySelectorAll("td").forEach(element=>
             element.addEventListener('click',toggleButaca,true));
@@ -94,6 +95,11 @@
   }
 
   function addColumn(){
+    if (butacas.length===0){
+      for (let i=0;i<10;i++){
+        butacas.push([])
+      }
+    }
     butacas.forEach(casilla => casilla.push(null));
     printLayout();
     document.querySelectorAll("td").forEach(element=>
@@ -101,7 +107,13 @@
   }
 
   function deleteColumn(){
-    butacas.forEach(casilla => casilla.pop());
+    for (let casilla of butacas){
+        if (casilla.length<=1){
+          butacas = [];
+          break;
+        }
+      casilla.pop();
+    }
     printLayout();
     document.querySelectorAll("td").forEach(element=>
             element.addEventListener('click',toggleButaca,true));
