@@ -1,12 +1,9 @@
 package com.daw.ticketsdaw.Controllers;
 
-import com.daw.ticketsdaw.DTOs.EventoDTO;
+import com.daw.ticketsdaw.DTOs.*;
 
-import com.daw.ticketsdaw.DTOs.SesionNoNumeradaDTO;
-import com.daw.ticketsdaw.DTOs.SesionNumeradaDTO;
 import com.daw.ticketsdaw.Entities.*;
 import com.daw.ticketsdaw.Services.*;
-import com.daw.ticketsdaw.DTOs.GaleriaDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -21,7 +18,6 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/eventos")
@@ -64,6 +60,31 @@ public class EventoController {
             return "eventos/show";
         }
         return "redirect:/auth/login?error=unauthorized";
+    }
+
+    @GetMapping({"/{id}/jsonSesiones"})
+    @ResponseBody
+    public List<CalendarEventDTO> jsonSesiones(@PathVariable(name="id") Integer eventoId, HttpSession session){
+        Evento evento = eventosService.read(eventoId);
+        if (checkOrganizador(evento, session)){
+            List<CalendarEventDTO> sesiones = new ArrayList<>();
+
+            for (var sesion : evento.getSesiones()) {
+                sesiones.add(generateCalendarEvent(sesion));
+            }
+
+            return sesiones;
+        }
+        return null;
+    }
+
+    private CalendarEventDTO generateCalendarEvent(Sesion sesion){
+        var calendarEvent = new CalendarEventDTO();
+        calendarEvent.setTitle(sesion.getId().toString());
+        calendarEvent.setStart(sesion.getFechaIni().toString());
+        calendarEvent.setEnd(sesion.getFechaFin().toString());
+        calendarEvent.getExtendedProps().put("sesion_id", sesion.getId().toString());
+        return calendarEvent;
     }
 
     @GetMapping({"create"})

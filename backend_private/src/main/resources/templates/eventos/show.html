@@ -1,7 +1,19 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/layout :: head(${evento.titulo})"></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${evento.titulo}">Placeholder</title>
+    <link rel="stylesheet" th:href="@{/css/customBootstrap.css}">
+    <link rel="stylesheet" th:href="@{/font/bootstrap-icons.css}">
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+    <link rel="stylesheet" th:href="@{/css/fullcalendar/main.min.css}">
+    <script th:src="@{/js/fullcalendar/main.js}"></script>
+    <script th:src="@{/js/fullcalendar/locales-all.js}"></script>
+</head>
+
 <style>
     .galleryItem{
         height: 100px;
@@ -85,6 +97,7 @@
                            th:text="#{sesion-num}">Sesión numerada</a></li>
                 </ul>
             </div>
+            <div id="calendar"></div>
             <table class="table table-bordered table-striped">
                 <tr>
                     <th>Id</th>
@@ -221,6 +234,26 @@
 
 <script th:inline="javascript">
     /*<![CDATA[*/
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            themeSystem: 'standard',
+            locale: 'es',
+            events: '/eventos/[[${evento.id}]]/jsonSesiones',
+            eventClick: processEventClick
+        });
+        calendar.render();
+    });
+
+    function processEventClick(info){
+        openSesionModal(info.event.extendedProps.sesion_id)
+    }
+    /*]]>*/
+</script>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
     let galeriaModal = document.getElementById("modalGaleria");
     let sesiones = [[${evento.sesiones}]];
     let sesionModal = document.getElementById("modalSesion");
@@ -228,7 +261,13 @@
 
     sesionModal.addEventListener('show.bs.modal',function (event){
         let button = event.relatedTarget;
-        let sesion = sesiones[button.getAttribute("data-sesion-index")];
+        let sesionIndex = button.getAttribute("data-sesion-index");
+        openSesionModal(sesionIndex);
+    })
+
+    function openSesionModal(sesionIndex){
+        alert(sesionIndex)
+        let sesion = sesiones[sesionIndex];
         let sesionFields = document.querySelectorAll("div#sesionInfo td");
         let salaFields = document.querySelectorAll("div#salaInfo td")
 
@@ -278,7 +317,7 @@
 
         document.querySelector("#deleteSesionBtn").setAttribute("href", "/eventos/"+[[${evento.id}]]+"/sesiones/"+sesion["id"]+"/delete");
 
-    })
+    }
 
     galeriaModal.addEventListener('show.bs.modal', function (event) {
         let button = event.relatedTarget
