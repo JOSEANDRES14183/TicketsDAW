@@ -16,12 +16,13 @@
             <img class="h-100 rounded-25" src="/img/concierto.png" alt="Cinema Image">
           </div>
 
-          <div class="col-5 p-5 card-body">
+          <div class="col-5 p-5 pb-3 card-body h-100 overflow-auto">
             <h5 th:text="#{register-organizador}" class="card-title mb-4">Registrate como organizador</h5>
-            <form method="POST" th:object="${organizador}" enctype="multipart/form-data">
+            <div th:replace="fragments/layout :: errorBox"></div>
+            <form method="POST" th:object="${organizador}" enctype="multipart/form-data" class="needs-validation" novalidate>
               <div class="mb-3">
                 <label th:text="#{name}" for="nombre" class="form-label">Nombre</label>
-                <input type="text" th:field="*{nombre}" class="form-control" aria-describedby="NombreField">
+                <input type="text" th:field="*{nombre}" class="form-control" aria-describedby="NombreField" required>
               </div>
               <div th:replace="fragments/user-form :: user-inputs"></div>
               <div class="mb-3">
@@ -30,7 +31,7 @@
               </div>
               <div class="mb-3">
                 <label th:text="#{profile-pic}" for="fotoPerfil" class="form-label">Foto de perfil</label>
-                <input type="file" class="form-control" th:field="*{fotoPerfil}">
+                <input type="file" class="form-control" th:field="*{fotoPerfil}" required>
                 <p class="small text-secondary fst-italic" th:inline="text" >*[[#{allowed-formats}]] .jpg, .png, .webp</p>
               </div>
               <button th:text="#{register-action}" type="submit" class="btn btn-primary">Regístrate</button>
@@ -43,6 +44,8 @@
 </main>
 
 <footer th:replace="fragments/layout :: footer"></footer>
+
+<script th:src="@{/js/clientValidation.js}"></script>
 
 </body>
 </html>

@@ -14,9 +14,10 @@
                 <div class="col-8 overflow-hidden h-100">
                     <img class="h-100 rounded-25" src="/img/cine.jpg" alt="Cinema Image">
                 </div>
-                <div class="col-4 p-5 card-body">
+                <div class="col-4 p-5 card-body h-100 overflow-auto">
                     <h5 th:text="#{register-propietario}" class="card-title mb-4">Registrate como propietario</h5>
-                    <form method="POST" th:object="${propietario}">
+                    <div th:replace="fragments/layout :: errorBox"></div>
+                    <form method="POST" th:object="${propietario}" class="needs-validation" novalidate>
                         <div th:replace="fragments/user-form :: user-inputs"></div>
                         <button th:text="#{register-action}" type="submit" class="btn btn-primary">Regístrate</button>
                     </form>
@@ -30,6 +31,8 @@
 
 
 <footer th:replace="fragments/layout :: footer"></footer>
+
+<script th:src="@{/js/clientValidation.js}"></script>
 
 </body>
 </html>
