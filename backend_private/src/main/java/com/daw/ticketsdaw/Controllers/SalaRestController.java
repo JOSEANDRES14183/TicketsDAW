@@ -20,4 +20,10 @@ public class SalaRestController {
         return salaService.read(id);
     }
 
+    @GetMapping("{id}/butacas")
+    public String getButacasFromSalaAsJson(@PathVariable int id){
+        Sala sala = salaService.read(id);
+        return salaService.getButacasJson(sala);
+    }
+
 }

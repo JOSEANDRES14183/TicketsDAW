@@ -127,15 +127,20 @@
     for (let i = 0; i<butacas.length; i++){
         text+="<tr>";
         for (let j = 0;j<butacas[i].length;j++){
-            text+="<td><i class=\"bi bi-circle-fill\"></i></td>";
+            text+="<td>";
+
+            if(butacas[i][j]!=null){
+                text+="<i class=\"bi bi-circle-fill\"></i>";
+            } else {
+                text+=" ";
+            }
+
+            text+="</td>";
         }
        text+="</tr>";
     }
 
     layout.innerHTML = text;
-
-    // console.log(butacasJSON);
-    // console.log(butacas);
 
 </script>
 

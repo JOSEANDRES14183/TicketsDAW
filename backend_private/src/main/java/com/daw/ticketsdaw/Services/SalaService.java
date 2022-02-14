@@ -2,6 +2,7 @@ package com.daw.ticketsdaw.Services;
 
 import com.daw.ticketsdaw.Entities.Sala;
 import com.daw.ticketsdaw.Repositories.SalaRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,5 +45,7 @@ public interface SalaService{
      * @return returns a list of Sala with all non-hidden entries with seats
      */
     public List<Sala> getSalasWithButacas();
+
+    public void setButacasJson(Sala sala,String json) throws JsonProcessingException;
 
 }
