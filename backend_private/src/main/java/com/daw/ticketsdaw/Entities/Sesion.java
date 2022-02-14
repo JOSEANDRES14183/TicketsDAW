@@ -1,5 +1,6 @@
 package com.daw.ticketsdaw.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.ToString;
@@ -57,6 +58,7 @@ public abstract class Sesion {
     private Evento evento;
 
     @ToString.Exclude
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "id_sala", referencedColumnName = "id")
     @NotNull

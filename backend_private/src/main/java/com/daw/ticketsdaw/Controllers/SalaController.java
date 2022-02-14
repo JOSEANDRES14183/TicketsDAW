@@ -1,5 +1,6 @@
 package com.daw.ticketsdaw.Controllers;
 
+import com.daw.ticketsdaw.DTOs.CalendarEventDTO;
 import com.daw.ticketsdaw.DTOs.SalaDTO;
 import com.daw.ticketsdaw.Entities.PropietarioSala;
 import com.daw.ticketsdaw.Entities.Sala;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/salas")
@@ -37,6 +40,22 @@ public class SalaController {
         modelMap.addAttribute("salas", propietarioSala.getSalas());
         return "salas/index";
 
+    }
+
+    @GetMapping("{id}/jsonSesiones")
+    @ResponseBody
+    public List<CalendarEventDTO> jsonSesiones(ModelMap modelMap, @PathVariable("id") int salaId, HttpSession session){
+        Sala sala = salaService.read(salaId);
+        if (checkPropietarioSala(sala,session)){
+            List<CalendarEventDTO> sesiones = new ArrayList<>();
+
+            for (var sesion : sala.getSesiones()) {
+                sesiones.add(new CalendarEventDTO(sesion));
+            }
+
+            return sesiones;
+        }
+        return null;
     }
 
     @GetMapping("{id}")

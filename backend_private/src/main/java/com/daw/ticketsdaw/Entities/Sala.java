@@ -60,6 +60,10 @@ public class Sala implements Serializable {
     @JsonManagedReference
     private List<Butaca> butacas = new ArrayList<>();
 
+    @OneToMany(mappedBy = "sala")
+    @JsonManagedReference
+    private List<Sesion> sesiones = new ArrayList<>();
+
     public boolean hasButacas(){
         if(butacas == null || butacas.isEmpty() || butacas.size() < 1)
             return false;

@@ -70,25 +70,12 @@ public class EventoController {
             List<CalendarEventDTO> sesiones = new ArrayList<>();
 
             for (var sesion : evento.getSesiones()) {
-                sesiones.add(generateCalendarEvent(sesion));
+                sesiones.add(new CalendarEventDTO(sesion));
             }
 
             return sesiones;
         }
         return null;
-    }
-
-    private CalendarEventDTO generateCalendarEvent(Sesion sesion){
-        var calendarEvent = new CalendarEventDTO();
-        calendarEvent.setTitle(sesion.getDuracion() + " min.");
-        calendarEvent.setStart(sesion.getFechaIni().toString());
-        calendarEvent.setEnd(sesion.getFechaFinFormatted());
-        calendarEvent.getExtendedProps().put("sesion_id", sesion.getId().toString());
-        if(sesion.isEstaOculto()){
-            calendarEvent.setBackgroundColor("red");
-            calendarEvent.setBorderColor("#E50000");
-        }
-        return calendarEvent;
     }
 
     @GetMapping({"create"})
