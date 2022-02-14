@@ -98,22 +98,22 @@
                 </ul>
             </div>
             <div id="calendar"></div>
-            <table class="table table-bordered table-striped">
-                <tr>
-                    <th>Id</th>
-                    <th>DateTime Inicio</th>
-                    <th>Esta oculto</th>
-                </tr>
-                <tr th:each="sesion: ${evento.sesiones}">
-                    <td><button class="btn btn-secondary"
-                           th:text="${sesion.id}"
-                           th:attr="data-sesion-index=${sesionStat.index}"
-                           data-bs-toggle="modal"
-                           data-bs-target="#modalSesion"></button></td>
-                    <td th:text="${sesion.fechaIni}"></td>
-                    <td th:text="${sesion.estaOculto}"></td>
-                </tr>
-            </table>
+<!--            <table class="table table-bordered table-striped">-->
+<!--                <tr>-->
+<!--                    <th>Id</th>-->
+<!--                    <th>DateTime Inicio</th>-->
+<!--                    <th>Esta oculto</th>-->
+<!--                </tr>-->
+<!--                <tr th:each="sesion: ${evento.sesiones}">-->
+<!--                    <td><button class="btn btn-secondary"-->
+<!--                           th:text="${sesion.id}"-->
+<!--                           th:attr="data-sesion-index=${sesionStat.index}"-->
+<!--                           data-bs-toggle="modal"-->
+<!--                           data-bs-target="#modalSesion"></button></td>-->
+<!--                    <td th:text="${sesion.fechaIni}"></td>-->
+<!--                    <td th:text="${sesion.estaOculto}"></td>-->
+<!--                </tr>-->
+<!--            </table>-->
         </div>
 
         <div class="modal fade" id="modalSesion">
@@ -237,8 +237,13 @@
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
+            headerToolbar: {
+                start: 'title',
+                center: '',
+                end: 'prev,next'
+            },
             initialView: 'dayGridMonth',
-            themeSystem: 'standard',
+            themeSystem: 'bootstrap5',
             locale: 'es',
             events: '/eventos/[[${evento.id}]]/jsonSesiones',
             eventClick: processEventClick
@@ -247,7 +252,9 @@
     });
 
     function processEventClick(info){
-        openSesionModal(info.event.extendedProps.sesion_id)
+        openSesionModal(getSesionIndex(info.event.extendedProps.sesion_id))
+        let myModal = new bootstrap.Modal(sesionModal)
+        myModal.show()
     }
     /*]]>*/
 </script>
@@ -259,14 +266,23 @@
     let sesionModal = document.getElementById("modalSesion");
     console.log(sesiones);
 
+    function getSesionIndex(sesionId){
+        for (let i = 0; i < sesiones.length; i++) {
+            if(sesiones[i].id == sesionId)
+                return i;
+        }
+        return null;
+    }
+
     sesionModal.addEventListener('show.bs.modal',function (event){
-        let button = event.relatedTarget;
-        let sesionIndex = button.getAttribute("data-sesion-index");
-        openSesionModal(sesionIndex);
+        if(event.relatedTarget != null){
+            let button = event.relatedTarget;
+            let sesionIndex = button.getAttribute("data-sesion-index");
+            openSesionModal(sesionIndex);
+        }
     })
 
     function openSesionModal(sesionIndex){
-        alert(sesionIndex)
         let sesion = sesiones[sesionIndex];
         let sesionFields = document.querySelectorAll("div#sesionInfo td");
         let salaFields = document.querySelectorAll("div#salaInfo td")
