@@ -12,6 +12,10 @@ import javax.persistence.Table;
 @Table(name = "tipo_butaca")
 public class TipoButaca {
 
+    public TipoButaca(int id){
+        this.id = id;
+    }
+
     @Id
     private int id;
 
@@ -19,4 +23,8 @@ public class TipoButaca {
 
     @Column(name = "precio_extra")
     private float precioExtra;
+
+    public TipoButaca() {
+
+    }
 }

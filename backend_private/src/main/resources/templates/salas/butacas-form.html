@@ -11,14 +11,15 @@
   <div class="container-md">
 
     <div class="d-flex justify-content-evenly my-4">
-      <button class="btn btn-primary" onclick="addRow()">Añadir linea</button>
-      <button class="btn btn-primary" onclick="deleteRow()">Eliminar linea</button>
-      <button class="btn btn-primary" onclick="addColumn()">Añadir columna</button>
-      <button class="btn btn-primary" onclick="deleteColumn()">Eliminar columna</button>
-      <a th:href="@{'/salas/' + ${sala.id}}" class="btn btn-secondary">Volver</a>
+      <button class="btn btn-primary" onclick="addRow()" th:text="#{add-row}">Añadir linea</button>
+      <button class="btn btn-primary" onclick="deleteRow()" th:text="#{del-row}">Eliminar linea</button>
+      <button class="btn btn-primary" onclick="addColumn()" th:text="#{add-column}">Añadir columna</button>
+      <button class="btn btn-primary" onclick="deleteColumn()" th:text="#{del-column}">Eliminar columna</button>
+      <button class="btn-primary btn" onclick="submitButacas()" th:text="#{save-changes}">Guardar cambios</button>
+      <a th:href="@{'/salas/' + ${sala.id}}" th:text="#{back}" class="btn btn-secondary">Volver</a>
     </div>
 
-    <table class="table table-bordered w-75 mx-auto" id="layout">
+    <table class="table-bordered mx-auto" id="layout">
       <tbody></tbody>
     </table>
 
@@ -28,9 +29,7 @@
 <footer th:replace="fragments/layout :: footer"></footer>
 
 <script th:inline="javascript">
-  /*<![CDATA[*/
   let butacasJSON = [[${butacas}]];
-  /*]]>*/
 
   let butacas = JSON.parse(butacasJSON);
   let layout = document.querySelector("#layout > tbody");
@@ -38,49 +37,100 @@
   if (butacas.length<2) {
     butacas = new Array(10);
     for (let i = 0; i < butacas.length; i++) {
-      butacas[i] = new Array(10);
+      butacas[i] = new Array(10).fill(null);
     }
-  }
-
-  let text = "";
-  for (let i = 0; i<butacas.length; i++){
-    text+="<tr>";
-    for (let j = 0;j<butacas[i].length;j++){
-      text+="<td>q</td>";
-    }
-    text+="</tr>";
-  }
-  layout.innerHTML = text;
-
-  function addRow(){
-    let text = "<tr>";
-    for (let i=0;i<butacas[0].length;i++){
-      text += "<td>q</td>"
-    }
-    text += "</tr>";
-    layout.innerHTML += text;
-    butacas.push(new Array(butacas[0].length));
-  }
-
-  function deleteRow(){
-    layout.removeChild(layout.lastChild);
-    butacas.pop();
-  }
-
-  function addColumn(){
-    layout.childNodes.forEach(element => {
-      element.innerHTML+="<td>q</td>";
-    })
-  }
-
-  function deleteColumn(){
-    layout.childNodes.forEach(element => {
-      element.removeChild(element.lastChild);
-    })
   }
 
   console.log(butacas);
-  console.log(butacasJSON);
+  printLayout();
+
+  document.querySelectorAll("td").forEach(element=>
+          element.addEventListener('click',toggleButaca,true));
+
+  function printLayout(){
+    let text = "";
+    for (let i = 0; i<butacas.length; i++){
+      text+="<tr>";
+      for (let j = 0;j<butacas[i].length;j++){
+        text+="<td>";
+
+        if(butacas[i][j]!=null){
+          text+="<i class=\"bi bi-circle-fill\"></i>";
+        } else {
+          text+=" ";
+        }
+        text+="</td>";
+      }
+      text+="</tr>";
+    }
+    layout.innerHTML=text;
+  }
+
+  function toggleButaca(){
+    let x = Array.from(this.parentNode.children).indexOf(this);
+    let y = Array.from(this.parentNode.parentNode.children).indexOf(this.parentNode);
+    let casilla = butacas[y][x];
+    if (casilla!=null){
+      butacas[y][x] = null;
+      this.innerHTML=" ";
+    } else {
+      butacas[y][x] = {butacaId:{posX: x, posY: y}};
+      this.innerHTML = "<i class=\"bi bi-circle-fill\"></i>"
+    }
+  }
+
+  function addRow(){
+    let length = butacas[0]===undefined ? 10 : butacas[0].length;
+    butacas.push(new Array(length).fill(null));
+    printLayout();
+    document.querySelectorAll("td").forEach(element=>
+            element.addEventListener('click',toggleButaca,true));
+  }
+
+  function deleteRow(){
+    butacas.pop();
+    printLayout();
+    document.querySelectorAll("td").forEach(element=>
+            element.addEventListener('click',toggleButaca,true));
+  }
+
+  function addColumn(){
+    if (butacas.length===0){
+      for (let i=0;i<10;i++){
+        butacas.push([])
+      }
+    }
+    butacas.forEach(casilla => casilla.push(null));
+    printLayout();
+    document.querySelectorAll("td").forEach(element=>
+            element.addEventListener('click',toggleButaca,true));
+  }
+
+  function deleteColumn(){
+    for (let casilla of butacas){
+        if (casilla.length<=1){
+          butacas = [];
+          break;
+        }
+      casilla.pop();
+    }
+    printLayout();
+    document.querySelectorAll("td").forEach(element=>
+            element.addEventListener('click',toggleButaca,true));
+  }
+
+  function submitButacas(){
+    fetch("/salas/"+[[${sala.id}]]+"/butacas",{
+      method: 'POST',
+      body: JSON.stringify(butacas),
+      headers:{
+        'Content-Type':'application/json'
+      }
+    }).then(res => res.json())
+            .catch(error => console.error('Error:', error))
+            .then(response => console.log('Success:', response));
+  }
+
 
 </script>
 

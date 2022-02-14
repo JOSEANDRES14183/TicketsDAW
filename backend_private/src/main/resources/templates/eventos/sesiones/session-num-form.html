@@ -40,23 +40,50 @@
         fetch('/salas-api/' + salaId)
             .then(response => response.json())
             .then(function (data){
-                printSalaInfo(data);
+                printSalaInfo(data,salaId);
             });
     }
 
-    function printSalaInfo(sala){
+    function printSalaInfo(sala,salaId){
         let container = document.querySelector("#infoSala");
         let text = "";
-
-        text+="<div class=\"d-flex flex-column\">" +
+        text+="<div class=\"d-flex flex-column mb-2\">" +
             "<h4>"+sala["nombre"]+"</h4>" +
             "<span>"+[[#{address}]]+": "+sala["direccion"]+"</span>" +
             "<span>"+sala["ciudad"]["nombre"]+"</span>" +
-            "<span>"+[[#{max-capacity}]]+": "+sala["aforoMax"]+"</span>" +
+            "<span>"+[[#{max-capacity}]]+": "+sala["aforoMax"]+"</span>"+
             "</div>"
 
         container.innerHTML = text;
+
+        fetch('/salas-api/' + salaId + '/butacas')
+            .then(response => response.json())
+            .then(function (data) {
+                let butacas = data;
+                let layout = document.createElement("table");
+
+                let textLayout = "";
+                for (let i = 0; i < butacas.length; i++) {
+                    textLayout += "<tr>";
+                    for (let j = 0; j < butacas[i].length; j++) {
+                        textLayout += "<td>";
+                        if (butacas[i][j] != null) {
+                            textLayout += "<i class=\"bi bi-circle-fill\"></i>";
+                        } else {
+                            textLayout += " ";
+                        }
+                        textLayout += "</td>";
+                    }
+                    textLayout += "</tr>";
+                }
+
+                layout.innerHTML = textLayout;
+                container.appendChild(layout);
+            });
     }
+
+
+
 
 </script>
 

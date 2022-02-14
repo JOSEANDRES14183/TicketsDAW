@@ -4,9 +4,11 @@ import com.daw.ticketsdaw.DTOs.SalaDTO;
 import com.daw.ticketsdaw.Entities.PropietarioSala;
 import com.daw.ticketsdaw.Entities.Sala;
 import com.daw.ticketsdaw.Entities.Usuario;
+import com.daw.ticketsdaw.Services.ButacaService;
 import com.daw.ticketsdaw.Services.CiudadService;
 import com.daw.ticketsdaw.Services.SalaService;
 import com.daw.ticketsdaw.Services.UsuarioService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,6 +25,8 @@ public class SalaController {
 
     @Autowired
     private SalaService salaService;
+    @Autowired
+    private ButacaService butacaService;
     @Autowired
     private CiudadService ciudadService;
     @Autowired
@@ -102,11 +106,26 @@ public class SalaController {
     }
 
     @GetMapping("{id}/butacas")
-    public String showButacasForm(ModelMap modelMap, @PathVariable("id") int salaId){
+    public String showButacasForm(ModelMap modelMap, @PathVariable("id") int salaId, HttpSession session){
         Sala sala = salaService.read(salaId);
-        modelMap.addAttribute("sala",sala);
-        modelMap.addAttribute("butacas",salaService.getButacasJson(sala));
-        return "salas/butacas-form";
+        if (checkPropietarioSala(sala,session)) {
+            modelMap.addAttribute("sala", sala);
+            modelMap.addAttribute("butacas", salaService.getButacasJson(sala));
+            return "salas/butacas-form";
+        }
+        return "redirect:/auth/login?error=unauthorized";
+    }
+
+    @PostMapping("{id}/butacas")
+    public String submitButacas(@RequestBody String butacas, @PathVariable int id, HttpSession session) throws JsonProcessingException {
+        Sala sala = salaService.read(id);
+        if (checkPropietarioSala(sala,session)){
+            System.out.println(butacas);
+            butacaService.deleteBySala(sala);
+            salaService.setButacasJson(sala,butacas);
+            return "redirect:/auth/register/propietario";
+        }
+        return "redirect:/auth/login?error=unauthorized";
     }
 
     private boolean checkPropietarioSala(Sala sala, HttpSession session){
