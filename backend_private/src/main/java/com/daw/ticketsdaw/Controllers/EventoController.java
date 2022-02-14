@@ -82,7 +82,7 @@ public class EventoController {
         var calendarEvent = new CalendarEventDTO();
         calendarEvent.setTitle(sesion.getDuracion() + " min.");
         calendarEvent.setStart(sesion.getFechaIni().toString());
-        calendarEvent.setEnd(sesion.getFechaFin().toString());
+        calendarEvent.setEnd(sesion.getFechaFinFormatted());
         calendarEvent.getExtendedProps().put("sesion_id", sesion.getId().toString());
         if(sesion.isEstaOculto())
             calendarEvent.setBackgroundColor("red");

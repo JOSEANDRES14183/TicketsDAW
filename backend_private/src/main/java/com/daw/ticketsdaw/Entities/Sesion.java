@@ -3,6 +3,7 @@ package com.daw.ticketsdaw.Entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.ToString;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -61,7 +62,7 @@ public abstract class Sesion {
     @NotNull
     private Sala sala;
 
-    public Date getFechaFin() {
-        return DateUtils.addMinutes(fechaIni, duracion);
+    public String getFechaFinFormatted() {
+        return DateFormatUtils.format(DateUtils.addMinutes(fechaIni, duracion), dateTimeFormat);
     }
 }
