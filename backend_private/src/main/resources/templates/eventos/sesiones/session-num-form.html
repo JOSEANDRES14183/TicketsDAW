@@ -40,15 +40,14 @@
         fetch('/salas-api/' + salaId)
             .then(response => response.json())
             .then(function (data){
-                printSalaInfo(data);
+                printSalaInfo(data,salaId);
             });
     }
 
-    function printSalaInfo(sala){
+    function printSalaInfo(sala,salaId){
         let container = document.querySelector("#infoSala");
         let text = "";
-
-        text+="<div class=\"d-flex flex-column\">" +
+        text+="<div class=\"d-flex flex-column mb-2\">" +
             "<h4>"+sala["nombre"]+"</h4>" +
             "<span>"+[[#{address}]]+": "+sala["direccion"]+"</span>" +
             "<span>"+sala["ciudad"]["nombre"]+"</span>" +
@@ -57,27 +56,34 @@
 
         container.innerHTML = text;
 
-        let butacas = sala["butacas"];
-        let layout = document.createElement("table");
+        fetch('/salas-api/' + salaId + '/butacas')
+            .then(response => response.json())
+            .then(function (data) {
+                let butacas = data;
+                let layout = document.createElement("table");
 
-        let textLayout = "";
-        for (let i = 0; i<butacas.length; i++){
-            textLayout+="<tr>";
-            for (let j = 0;j<butacas[i].length;j++){
-                textLayout+="<td>";
-                if(butacas[i][j]!=null){
-                    textLayout+="<i class=\"bi bi-circle-fill\"></i>";
-                } else {
-                    textLayout+=" ";
+                let textLayout = "";
+                for (let i = 0; i < butacas.length; i++) {
+                    textLayout += "<tr>";
+                    for (let j = 0; j < butacas[i].length; j++) {
+                        textLayout += "<td>";
+                        if (butacas[i][j] != null) {
+                            textLayout += "<i class=\"bi bi-circle-fill\"></i>";
+                        } else {
+                            textLayout += " ";
+                        }
+                        textLayout += "</td>";
+                    }
+                    textLayout += "</tr>";
                 }
-                textLayout+="</td>";
-            }
-            textLayout+="</tr>";
-        }
 
-        layout.innerHTML=textLayout;
-        container.appendChild(layout);
+                layout.innerHTML = textLayout;
+                container.appendChild(layout);
+            });
     }
+
+
+
 
 </script>
 
