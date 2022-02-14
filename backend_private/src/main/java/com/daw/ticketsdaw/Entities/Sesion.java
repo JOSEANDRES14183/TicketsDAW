@@ -1,11 +1,16 @@
 package com.daw.ticketsdaw.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.ToString;
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -25,6 +30,7 @@ public abstract class Sesion {
 
     @NotNull
     @Column(name = "entradas_max")
+    @Min(1)
     private int entradasMax;
 
     @NotNull
@@ -38,11 +44,12 @@ public abstract class Sesion {
     private Date fechaIni;
 
     @NotNull
+    @Min(1)
     private int duracion;
 
     @NotNull
     @Column(name = "esta_oculto")
-    private boolean estaOculto = false;
+    private boolean estaOculto = true;
 
     @ToString.Exclude
     @ManyToOne
@@ -52,11 +59,13 @@ public abstract class Sesion {
     private Evento evento;
 
     @ToString.Exclude
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "id_sala", referencedColumnName = "id")
     @NotNull
     private Sala sala;
 
-
-
+    public String getFechaFinFormatted() {
+        return DateFormatUtils.format(DateUtils.addMinutes(fechaIni, duracion), dateTimeFormat);
+    }
 }

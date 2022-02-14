@@ -1,6 +1,7 @@
 package com.daw.ticketsdaw.Controllers;
 
 import com.daw.ticketsdaw.DTOs.OrganizadorDTO;
+import com.daw.ticketsdaw.DTOs.PropietarioSalaDTO;
 import com.daw.ticketsdaw.EmailSenders.UserConfirmationSender;
 import com.daw.ticketsdaw.Entities.Organizador;
 import com.daw.ticketsdaw.Entities.PropietarioSala;
@@ -88,11 +89,14 @@ public class LoginController {
     }
 
     @PostMapping("/register/propietario")
-    public String savePropietario(@Valid @ModelAttribute PropietarioSala propietarioSala, BindingResult bindingResult, ModelMap modelMap) throws MessagingException, SQLIntegrityConstraintViolationException {
+    public String savePropietario(@Valid @ModelAttribute PropietarioSalaDTO propietarioSalaDTO, BindingResult bindingResult, ModelMap modelMap) throws MessagingException, SQLIntegrityConstraintViolationException {
         if (bindingResult.hasErrors()){
             return "redirect:/auth/register/propietario?error=validation";
         }
-        propietarioSala.setPasswordHash(passwordEncoder.encode(propietarioSala.getPasswordHash()));
+
+        PropietarioSala propietarioSala = modelMapper.map(propietarioSalaDTO, PropietarioSala.class);
+
+        propietarioSala.setPasswordHash(passwordEncoder.encode(propietarioSalaDTO.getPasswordHash()));
 
         usuarioService.create(propietarioSala);
 

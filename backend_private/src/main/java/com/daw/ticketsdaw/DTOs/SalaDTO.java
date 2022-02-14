@@ -31,6 +31,9 @@ public class SalaDTO {
     private double longitud;
 
     @NotNull
+    private boolean estaOculto;
+
+    @NotNull
     private Ciudad ciudad;
 
 }

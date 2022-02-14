@@ -1,12 +1,9 @@
 package com.daw.ticketsdaw.Controllers;
 
-import com.daw.ticketsdaw.DTOs.EventoDTO;
+import com.daw.ticketsdaw.DTOs.*;
 
-import com.daw.ticketsdaw.DTOs.SesionNoNumeradaDTO;
-import com.daw.ticketsdaw.DTOs.SesionNumeradaDTO;
 import com.daw.ticketsdaw.Entities.*;
 import com.daw.ticketsdaw.Services.*;
-import com.daw.ticketsdaw.DTOs.GaleriaDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -50,7 +47,7 @@ public class EventoController {
 
     @GetMapping({"/", ""})
     public String show(ModelMap modelMap, HttpSession session){
-        Organizador organizador = (Organizador) usuarioService.getById(((Usuario)session.getAttribute("usuario")).getId());
+        Organizador organizador = getOrganizador(session);
         modelMap.addAttribute("eventos", organizador.getEventos());
         return "eventos/index";
     }
@@ -62,7 +59,23 @@ public class EventoController {
             modelMap.addAttribute("evento", evento);
             return "eventos/show";
         }
-        return "redirect:/auth/login";
+        return "redirect:/auth/login?error=unauthorized";
+    }
+
+    @GetMapping({"/{id}/jsonSesiones"})
+    @ResponseBody
+    public List<CalendarEventDTO> jsonSesiones(@PathVariable(name="id") Integer eventoId, HttpSession session){
+        Evento evento = eventosService.read(eventoId);
+        if (checkOrganizador(evento, session)){
+            List<CalendarEventDTO> sesiones = new ArrayList<>();
+
+            for (var sesion : evento.getSesiones()) {
+                sesiones.add(new CalendarEventDTO(sesion));
+            }
+
+            return sesiones;
+        }
+        return null;
     }
 
     @GetMapping({"create"})
@@ -75,34 +88,50 @@ public class EventoController {
     @GetMapping({"/{id}/update"})
     public String showUpdateForm(ModelMap model, @PathVariable(name="id") Integer eventoId, HttpSession session){
         Evento evento = eventosService.read(eventoId);
+
+        if(!evento.isEstaOculto())
+            return "redirect:/eventos?error=edit_visible";
+
         if (checkOrganizador(evento, session)) {
             model.addAttribute("evento", evento);
             model.addAttribute("categorias", categoriaService.read());
             return "eventos/create";
         }
-        return "redirect:/auth/login";
+        return "redirect:/auth/login?error=unauthorized";
     }
 
     @PostMapping({"/", ""})
     @Transactional(rollbackFor = {IOException.class})
-    public String saveEvento(@ModelAttribute @Valid EventoDTO eventoDTO, BindingResult bindingResult, HttpSession session) throws IOException {
-        if(bindingResult.hasErrors()){
-            return "redirect:/eventos/create?error=validation";
-        }
-
+    public String saveEvento(ModelMap model, @ModelAttribute @Valid EventoDTO eventoDTO, BindingResult bindingResult, HttpSession session) throws IOException {
         Evento eventoPrevState;
         Evento evento = modelMapper.map(eventoDTO, Evento.class);
 
-        //If ID is null, this is a create operation, and all NonNull file inputs are mandatory
-        if(eventoDTO.getId() == null){
+        boolean fileInputCheckPassed = true;
+
+        //If this is an update operation, check if the user is allowed to update this event
+        if(evento.getId() != null){
+            eventoPrevState = eventosService.read(eventoDTO.getId());
+
+            if(!eventoPrevState.isEstaOculto())
+                return "redirect:/eventos?error=edit_visible";
+
+            if(!checkOrganizador(evento, session)){
+                return "redirect:/auth/login?error=unauthorized";
+            }
+        }
+        //If this is a create operation, check all NonNull file inputs
+        else{
             if(eventoDTO.getFotoPerfil().isEmpty())
-                return "redirect:/eventos/create?error=validation";
+                fileInputCheckPassed = false;
             eventoPrevState = new Evento();
         }
-        else{
-            eventoPrevState = eventosService.read(eventoDTO.getId());
-        }
 
+        if(bindingResult.hasErrors() || !fileInputCheckPassed){
+            model.addAttribute("evento", evento);
+            model.addAttribute("categorias", categoriaService.read());
+            model.addAttribute("error", "Validation error");
+            return "eventos/create";
+        }
 
         RecursoMedia fotoPerfil = null;
         NormasEvento documentoNormas = null;
@@ -123,8 +152,7 @@ public class EventoController {
             evento.setDocumentoNormas(documentoNormas);
         }
 
-        //TODO: Get user id from context
-        Organizador organizador = (Organizador) usuarioService.getById(((Usuario) session.getAttribute("usuario")).getId());
+        Organizador organizador = getOrganizador(session);
         evento.setOrganizador(organizador);
 
         eventosService.save(evento);
@@ -134,17 +162,25 @@ public class EventoController {
     @GetMapping({"/{id}/delete"})
     public String deleteEvento(@PathVariable(name="id") Integer eventoId, HttpSession session){
         Evento evento = eventosService.read(eventoId);
+
+        if(!evento.isEstaOculto())
+            return "redirect:/eventos?error=edit_visible";
+
         if (checkOrganizador(evento, session)) {
             eventosService.remove(evento);
             return "redirect:/eventos";
         }
-        return "redirect:/auth/login";
+        return "redirect:/auth/login?error=unauthorized";
     }
 
     @GetMapping({"/{id}/normas_evento/delete"})
     @Transactional
     public String deleteNormasEvento(@PathVariable(name="id") Integer eventoId, HttpSession session){
         Evento evento = eventosService.read(eventoId);
+
+        if(!evento.isEstaOculto())
+            return "redirect:/eventos?error=edit_visible";
+
         if (checkOrganizador(evento, session)) {
             var documentoNormas = evento.getDocumentoNormas();
             evento.setDocumentoNormas(null);
@@ -152,7 +188,7 @@ public class EventoController {
             normasService.deleteNormas(documentoNormas);
             return "redirect:/eventos/" + eventoId;
         }
-        return "redirect:/auth/login";
+        return "redirect:/auth/login?error=unauthorized";
     }
 
     @GetMapping({"/{id}/images/add"})
@@ -163,7 +199,7 @@ public class EventoController {
             model.addAttribute("galeria", new GaleriaDTO());
             return "eventos/galerias/create";
         }
-        return "redirect:/auth/login";
+        return "redirect:/auth/login?error=unauthorized";
     }
 
     @PostMapping({"/{id}/images/add"})
@@ -176,10 +212,10 @@ public class EventoController {
         Evento evento = eventosService.read(eventoId);
         if (checkOrganizador(evento, session)) {
             RecursoMedia formSubmittedMedia = modelMapper.map(galeriaDTO, RecursoMedia.class);
-            mediaService.saveImageGallery(galeriaDTO.getMedia(), formSubmittedMedia, eventosService.read(eventoId));
+            mediaService.saveImageGallery(galeriaDTO.getMedia(), formSubmittedMedia, evento);
             return "redirect:/eventos/" + eventoId;
         }
-        return "redirect:/auth/login";
+        return "redirect:/auth/login?error=unauthorized";
     }
 
     @PostMapping({"/{eventoId}/images/{mediaId}/update"})
@@ -198,7 +234,7 @@ public class EventoController {
 
             return "redirect:/eventos/" + eventoId;
         }
-        return "redirect:/auth/login";
+        return "redirect:/auth/login?error=unauthorized";
     }
 
     @GetMapping({"/{eventoId}/images/{mediaId}/delete"})
@@ -214,14 +250,19 @@ public class EventoController {
 
             return "redirect:/eventos/" + eventoId;
         }
-        return "redirect:/auth/login";
+        return "redirect:/auth/login?error=unauthorized";
     }
 
     @GetMapping({"/{eventoId}/sesiones_no_num/create"})
-    public String showFormNoNum(ModelMap model, @PathVariable Integer eventoId){
+    public String showFormNoNum(ModelMap model, @PathVariable Integer eventoId, HttpSession session){
+        Evento evento = eventosService.read(eventoId);
+
+        if(!checkOrganizador(evento, session))
+            return "redirect:/auth/login?error=unauthorized";
+
         model.addAttribute("sesion", new SesionNoNumerada());
-        model.addAttribute("salas", salaService.read());
-        model.addAttribute("evento", eventosService.read(eventoId));
+        model.addAttribute("salas", salaService.readVisible());
+        model.addAttribute("evento", evento);
         return "eventos/sesiones/session-no-numerada-form";
     }
 
@@ -230,37 +271,46 @@ public class EventoController {
         Evento evento = eventosService.read(eventoId);
         if (checkOrganizador(evento,session)){
             Sesion sesion = sesionService.read(sesionId);
-            if (sesion.getEvento()==evento){
+
+            if(!sesion.isEstaOculto())
+                return "redirect:/eventos/" + evento.getId() + "?error=edit_visible";
+
+            if (sesion.getEvento().equals(evento)){
                 sesionService.delete(sesion);
                 return "redirect:/eventos/"+evento.getId();
             }
         }
-        return "redirect:/auth/login";
+        return "redirect:/auth/login?error=unauthorized";
     }
 
     @GetMapping({"/{eventoId}/sesiones_no_num/{sesionId}/update"})
-    public String updateNoNum(ModelMap model, @PathVariable Integer eventoId, @PathVariable Integer sesionId){
-        model.addAttribute("sesion", (SesionNoNumerada) sesionService.read(sesionId));
-        model.addAttribute("salas", salaService.read());
-        model.addAttribute("evento", eventosService.read(eventoId));
+    public String updateNoNum(ModelMap model, @PathVariable Integer eventoId, @PathVariable Integer sesionId, HttpSession session){
+        Evento evento = eventosService.read(eventoId);
+
+        if(!checkOrganizador(evento, session))
+            return "redirect:/auth/login?error=unauthorized";
+
+        SesionNoNumerada sesion = (SesionNoNumerada) sesionService.read(sesionId);
+
+        if(!sesion.isEstaOculto())
+            return "redirect:/eventos/" + evento.getId() + "?error=edit_visible";
+
+        if (!sesion.getEvento().equals(evento))
+            return "redirect:/auth/login?error=unauthorized";
+
+        model.addAttribute("sesion", sesion);
+        model.addAttribute("salas", salaService.readVisible());
+        model.addAttribute("evento", evento);
         return "eventos/sesiones/session-no-numerada-form";
     }
 
     @PostMapping({"/{eventoId}/sesiones_no_num"})
     @Transactional(rollbackFor = {Exception.class})
-    public String saveSesionNoNum(ModelMap model, @Valid @ModelAttribute SesionNoNumeradaDTO sesionDTO, BindingResult bindingResult, @PathVariable Integer eventoId) throws IOException {
-        SesionNoNumerada sesion = modelMapper.map(sesionDTO, SesionNoNumerada.class);
-
-        if(bindingResult.hasErrors()){
-            //TODO: Demo for error notifications, apply this to the rest of the forms
-            model.addAttribute("evento", eventosService.read(eventoId));
-            model.addAttribute("salas", salaService.read());
-            model.addAttribute("sesion", sesion);
-            model.addAttribute("error", "Validation error");
-            return "eventos/sesiones/session-no-numerada-form";
-        }
-
+    public String saveSesionNoNum(ModelMap model, @Valid @ModelAttribute SesionNoNumeradaDTO sesionDTO, BindingResult bindingResult, @PathVariable Integer eventoId, HttpSession session) throws IOException {
         Evento evento = eventosService.read(eventoId);
+
+        if(!checkOrganizador(evento, session))
+            return "redirect:/auth/login?error=unauthorized";
 
         //Check if TipoEntrada inputs have a valid structure
         if(!(sesionDTO.getMaxEntradasTipo().size() == sesionDTO.getNombreTipo().size() &&
@@ -268,16 +318,35 @@ public class EventoController {
             return "redirect:/eventos/" + eventoId + "/sesiones_no_num/create?error=validation";
         }
 
+        SesionNoNumerada sesion = modelMapper.map(sesionDTO, SesionNoNumerada.class);
+
+        if(bindingResult.hasErrors() || sesionDTO.getSala().isEstaOculto()){
+            model.addAttribute("evento", evento);
+            model.addAttribute("salas", salaService.readVisible());
+
+            //Parse current TiposEntrada to return to the form
+            List<TipoEntrada> tipoEntradaList = generateTiposEntrada(sesion, sesionDTO);
+            sesion.setTiposEntrada(tipoEntradaList);
+
+            model.addAttribute("sesion", sesion);
+            model.addAttribute("error", "Validation error");
+            return "eventos/sesiones/session-no-numerada-form";
+        }
+
         if(sesionDTO.getId() != null){
             //If Sesion had TiposEntrada previously, put them back before saving the object, if not a bug occurs and the TiposEntrada list appears empty even though they aren't dropped from the database
             SesionNoNumerada sesionPrevState = (SesionNoNumerada) sesionService.read(sesionDTO.getId());
             sesion.setTiposEntrada(sesionPrevState.getTiposEntrada());
 
+            if(!sesionPrevState.isEstaOculto())
+                return "redirect:/eventos/" + evento.getId() + "?error=edit_visible";
+
             //Check if evento id has changed since last submission
             if(sesionPrevState.getEvento().getId() != eventoId)
                 return "redirect:/eventos?error=validation";
 
-            //TODO: Check auth
+            if(!sesionPrevState.getEvento().equals(evento))
+                return "redirect:/auth/login?error=unauthorized";
         }
 
         sesion.setEvento(evento);
@@ -290,16 +359,27 @@ public class EventoController {
             }
         }
 
+        List<TipoEntrada> tipoEntradaList = generateTiposEntrada(sesion, sesionDTO);
+
+        for (var tipo :
+                tipoEntradaList) {
+            tipoEntradaService.save(tipo);
+        }
+
+        return "redirect:/eventos/" + eventoId + (savedWithoutOverlap ? "" : "?warning=overlap");
+    }
+
+    private List<TipoEntrada> generateTiposEntrada(SesionNoNumerada sesion, SesionNoNumeradaDTO sesionDTO){
+        List<TipoEntrada> tipoEntradaList = new ArrayList<>();
         for (int i = 0; i < sesionDTO.getMaxEntradasTipo().size(); i++){
             var tipo = new TipoEntrada();
             tipo.setPrimaryKey(new TipoEntradaId(sesion.getId(), sesionDTO.getNombreTipo().get(i)));
             tipo.setEntitySesion(sesion);
             tipo.setMaxEntradas(sesionDTO.getMaxEntradasTipo().get(i));
             tipo.setPrecio(sesionDTO.getPrecioTipo().get(i));
-            tipoEntradaService.save(tipo);
+            tipoEntradaList.add(tipo);
         }
-
-        return "redirect:/eventos/" + eventoId + (savedWithoutOverlap ? "" : "?warning=overlap");
+        return tipoEntradaList;
     }
 
     @GetMapping("/{eventoId}/sesiones_num/create")
@@ -311,46 +391,74 @@ public class EventoController {
             modelMap.addAttribute("evento", evento);
             return "eventos/sesiones/session-num-form";
         }
-        return "redirect:/auth/login";
+        return "redirect:/auth/login?error=unauthorized";
     }
 
     @GetMapping("/{eventoId}/sesiones_num/{sesionId}/update")
     public String showUpdateSesionNumerada(ModelMap modelMap, @PathVariable int sesionId, @PathVariable int eventoId, HttpSession session){
         Evento evento = eventosService.read(eventoId);
         if (checkOrganizador(evento, session)) {
-            modelMap.addAttribute("sesion", sesionService.read(sesionId));
+
+            SesionNumerada sesion = (SesionNumerada) sesionService.read(sesionId);
+
+            if(!sesion.isEstaOculto())
+                return "redirect:/eventos/" + evento.getId() + "?error=edit_visible";
+
+            if (!sesion.getEvento().equals(evento))
+                return "redirect:/auth/login?error=unauthorized";
+
+            modelMap.addAttribute("sesion", sesion);
             modelMap.addAttribute("salas", salaService.getSalasWithButacas());
             modelMap.addAttribute("evento", evento);
             return "eventos/sesiones/session-num-form";
         }
-        return "redirect:/auth/login";
+        return "redirect:/auth/login?error=unauthorized";
     }
 
     @PostMapping("/{eventoId}/sesiones_num")
-    public String saveSesionNum(@Valid @ModelAttribute SesionNumeradaDTO sesionNumeradaDTO, BindingResult bindingResult , @PathVariable int eventoId, HttpSession session) {
-        if (bindingResult.hasErrors()){
-            return "redirect:/eventos";
+    public String saveSesionNum(ModelMap modelMap, @Valid @ModelAttribute SesionNumeradaDTO sesionNumeradaDTO, BindingResult bindingResult , @PathVariable int eventoId, HttpSession session) {
+        Evento evento = eventosService.read(eventoId);
+
+        if(!checkOrganizador(evento, session))
+            return "redirect:/auth/login?error=unauthorized";
+
+        if (bindingResult.hasErrors() || sesionNumeradaDTO.getSala().isEstaOculto() || !sesionNumeradaDTO.getSala().hasButacas()){
+            modelMap.addAttribute("sesion", sesionNumeradaDTO);
+            modelMap.addAttribute("salas", salaService.getSalasWithButacas());
+            modelMap.addAttribute("evento", evento);
+            modelMap.addAttribute("error", "Validation error");
+            return "eventos/sesiones/session-num-form";
         }
         SesionNumerada sesionNumerada = modelMapper.map(sesionNumeradaDTO, SesionNumerada.class);
         if (sesionNumerada.getId()!=null){
            Sesion sesionPrevState = sesionService.read(sesionNumerada.getId());
-           if (checkOrganizador(sesionPrevState.getEvento(), session)){
-               return "redirect:/eventos";
-           }
+
+            if(!sesionPrevState.isEstaOculto())
+                return "redirect:/eventos/" + evento.getId() + "?error=edit_visible";
+
+            //Check if evento id has changed since last submission
+            if(sesionPrevState.getEvento().getId() != eventoId)
+                return "redirect:/eventos?error=validation";
+
+            if(!sesionPrevState.getEvento().equals(evento))
+                return "redirect:/auth/login?error=unauthorized";
         }
-        Evento evento = eventosService.read(eventoId);
-        Organizador loggedOrganizador = (Organizador) session.getAttribute("usuario");
-        if (evento.getOrganizador().getId() != loggedOrganizador.getId()){
-            return "redirect:/eventos";
-        }
+
         sesionNumerada.setEvento(evento);
+
         boolean savedWithoutOverlap = sesionService.save(sesionNumerada);
-        return "redirect:/eventos/" + sesionNumerada.getEvento().getId() + (savedWithoutOverlap ? "" : "?warning=overlap");
+        return "redirect:/eventos/" + eventoId + (savedWithoutOverlap ? "" : "?warning=overlap");
     }
 
     private boolean checkOrganizador(Evento evento, HttpSession session){
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         return evento.getOrganizador().getId() == usuario.getId();
+    }
+
+    private Organizador getOrganizador(HttpSession session){
+        return (Organizador) usuarioService.getById(
+                ((Usuario) session.getAttribute("usuario")).getId()
+        );
     }
 
 }

@@ -1,6 +1,5 @@
 package com.daw.ticketsdaw.DTOs;
 
-import com.daw.ticketsdaw.Entities.RecursoMedia;
 import com.sun.istack.NotNull;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,11 +8,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 
 @Data
-public class OrganizadorDTO {
-
-    @NotNull
-    @Size(max = 30)
-    private String nombre;
+public class PropietarioSalaDTO {
 
     @NotNull
     @Size(max = 15)
@@ -26,10 +21,5 @@ public class OrganizadorDTO {
     @NotNull
     @Size(min = 5)
     private String passwordHash;
-
-    @Size(max = 300)
-    private String descripcion;
-
-    MultipartFile fotoPerfil;
 
 }

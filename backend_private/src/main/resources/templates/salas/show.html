@@ -1,7 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/layout :: head(${sala.nombre})"></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${sala.nombre}">Placeholder</title>
+    <link rel="stylesheet" th:href="@{/css/customBootstrap.css}">
+    <link rel="stylesheet" th:href="@{/font/bootstrap-icons.css}">
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+    <link rel="stylesheet" th:href="@{/css/fullcalendar/main.min.css}">
+    <script th:src="@{/js/fullcalendar/main.js}"></script>
+    <script th:src="@{/js/fullcalendar/locales-all.js}"></script>
+</head>
 
 <body>
 
@@ -19,6 +30,9 @@
         </p>
 
         <div class="mt-4 row">
+            <div class="col-12">
+                <div th:replace="fragments/layout :: errorBox"></div>
+            </div>
             <div class="col-7 d-flex flex-column gap-2">
                 <h3 th:text="${sala.nombre}"></h3>
                 <span th:inline="text"><i class="bi bi-geo-alt-fill"></i> [[${sala.direccion}]]</span>
@@ -44,16 +58,17 @@
 
         <div class="mt-5">
             <h3 class="text-center text-decoration-underline" th:text="#{sesiones}">Sesiones</h3>
-            <table class="table table-bordered table-striped my-4">
-                <tbody>
-                    <tr>
-                        <th>Evento</th>
-                        <th>Tipo</th>
-                        <th>Fecha de inicio</th>
-                        <th>Fecha de fin</th>
-                    </tr>
-                </tbody>
-            </table>
+<!--            <table class="table table-bordered table-striped my-4">-->
+<!--                <tbody>-->
+<!--                    <tr>-->
+<!--                        <th>Evento</th>-->
+<!--                        <th>Tipo</th>-->
+<!--                        <th>Fecha de inicio</th>-->
+<!--                        <th>Fecha de fin</th>-->
+<!--                    </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+            <div id="calendar"></div>
         </div>
 
     </section>
@@ -61,6 +76,27 @@
 </main>
 
 <footer th:replace="fragments/layout :: footer"></footer>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            headerToolbar: {
+                start: 'title',
+                center: '',
+                end: 'today timeGridDay,dayGridWeek,dayGridMonth prev,next'
+            },
+            eventDisplay: 'block',
+            initialView: 'dayGridMonth',
+            themeSystem: 'bootstrap5',
+            locale: [[#{lang}]],
+            events: '/salas/[[${sala.id}]]/jsonSesiones',
+        });
+        calendar.render();
+    });
+    /*]]>*/
+</script>
 
 <script th:inline="javascript">
 

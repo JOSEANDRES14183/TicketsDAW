@@ -13,7 +13,7 @@
             <span class="input-group-text">
                 <i class="bi bi-ticket-detailed"></i>
             </span>
-            <input type="number" class="form-control" th:field="*{entradasMax}">
+            <input type="number" class="form-control" th:field="*{entradasMax}" min="1">
         </div>
     </div>
     <div class="mb-3 form-check form-switch">
@@ -22,11 +22,11 @@
     </div>
     <div class="mb-3">
         <label th:for="*{fechaFinVenta}" class="form-label h6 text-primary" th:text="#{fecha-fin-venta}">Fecha y hora de fin de venta</label>
-        <input type="datetime-local" class="form-control w-50" th:field="*{fechaFinVenta}">
+        <input type="datetime-local" class="form-control w-50" th:field="*{fechaFinVenta}" required>
     </div>
     <div class="mb-3">
         <label th:for="*{fechaIni}" class="form-label h6 text-primary" th:text="#{fecha-inicio}">Fecha y hora de inicio del evento</label>
-        <input type="datetime-local" class="form-control w-50" th:field="*{fechaIni}">
+        <input type="datetime-local" class="form-control w-50" th:field="*{fechaIni}" required>
     </div>
     <div class="mb-3">
         <label th:for="*{duracion}" class="form-label h6 text-primary" th:text="#{duration}+' (min.)'">Duración de la sesión (min.)</label>
@@ -34,14 +34,14 @@
             <span class="input-group-text">
                 <i class="bi bi-clock"></i>
             </span>
-            <input type="number" class="form-control" th:field="*{duracion}">
+            <input type="number" class="form-control" th:field="*{duracion}" min="1">
         </div>
     </div>
 
     <div class="row mb-3">
         <h5 class="form-label text-primary mb-3" th:text="#{sala-info}">Información de la sala</h5>
         <div class="col-6">
-            <select class="form-select" th:field="*{sala}">
+            <select class="form-select" th:field="*{sala}" required>
                 <option th:each="sala: ${salas}"
                         th:value="${sala.id}"
                         th:text="${sala.nombre}"/>
@@ -53,6 +53,8 @@
 
 
 </div>
+
+
 
 </body>
 </html>

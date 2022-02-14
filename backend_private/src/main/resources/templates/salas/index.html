@@ -1,13 +1,32 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/layout :: head('Salas')"></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Salas'">Placeholder</title>
+    <link rel="stylesheet" th:href="@{/css/customBootstrap.css}">
+    <link rel="stylesheet" th:href="@{/font/bootstrap-icons.css}">
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+    <link rel="stylesheet" th:href="@{/css/dataTables.bootstrap5.min.css}">
+    <link rel="stylesheet" th:href="@{/css/responsive.bootstrap5.min.css}">
+
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/jquery.dataTables.min.js}"></script>
+    <script th:src="@{/js/dataTables.bootstrap5.min.js}"></script>
+    <script th:src="@{/js/dataTables.responsive.min.js}"></script>
+    <script th:src="@{/js/responsive.bootstrap5.js}"></script>
+
+</head>
 <body>
 <header th:replace="fragments/layout :: header('Salas')"></header>
 
 <main>
 
     <section class="container-md">
-        <table class="table table-bordered table-striped">
+        <div th:replace="fragments/layout :: errorBox"></div>
+        <table class="table table-bordered table-striped w-100" id="dtTable">
+            <thead>
             <tr>
                 <th th:text="#{name}">Nombre</th>
                 <th th:text="#{address}">Dirección</th>
@@ -16,6 +35,8 @@
                 <th th:text="#{hidden}">Oculto</th>
                 <th th:text="#{actions}">Acciones</th>
             </tr>
+            </thead>
+            <tbody>
             <tr th:each="sala: ${salas}">
                 <td>
                     <a th:text="${sala.nombre}"
@@ -34,6 +55,7 @@
                     </a>
                 </td>
             </tr>
+            </tbody>
         </table>
 
         <a href="/salas/create" role="button"
@@ -45,6 +67,12 @@
 </main>
 
 <footer th:replace="fragments/layout :: footer"></footer>
-
+<script>
+    $(document).ready(function (){
+        $("#dtTable").DataTable(
+            {responsive: true}
+        );
+    })
+</script>
 </body>
 </html>

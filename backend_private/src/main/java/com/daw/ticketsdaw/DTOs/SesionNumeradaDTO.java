@@ -9,4 +9,6 @@ import java.util.Date;
 
 @Data
 public class SesionNumeradaDTO extends SesionDTO{
+    @NotNull
+    private float precio;
 }

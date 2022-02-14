@@ -1,6 +1,7 @@
 package com.daw.ticketsdaw.Services;
 
 import com.daw.ticketsdaw.Entities.Sesion;
+import com.daw.ticketsdaw.Exceptions.InvalidSaveException;
 import com.daw.ticketsdaw.Repositories.SesionRepository;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,17 +25,18 @@ public class SesionService {
      * @return          returns false if the Sesion has been saved, but it overlaps with another Sesion on the DB
      */
     public boolean save(Sesion sesion){
-        //Save date availability before saving the Sesion to the DB, if not, it will collide with itself when checking availability
-        boolean isDateAvailable = checkDateAvailability(sesion);
+        if(sesion.getSala().isEstaOculto())
+            throw new InvalidSaveException("Tried to save a new session with a hidden room assigned");
+
         sesionRepository.save(sesion);
-        return isDateAvailable;
+        return checkDateAvailability(sesion);
     }
 
     private boolean checkDateAvailability(Sesion newSesion){
         //Possible optimization https://stackoverflow.com/questions/22007341/spring-jpa-selecting-specific-columns
         List<Sesion> sesiones = sesionRepository.findAll();
         for (var sesion : sesiones) {
-            if(checkSesionOverlap(sesion, newSesion))
+            if(sesion.getId() != newSesion.getId() && checkSesionOverlap(sesion, newSesion))
                 return false;
         }
         return true;

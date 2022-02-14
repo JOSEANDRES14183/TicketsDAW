@@ -4,19 +4,25 @@
 <div th:fragment="user-inputs">
     <div class="mb-3">
         <label th:text="#{username}" for="nombreUsuario" class="form-label">Nombre de usuario</label>
-        <input type="text" th:field="*{nombreUsuario}" class="form-control" aria-describedby="NombreUsuarioField">
+        <input type="text" th:field="*{nombreUsuario}" class="form-control" aria-describedby="NombreUsuarioField" required>
     </div>
     <div class="mb-3">
         <label th:text="#{email}" for="email" class="form-label">Correo electrónico</label>
-        <input type="text" class="form-control" th:field="*{email}" aria-describedby="EmailField">
+        <input type="email" class="form-control" th:field="*{email}" aria-describedby="EmailField" required>
     </div>
     <div class="mb-3">
         <label th:text="#{password}" for="passwordHash" class="form-label">Contraseña</label>
-        <input type="password" class="form-control" th:field="*{passwordHash}" aria-describedby="PasswordField">
+        <input type="password" class="form-control" th:field="*{passwordHash}" aria-describedby="PasswordField" minlength="5" required>
+        <div class="invalid-feedback" th:text="#{passwordReq}">
+            Password is invalid
+        </div>
     </div>
     <div class="mb-3">
         <label th:text="#{repeat-password}" for="passwordHashRepeat" class="form-label">Repetir contraseña</label>
         <input type="password" class="form-control" id="passwordHashRepeat" aria-describedby="PasswordRepeatField">
+        <div class="invalid-feedback" th:text="#{passwordRepeat}">
+            It must match your password
+        </div>
     </div>
 </div>
 

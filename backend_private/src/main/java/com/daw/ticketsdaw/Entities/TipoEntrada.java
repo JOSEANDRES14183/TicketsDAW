@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -24,9 +25,11 @@ public class TipoEntrada {
 
     @NotNull
     @Column(name = "max_entradas")
+    @Min(1)
     private int maxEntradas;
 
     @NotNull
+    @Min(0)
     private float precio;
 
 }
