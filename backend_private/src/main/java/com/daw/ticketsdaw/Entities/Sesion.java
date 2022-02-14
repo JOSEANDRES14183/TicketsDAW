@@ -2,6 +2,7 @@ package com.daw.ticketsdaw.Entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.ToString;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -58,7 +59,7 @@ public abstract class Sesion {
     private Evento evento;
 
     @ToString.Exclude
-    @JsonBackReference
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "id_sala", referencedColumnName = "id")
     @NotNull

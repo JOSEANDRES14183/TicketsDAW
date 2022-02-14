@@ -1,5 +1,6 @@
 package com.daw.ticketsdaw.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
@@ -61,7 +62,7 @@ public class Sala implements Serializable {
     private List<Butaca> butacas = new ArrayList<>();
 
     @OneToMany(mappedBy = "sala")
-    @JsonManagedReference
+    @JsonBackReference
     private List<Sesion> sesiones = new ArrayList<>();
 
     public boolean hasButacas(){
