@@ -84,8 +84,10 @@ public class EventoController {
         calendarEvent.setStart(sesion.getFechaIni().toString());
         calendarEvent.setEnd(sesion.getFechaFinFormatted());
         calendarEvent.getExtendedProps().put("sesion_id", sesion.getId().toString());
-        if(sesion.isEstaOculto())
+        if(sesion.isEstaOculto()){
             calendarEvent.setBackgroundColor("red");
+            calendarEvent.setBorderColor("#E50000");
+        }
         return calendarEvent;
     }
 

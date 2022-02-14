@@ -11,6 +11,7 @@ public class CalendarEventDTO {
     String start;
     String end;
     String backgroundColor;
+    String borderColor;
 
     Map<String, String> extendedProps = new HashMap<>();
 }
