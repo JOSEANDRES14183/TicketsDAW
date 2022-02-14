@@ -11,11 +11,11 @@
   <div class="container-md">
 
     <div class="d-flex justify-content-evenly my-4">
-      <button class="btn btn-primary" onclick="addRow()">Añadir linea</button>
-      <button class="btn btn-primary" onclick="deleteRow()">Eliminar linea</button>
-      <button class="btn btn-primary" onclick="addColumn()">Añadir columna</button>
-      <button class="btn btn-primary" onclick="deleteColumn()">Eliminar columna</button>
-      <button class="btn-primary btn" onclick="submitButacas()">Guardar cambios</button>
+      <button class="btn btn-primary" onclick="addRow()" th:text="#{add-row}">Añadir linea</button>
+      <button class="btn btn-primary" onclick="deleteRow()" th:text="#{del-row}">Eliminar linea</button>
+      <button class="btn btn-primary" onclick="addColumn()" th:text="#{add-column}">Añadir columna</button>
+      <button class="btn btn-primary" onclick="deleteColumn()" th:text="#{del-column}">Eliminar columna</button>
+      <button class="btn-primary btn" onclick="submitButacas()" th:text="#{save-changes}">Guardar cambios</button>
       <a th:href="@{'/salas/' + ${sala.id}}" th:text="#{back}" class="btn btn-secondary">Volver</a>
     </div>
 
