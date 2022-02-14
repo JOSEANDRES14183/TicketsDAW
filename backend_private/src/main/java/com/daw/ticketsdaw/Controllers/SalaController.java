@@ -4,6 +4,7 @@ import com.daw.ticketsdaw.DTOs.SalaDTO;
 import com.daw.ticketsdaw.Entities.PropietarioSala;
 import com.daw.ticketsdaw.Entities.Sala;
 import com.daw.ticketsdaw.Entities.Usuario;
+import com.daw.ticketsdaw.Services.ButacaService;
 import com.daw.ticketsdaw.Services.CiudadService;
 import com.daw.ticketsdaw.Services.SalaService;
 import com.daw.ticketsdaw.Services.UsuarioService;
@@ -24,6 +25,8 @@ public class SalaController {
 
     @Autowired
     private SalaService salaService;
+    @Autowired
+    private ButacaService butacaService;
     @Autowired
     private CiudadService ciudadService;
     @Autowired
@@ -115,6 +118,7 @@ public class SalaController {
         Sala sala = salaService.read(id);
         if (checkPropietarioSala(sala,session)){
             System.out.println(butacas);
+            butacaService.deleteBySala(sala);
             salaService.setButacasJson(sala,butacas);
             return "redirect:/auth/register/propietario";
         }

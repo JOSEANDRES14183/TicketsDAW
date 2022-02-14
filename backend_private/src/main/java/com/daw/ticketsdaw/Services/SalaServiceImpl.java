@@ -1,19 +1,22 @@
 package com.daw.ticketsdaw.Services;
 
 import com.daw.ticketsdaw.Entities.Butaca;
+import com.daw.ticketsdaw.Entities.ButacaId;
 import com.daw.ticketsdaw.Entities.Sala;
+import com.daw.ticketsdaw.Entities.TipoButaca;
 import com.daw.ticketsdaw.Repositories.SalaRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -22,6 +25,9 @@ public class SalaServiceImpl implements SalaService{
 
     @Autowired
     private SalaRepository salaRepository;
+
+    @Autowired
+    private ButacaService butacaService;
 
     @Override
     public void create(Sala sala){ salaRepository.save(sala); }
@@ -53,11 +59,11 @@ public class SalaServiceImpl implements SalaService{
         int columns=0;
 
         for (Butaca butaca : butacas){
-            if(butaca.getPosY()>rows){
-                rows = butaca.getPosY();
+            if(butaca.getButacaId().getPosY()>rows){
+                rows = butaca.getButacaId().getPosY();
             }
-            if(butaca.getPosX()>columns){
-                columns = butaca.getPosX();
+            if(butaca.getButacaId().getPosX()>columns){
+                columns = butaca.getButacaId().getPosX();
             }
         }
 
@@ -68,7 +74,7 @@ public class SalaServiceImpl implements SalaService{
         }
 
         for (Butaca butaca: butacas){
-            layout.get(butaca.getPosY()).set(butaca.getPosX(),butaca);
+            layout.get(butaca.getButacaId().getPosY()).set(butaca.getButacaId().getPosX(),butaca);
         }
 
         ObjectMapper mapper = new ObjectMapper();
@@ -89,7 +95,32 @@ public class SalaServiceImpl implements SalaService{
 
     @Override
     public void setButacasJson(Sala sala, String json) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
+        JsonNode node = new ObjectMapper().readTree(json);
+        Iterator<JsonNode> iterator = node.iterator();
+        int counter = 1;
+
+        while (iterator.hasNext()){
+            Iterator<JsonNode> row = iterator.next().iterator();
+            while (row.hasNext()){
+                JsonNode cell = row.next();
+                if (!cell.isNull()){
+                    Butaca butaca = new Butaca();
+
+                    ButacaId butacaId = new ButacaId();
+                    butacaId.setSala(sala.getId());
+                    butacaId.setPosX(cell.get("butacaId").get("posX").intValue());
+                    butacaId.setPosY(cell.get("butacaId").get("posY").intValue());
+
+                    butaca.setButacaId(butacaId);
+                    butaca.setSala(sala);
+                    butaca.setNumButaca(counter);
+                    butaca.setTipoButaca(new TipoButaca(1));
+                    butacaService.save(butaca);
+                    counter++;
+                }
+            }
+        }
+
     }
 
 }

@@ -37,7 +37,7 @@
   if (butacas.length<2) {
     butacas = new Array(10);
     for (let i = 0; i < butacas.length; i++) {
-      butacas[i] = new Array(10);
+      butacas[i] = new Array(10).fill(null);
     }
   }
 
@@ -74,7 +74,7 @@
       butacas[y][x] = null;
       this.innerHTML=" ";
     } else {
-      butacas[y][x] = {posX: x, posY: y};
+      butacas[y][x] = {butacaId:{posX: x, posY: y}};
       this.innerHTML = "<i class=\"bi bi-circle-fill\"></i>"
     }
   }
