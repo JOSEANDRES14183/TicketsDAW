@@ -1,18 +1,37 @@
 <!DOCTYPE html>
 <html lang="es" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/layout :: head('Eventos')"></head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="Eventos">Placeholder</title>
+    <link rel="stylesheet" th:href="@{/css/customBootstrap.css}">
+    <link rel="stylesheet" th:href="@{/font/bootstrap-icons.css}">
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+    <link rel="stylesheet" th:href="@{/css/dataTables.bootstrap5.min.css}">
+    <link rel="stylesheet" th:href="@{/css/responsive.bootstrap5.min.css}">
+
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/jquery.dataTables.min.js}"></script>
+    <script th:src="@{/js/dataTables.bootstrap5.min.js}"></script>
+    <script th:src="@{/js/dataTables.responsive.min.js}"></script>
+    <script th:src="@{/js/responsive.bootstrap5.js}"></script>
+</head>
 <body>
 <header th:replace="fragments/layout :: header('Eventos')"></header>
 <main>
     <section class="container-md">
         <div th:replace="fragments/layout :: errorBox"></div>
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered table-striped w-100" id="dtTable">
+            <thead>
             <tr>
                 <th th:text="#{title}">Título</th>
                 <th th:text="#{hidden}">Oculto</th>
                 <th th:text="#{nominative}">Nominativo</th>
                 <th th:text="#{actions}">Acciones</th>
             </tr>
+            </thead>
+            <tbody>
             <tr th:each="evento: ${eventos}">
                 <td><a th:text="${evento.titulo}" th:href="'/eventos/' + ${evento.id}"></a></td>
                 <td th:text="${evento.estaOculto} ? #{yes} : #{no}"></td>
@@ -26,6 +45,7 @@
                     </a>
                 </td>
             </tr>
+            </tbody>
         </table>
 
         <a href="/eventos/create" th:text="'+'+#{evento-create}"
@@ -36,5 +56,12 @@
 </main>
 
 <footer th:replace="fragments/layout :: footer"></footer>
+<script>
+    $(document).ready(function (){
+        $("#dtTable").DataTable(
+            {responsive: true}
+        );
+    })
+</script>
 </body>
 </html>
