@@ -4,6 +4,7 @@ import com.daw.ticketsdaw.DTOs.*;
 
 import com.daw.ticketsdaw.Entities.*;
 import com.daw.ticketsdaw.Services.*;
+import org.apache.commons.lang3.time.DateUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -17,7 +18,9 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 @RequestMapping("/eventos")
@@ -301,6 +304,45 @@ public class EventoController {
         model.addAttribute("sesion", sesion);
         model.addAttribute("salas", salaService.readVisible());
         model.addAttribute("evento", evento);
+        return "eventos/sesiones/session-no-numerada-form";
+    }
+
+    @GetMapping({"/{eventoId}/sesiones_no_num/{sesionId}/copy"})
+    @Transactional(rollbackFor = {IOException.class})
+    public String copySesionNoNum(ModelMap model, @PathVariable Integer eventoId, @PathVariable int sesionId, HttpSession session) throws IOException {
+        Evento evento = eventosService.read(eventoId);
+
+        if(!checkOrganizador(evento, session))
+            return "redirect:/auth/login?error=unauthorized";
+
+        SesionNoNumerada sesion = (SesionNoNumerada) sesionService.read(sesionId);
+
+        if (!sesion.getEvento().equals(evento))
+            return "redirect:/auth/login?error=unauthorized";
+
+        SesionNoNumeradaDTO sesionNoNumeradaDTO = modelMapper.map(sesion, SesionNoNumeradaDTO.class);
+
+        sesionNoNumeradaDTO.setId(null);
+        sesionNoNumeradaDTO.setEstaOculto(true);
+
+        int finVentaDiffSeconds = (int) TimeUnit.SECONDS.convert( sesionNoNumeradaDTO.getFechaFinVenta().getTime() - sesionNoNumeradaDTO.getFechaIni().getTime(), TimeUnit.MILLISECONDS);
+        Date dateNow = new Date();
+        sesionNoNumeradaDTO.setFechaIni(dateNow);
+        sesionNoNumeradaDTO.setFechaFinVenta(DateUtils.addSeconds(dateNow, finVentaDiffSeconds));
+
+        List<String> nombreTipo = new ArrayList<>();
+        List<Integer> maxEntradasTipo = new ArrayList<>();
+        List<Float> precioTipo = new ArrayList<>();
+        for (var tipo:
+             sesion.getTiposEntrada()) {
+            nombreTipo.add(tipo.getPrimaryKey().getNombre());
+            maxEntradasTipo.add(tipo.getMaxEntradas());
+            precioTipo.add(tipo.getPrecio());
+        }
+        sesionNoNumeradaDTO.setNombreTipo(nombreTipo);
+        sesionNoNumeradaDTO.setMaxEntradasTipo(maxEntradasTipo);
+        sesionNoNumeradaDTO.setPrecioTipo(precioTipo);
+
         return "eventos/sesiones/session-no-numerada-form";
     }
 
