@@ -106,11 +106,14 @@ public class SalaController {
     }
 
     @GetMapping("{id}/butacas")
-    public String showButacasForm(ModelMap modelMap, @PathVariable("id") int salaId){
+    public String showButacasForm(ModelMap modelMap, @PathVariable("id") int salaId, HttpSession session){
         Sala sala = salaService.read(salaId);
-        modelMap.addAttribute("sala",sala);
-        modelMap.addAttribute("butacas",salaService.getButacasJson(sala));
-        return "salas/butacas-form";
+        if (checkPropietarioSala(sala,session)) {
+            modelMap.addAttribute("sala", sala);
+            modelMap.addAttribute("butacas", salaService.getButacasJson(sala));
+            return "salas/butacas-form";
+        }
+        return "redirect:/auth/login?error=unauthorized";
     }
 
     @PostMapping("{id}/butacas")
