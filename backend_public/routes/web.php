@@ -18,6 +18,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/eventos', function () {
-    return Evento::all();
-});
+//Route::get('/eventos', function () {
+//    return Evento::all();
+//});

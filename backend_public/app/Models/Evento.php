@@ -17,5 +17,10 @@ class Evento extends Model
     //https://laravel.com/docs/9.x/eloquent#introduction
     //public $incrementing = false;
 
+    public function sesiones()
+    {
+        return $this->hasMany(Sesion::class,'id_evento');
+    }
+
 
 }
