@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data
-public class SesionDTO {
+public abstract class SesionDTO {
     @Transient
     private final String dateTimeFormat = "yyyy-MM-dd'T'HH:mm";
 
