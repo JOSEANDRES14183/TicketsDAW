@@ -5,7 +5,7 @@ function EventoCard(props){
     return(
         <Card>
             <CardBody>
-              <CardTitle tag={"h5"}>
+              <CardTitle className={"border-bootom"} tag={"h5"}>
                   {props.evento.titulo}
               </CardTitle>
               <CardText>
