@@ -10,6 +10,6 @@ import java.util.List;
 @Entity
 @Table(name = "sesion_no_numerada")
 public class SesionNoNumerada extends Sesion{
-    @OneToMany(mappedBy = "entitySesion", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "entitySesion", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     List<TipoEntrada> tiposEntrada;
 }
