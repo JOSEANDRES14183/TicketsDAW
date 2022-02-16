@@ -13,7 +13,7 @@ function App() {
 
     useEffect(()=>{
         setLoading(true);
-        axios.get("http://ticketsdev.test/eventos")
+        axios.get("http://" + process.env.REACT_APP_API_HOST + "/api/eventos")
             .then(result =>
                 setData(result.data),
                 setLoading(false),
