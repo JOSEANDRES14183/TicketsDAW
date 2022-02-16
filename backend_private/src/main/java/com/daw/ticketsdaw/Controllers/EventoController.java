@@ -320,21 +320,33 @@ public class EventoController {
         if (!sesion.getEvento().equals(evento))
             return "redirect:/auth/login?error=unauthorized";
 
+        SesionNoNumeradaDTO sesionNoNumeradaDTO = generateNoNumeradaDTO(sesion, new Date());
+
+        //Generate SesionNoNumerada from DTO
+
+        List<SesionNoNumeradaDTO> sesiones = new ArrayList<>();
+        sesiones.add(sesionNoNumeradaDTO);
+
+        boolean savedWithoutOverlap = saveNoNumCopies(evento, sesiones);
+
+        return "redirect:/eventos/" + eventoId + (savedWithoutOverlap ? "" : "?warning=overlap");
+    }
+
+    private SesionNoNumeradaDTO generateNoNumeradaDTO(SesionNoNumerada sesion, Date dateNew){
         SesionNoNumeradaDTO sesionNoNumeradaDTO = modelMapper.map(sesion, SesionNoNumeradaDTO.class);
 
         sesionNoNumeradaDTO.setId(null);
         sesionNoNumeradaDTO.setEstaOculto(true);
 
         int finVentaDiffSeconds = (int) TimeUnit.SECONDS.convert( sesionNoNumeradaDTO.getFechaFinVenta().getTime() - sesionNoNumeradaDTO.getFechaIni().getTime(), TimeUnit.MILLISECONDS);
-        Date dateNow = new Date();
-        sesionNoNumeradaDTO.setFechaIni(dateNow);
-        sesionNoNumeradaDTO.setFechaFinVenta(DateUtils.addSeconds(dateNow, finVentaDiffSeconds));
+        sesionNoNumeradaDTO.setFechaIni(dateNew);
+        sesionNoNumeradaDTO.setFechaFinVenta(DateUtils.addSeconds(dateNew, finVentaDiffSeconds));
 
         List<String> nombreTipo = new ArrayList<>();
         List<Integer> maxEntradasTipo = new ArrayList<>();
         List<Float> precioTipo = new ArrayList<>();
         for (var tipo:
-             sesion.getTiposEntrada()) {
+                sesion.getTiposEntrada()) {
             nombreTipo.add(tipo.getPrimaryKey().getNombre());
             maxEntradasTipo.add(tipo.getMaxEntradas());
             precioTipo.add(tipo.getPrecio());
@@ -343,7 +355,27 @@ public class EventoController {
         sesionNoNumeradaDTO.setMaxEntradasTipo(maxEntradasTipo);
         sesionNoNumeradaDTO.setPrecioTipo(precioTipo);
 
-        return "eventos/sesiones/session-no-numerada-form";
+        return sesionNoNumeradaDTO;
+    }
+
+    private boolean saveNoNumCopies(Evento evento, List<SesionNoNumeradaDTO> sesionNoNumeradaDTOs){
+        boolean savedWithoutOverlap = true;
+        for(var sesionNoNumeradaDTO : sesionNoNumeradaDTOs){
+            SesionNoNumerada sesionCopy = modelMapper.map(sesionNoNumeradaDTO, SesionNoNumerada.class);
+
+            sesionCopy.setEvento(evento);
+
+            if(!sesionService.save(sesionCopy))
+                savedWithoutOverlap = false;
+
+            List<TipoEntrada> tipoEntradaList = generateTiposEntrada(sesionCopy, sesionNoNumeradaDTO);
+
+            for (var tipo :
+                    tipoEntradaList) {
+                tipoEntradaService.save(tipo);
+            }
+        }
+        return savedWithoutOverlap;
     }
 
     @PostMapping({"/{eventoId}/sesiones_no_num"})
