@@ -9,7 +9,7 @@
     <section class="container-md">
         <form method="POST" th:action="${returnURL}" th:object="${copyDTO}" class="needs-validation" novalidate>
             <div class="mb-3">
-                <label th:for="*{endDate}" class="form-label h6 text-primary" th:text="#{fecha-fin}"></label>
+                <label th:for="*{endDate}" class="form-label" th:text="#{fecha-fin}"></label>
                 <input type="datetime-local" class="form-control w-50" th:field="*{endDate}" required>
             </div>
             <div class="mb-3">

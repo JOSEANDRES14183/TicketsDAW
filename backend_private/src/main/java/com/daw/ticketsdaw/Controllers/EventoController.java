@@ -321,7 +321,7 @@ public class EventoController {
 
         model.addAttribute("copyDTO", new CopySesionDTO());
         model.addAttribute("evento", evento);
-        model.addAttribute("returnURL", "eventos/" + eventoId + "/sesiones_no_num/" + sesionId + "/copy");
+        model.addAttribute("returnURL", "/eventos/" + eventoId + "/sesiones_no_num/" + sesionId + "/copy");
         return "eventos/sesiones/copy/form";
     }
 
@@ -340,7 +340,9 @@ public class EventoController {
 
         List<SesionNoNumeradaDTO> sesiones = new ArrayList<>();
 
-        for (Date d = sesion.getFechaIni(); d.before(copySesionDTO.getEndDate()); d = DateUtils.addDays(d, copySesionDTO.getNumDays())) {
+        int daysBetween = copySesionDTO.getNumDays();
+
+        for (Date d = DateUtils.addDays(sesion.getFechaIni(), daysBetween); d.before(copySesionDTO.getEndDate()); d = DateUtils.addDays(d, daysBetween)) {
             sesiones.add(generateNoNumeradaDTO(sesion, d));
         }
 
