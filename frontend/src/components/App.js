@@ -35,12 +35,14 @@ function App() {
     <>
         <Header />
         <main>
-            <section className={"mt-4 container-md d-flex justify-content-center gap-3"}>
-                {data.map(function (item,key){
-                    return (
-                        <EventoCard key={key} evento={item}/>
-                    )
-                })}
+            <section className={"mt-4 container-md"}>
+                <div className={"row"}>
+                    {data.map(function (item,key){
+                        return (
+                            <EventoCard key={key} evento={item}/>
+                        )
+                    })}
+                </div>
             </section>
         </main>
         <Footer />

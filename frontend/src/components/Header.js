@@ -53,7 +53,7 @@ function Header(){
                             </NavLink>
                         </NavItem>
                     </Nav>
-                    <input className={"col-3 rounded-pill p-1 border-1 border-dark"}
+                    <input className={"px-3 col-3 rounded-pill p-1 border-1 border-dark"}
                            type="text"
                            placeholder={"search..."}/>
                     </div>
