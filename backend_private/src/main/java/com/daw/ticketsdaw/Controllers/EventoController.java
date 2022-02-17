@@ -308,8 +308,7 @@ public class EventoController {
     }
 
     @GetMapping({"/{eventoId}/sesiones_no_num/{sesionId}/copy"})
-    @Transactional(rollbackFor = {IOException.class})
-    public String copySesionNoNum(ModelMap model, @PathVariable Integer eventoId, @PathVariable int sesionId, HttpSession session) throws IOException {
+    public String copyNoNumForm(ModelMap model, @PathVariable Integer eventoId, @PathVariable Integer sesionId, HttpSession session){
         Evento evento = eventosService.read(eventoId);
 
         if(!checkOrganizador(evento, session))
@@ -320,12 +319,32 @@ public class EventoController {
         if (!sesion.getEvento().equals(evento))
             return "redirect:/auth/login?error=unauthorized";
 
-        SesionNoNumeradaDTO sesionNoNumeradaDTO = generateNoNumeradaDTO(sesion, new Date());
+        model.addAttribute("copyDTO", new CopySesionDTO());
+        model.addAttribute("evento", evento);
+        model.addAttribute("returnURL", "eventos/" + eventoId + "/sesiones_no_num/" + sesionId + "/copy");
+        return "eventos/sesiones/copy/form";
+    }
 
-        //Generate SesionNoNumerada from DTO
+    @PostMapping({"/{eventoId}/sesiones_no_num/{sesionId}/copy"})
+    @Transactional(rollbackFor = {IOException.class})
+    public String copySesionNoNum(@Valid @ModelAttribute CopySesionDTO copySesionDTO, BindingResult bindingResult, @PathVariable Integer eventoId, @PathVariable int sesionId, HttpSession session) throws IOException {
+        Evento evento = eventosService.read(eventoId);
+
+        if(!checkOrganizador(evento, session))
+            return "redirect:/auth/login?error=unauthorized";
+
+        SesionNoNumerada sesion = (SesionNoNumerada) sesionService.read(sesionId);
+
+        if (!sesion.getEvento().equals(evento))
+            return "redirect:/auth/login?error=unauthorized";
 
         List<SesionNoNumeradaDTO> sesiones = new ArrayList<>();
-        sesiones.add(sesionNoNumeradaDTO);
+
+        for (Date d = sesion.getFechaIni(); d.before(copySesionDTO.getEndDate()); d = DateUtils.addDays(d, copySesionDTO.getNumDays())) {
+            sesiones.add(generateNoNumeradaDTO(sesion, d));
+        }
+
+        //Generate SesionNoNumerada from DTO
 
         boolean savedWithoutOverlap = saveNoNumCopies(evento, sesiones);
 
