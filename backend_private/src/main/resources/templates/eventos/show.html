@@ -329,12 +329,11 @@
             }
             document.querySelector("#additionalInfo").innerHTML=text;
             document.querySelector("#updateSesionBtn").setAttribute("href", "/eventos/"+[[${evento.id}]]+"/sesiones_no_num/"+sesion["id"]+"/update");
-            document.querySelector("#copySesionBtn").setAttribute("href", "/eventos/"+[[${evento.id}]]+"/sesiones_no_num/"+sesion["id"]+"/copy");
         } else {
             document.querySelector("#updateSesionBtn").setAttribute("href", "/eventos/"+[[${evento.id}]]+"/sesiones_num/"+sesion["id"]+"/update");
-            document.querySelector("#copySesionBtn").setAttribute("href", "/eventos/"+[[${evento.id}]]+"/sesiones_num/"+sesion["id"]+"/copy");
         }
 
+        document.querySelector("#copySesionBtn").setAttribute("href", "/eventos/"+[[${evento.id}]]+"/sesiones/"+sesion["id"]+"/copy");
         document.querySelector("#deleteSesionBtn").setAttribute("href", "/eventos/"+[[${evento.id}]]+"/sesiones/"+sesion["id"]+"/delete");
 
     }

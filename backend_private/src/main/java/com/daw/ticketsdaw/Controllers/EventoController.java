@@ -307,93 +307,108 @@ public class EventoController {
         return "eventos/sesiones/session-no-numerada-form";
     }
 
-    @GetMapping({"/{eventoId}/sesiones_no_num/{sesionId}/copy"})
-    public String copyNoNumForm(ModelMap model, @PathVariable Integer eventoId, @PathVariable Integer sesionId, HttpSession session){
+    @GetMapping({"/{eventoId}/sesiones/{sesionId}/copy"})
+    public String copySesionForm(ModelMap model, @PathVariable Integer eventoId, @PathVariable Integer sesionId, HttpSession session){
         Evento evento = eventosService.read(eventoId);
 
         if(!checkOrganizador(evento, session))
             return "redirect:/auth/login?error=unauthorized";
 
-        SesionNoNumerada sesion = (SesionNoNumerada) sesionService.read(sesionId);
+        Sesion sesion = sesionService.read(sesionId);
 
         if (!sesion.getEvento().equals(evento))
             return "redirect:/auth/login?error=unauthorized";
 
         model.addAttribute("copyDTO", new CopySesionDTO());
-        model.addAttribute("evento", evento);
         model.addAttribute("returnURL", "/eventos/" + eventoId + "/sesiones_no_num/" + sesionId + "/copy");
         return "eventos/sesiones/copy/form";
     }
 
-    @PostMapping({"/{eventoId}/sesiones_no_num/{sesionId}/copy"})
+    @PostMapping({"/{eventoId}/sesiones/{sesionId}/copy"})
     @Transactional(rollbackFor = {IOException.class})
-    public String copySesionNoNum(@Valid @ModelAttribute CopySesionDTO copySesionDTO, BindingResult bindingResult, @PathVariable Integer eventoId, @PathVariable int sesionId, HttpSession session) throws IOException {
+    public String copySesion(@Valid @ModelAttribute CopySesionDTO copySesionDTO, BindingResult bindingResult, @PathVariable Integer eventoId, @PathVariable int sesionId, HttpSession session) throws IOException {
         Evento evento = eventosService.read(eventoId);
 
         if(!checkOrganizador(evento, session))
             return "redirect:/auth/login?error=unauthorized";
 
-        SesionNoNumerada sesion = (SesionNoNumerada) sesionService.read(sesionId);
+        Sesion sesion = sesionService.read(sesionId);
 
         if (!sesion.getEvento().equals(evento))
             return "redirect:/auth/login?error=unauthorized";
 
-        List<SesionNoNumeradaDTO> sesiones = new ArrayList<>();
+        List<SesionDTO> sesiones = new ArrayList<>();
 
         int daysBetween = copySesionDTO.getNumDays();
 
         for (Date d = DateUtils.addDays(sesion.getFechaIni(), daysBetween); d.before(copySesionDTO.getEndDate()); d = DateUtils.addDays(d, daysBetween)) {
-            sesiones.add(generateNoNumeradaDTO(sesion, d));
+            sesiones.add(generateSesionDTO(sesion, d));
         }
 
         //Generate SesionNoNumerada from DTO
 
-        boolean savedWithoutOverlap = saveNoNumCopies(evento, sesiones);
+        boolean savedWithoutOverlap = saveSesionCopies(evento, sesiones);
 
         return "redirect:/eventos/" + eventoId + (savedWithoutOverlap ? "" : "?warning=overlap");
     }
 
-    private SesionNoNumeradaDTO generateNoNumeradaDTO(SesionNoNumerada sesion, Date dateNew){
-        SesionNoNumeradaDTO sesionNoNumeradaDTO = modelMapper.map(sesion, SesionNoNumeradaDTO.class);
+    private SesionDTO generateSesionDTO(Sesion sesion, Date dateNew){
+        SesionDTO sesionDTO = null;
+        if(sesion instanceof SesionNoNumerada)
+            sesionDTO = modelMapper.map(sesion, SesionNoNumeradaDTO.class);
+        if(sesion instanceof SesionNumerada)
+            sesionDTO = modelMapper.map(sesion, SesionNumeradaDTO.class);
 
-        sesionNoNumeradaDTO.setId(null);
-        sesionNoNumeradaDTO.setEstaOculto(true);
+        sesionDTO.setId(null);
+        sesionDTO.setEstaOculto(true);
 
-        int finVentaDiffSeconds = (int) TimeUnit.SECONDS.convert( sesionNoNumeradaDTO.getFechaFinVenta().getTime() - sesionNoNumeradaDTO.getFechaIni().getTime(), TimeUnit.MILLISECONDS);
-        sesionNoNumeradaDTO.setFechaIni(dateNew);
-        sesionNoNumeradaDTO.setFechaFinVenta(DateUtils.addSeconds(dateNew, finVentaDiffSeconds));
+        int finVentaDiffSeconds = (int) TimeUnit.SECONDS.convert( sesionDTO.getFechaFinVenta().getTime() - sesionDTO.getFechaIni().getTime(), TimeUnit.MILLISECONDS);
+        sesionDTO.setFechaIni(dateNew);
+        sesionDTO.setFechaFinVenta(DateUtils.addSeconds(dateNew, finVentaDiffSeconds));
 
-        List<String> nombreTipo = new ArrayList<>();
-        List<Integer> maxEntradasTipo = new ArrayList<>();
-        List<Float> precioTipo = new ArrayList<>();
-        for (var tipo:
-                sesion.getTiposEntrada()) {
-            nombreTipo.add(tipo.getPrimaryKey().getNombre());
-            maxEntradasTipo.add(tipo.getMaxEntradas());
-            precioTipo.add(tipo.getPrecio());
+
+        if(sesionDTO instanceof SesionNoNumeradaDTO) {
+            SesionNoNumeradaDTO sesionNoNumeradaDTO = (SesionNoNumeradaDTO) sesionDTO;
+            SesionNoNumerada sesionNoNumerada = (SesionNoNumerada) sesion;
+
+            List<String> nombreTipo = new ArrayList<>();
+            List<Integer> maxEntradasTipo = new ArrayList<>();
+            List<Float> precioTipo = new ArrayList<>();
+            for (var tipo:
+                    sesionNoNumerada.getTiposEntrada()) {
+                nombreTipo.add(tipo.getPrimaryKey().getNombre());
+                maxEntradasTipo.add(tipo.getMaxEntradas());
+                precioTipo.add(tipo.getPrecio());
+            }
+            sesionNoNumeradaDTO.setNombreTipo(nombreTipo);
+            sesionNoNumeradaDTO.setMaxEntradasTipo(maxEntradasTipo);
+            sesionNoNumeradaDTO.setPrecioTipo(precioTipo);
         }
-        sesionNoNumeradaDTO.setNombreTipo(nombreTipo);
-        sesionNoNumeradaDTO.setMaxEntradasTipo(maxEntradasTipo);
-        sesionNoNumeradaDTO.setPrecioTipo(precioTipo);
 
-        return sesionNoNumeradaDTO;
+        return sesionDTO;
     }
 
-    private boolean saveNoNumCopies(Evento evento, List<SesionNoNumeradaDTO> sesionNoNumeradaDTOs){
+    private boolean saveSesionCopies(Evento evento, List<SesionDTO> sesionDTOs){
         boolean savedWithoutOverlap = true;
-        for(var sesionNoNumeradaDTO : sesionNoNumeradaDTOs){
-            SesionNoNumerada sesionCopy = modelMapper.map(sesionNoNumeradaDTO, SesionNoNumerada.class);
+        for(var sesionDTO : sesionDTOs){
+            Sesion sesionCopy = null;
+            if(sesionDTO instanceof SesionNoNumeradaDTO)
+                sesionCopy = modelMapper.map(sesionDTO, SesionNoNumerada.class);
+            if(sesionDTO instanceof SesionNumeradaDTO)
+                sesionCopy = modelMapper.map(sesionDTO, SesionNumerada.class);
 
             sesionCopy.setEvento(evento);
 
             if(!sesionService.save(sesionCopy))
                 savedWithoutOverlap = false;
 
-            List<TipoEntrada> tipoEntradaList = generateTiposEntrada(sesionCopy, sesionNoNumeradaDTO);
+            if(sesionCopy instanceof SesionNoNumerada){
+                List<TipoEntrada> tipoEntradaList = generateTiposEntrada((SesionNoNumerada) sesionCopy, (SesionNoNumeradaDTO) sesionDTO);
 
-            for (var tipo :
-                    tipoEntradaList) {
-                tipoEntradaService.save(tipo);
+                for (var tipo :
+                        tipoEntradaList) {
+                    tipoEntradaService.save(tipo);
+                }
             }
         }
         return savedWithoutOverlap;

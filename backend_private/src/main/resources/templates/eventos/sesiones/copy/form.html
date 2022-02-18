@@ -7,7 +7,7 @@
 
 <main>
     <section class="container-md">
-        <form method="POST" th:action="${returnURL}" th:object="${copyDTO}" class="needs-validation" novalidate>
+        <form method="POST" th:action="'/eventos/' + ${eventoId} + '/sesiones/' + ${sesionId} + '/copy'" th:object="${copyDTO}" class="needs-validation" novalidate>
             <div class="mb-3">
                 <label th:for="*{endDate}" class="form-label" th:text="#{fecha-fin}"></label>
                 <input type="datetime-local" class="form-control w-50" th:field="*{endDate}" required>
@@ -17,7 +17,7 @@
                 <input type="number" class="form-control w-25" th:field="*{numDays}" required>
             </div>
             <button type="submit" class="btn btn-primary" th:text="#{save}"></button>
-            <a class="btn btn-secondary" th:href="'/eventos/' + ${evento.id}" th:text="#{back}">Volver</a>
+            <a class="btn btn-secondary" th:href="'/eventos/' + ${eventoId}" th:text="#{back}">Volver</a>
         </form>
     </section>
 </main>
