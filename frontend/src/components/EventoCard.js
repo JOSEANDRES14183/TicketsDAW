@@ -1,22 +1,17 @@
-import {Card, CardBody, CardImg, CardText, CardTitle} from "reactstrap";
-
 function EventoCard(props){
 
     return(
-        <Card className={"col-6 col-md-3 border-0 mb-3"}>
-            <div className={"row"}>
-                <CardBody className={"col-7 border"}>
-                    <CardTitle tag={"h6"}>
-                        {props.evento.titulo}
-                    </CardTitle>
-                    <CardText>
-                        {props.evento.descripcion}
-                    </CardText>
-                </CardBody>
-                <CardImg className={"col-4 img-fluid"}
-                         src={require(process.env.REACT_APP_IMG_DIR + props.evento.foto_perfil.nombre_archivo)}/>
-            </div>
-        </Card>
+            <article className={"col-12 col-md-6 mb-1 p-2 evento overflow-hidden"}>
+                <div className={"d-flex border border-secondary h-100"}>
+                    <img className={"border-1 border-end img-fluid"}
+                         src={'http://'+process.env.REACT_APP_API_HOST + '/api/media/' +props.evento.foto_perfil.nombre_archivo}/>
+                    <div className={"d-flex flex-column p-3"}>
+                        <h6>{props.evento.titulo}</h6>
+                        <p>{props.evento.descripcion}</p>
+                        <p>{props.evento.categoria.nombre}</p>
+                    </div>
+                </div>
+            </article>
     )
 }
 

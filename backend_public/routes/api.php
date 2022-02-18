@@ -3,6 +3,7 @@
 use App\Http\Controllers\EventoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RecursoMediaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('eventos', [EventoController::class,'index']);
 Route::get('eventos/{id}', [EventoController::class,'show']);
+
+Route::get('media/{filename}', [RecursoMediaController::class,'image']);

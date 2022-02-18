@@ -34,30 +34,6 @@ function Header(){
                 </Nav>
                 <Button color={"primary"}>CREAR UN EVENTO</Button>
             </Navbar>
-            <div className={"py-3 container-md"}>
-                <div className={"row"}>
-                    <Nav className={"col-8"}>
-                        <NavItem>
-                            <NavLink>
-                                Teatro
-                            </NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink>
-                                Musical
-                            </NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink>
-                                Cine
-                            </NavLink>
-                        </NavItem>
-                    </Nav>
-                    <input className={"px-3 col-3 rounded-pill p-1 border-1 border-dark"}
-                           type="text"
-                           placeholder={"search..."}/>
-                    </div>
-                </div>
         </header>
     );
 }
