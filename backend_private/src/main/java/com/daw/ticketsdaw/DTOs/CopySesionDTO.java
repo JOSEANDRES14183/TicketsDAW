@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Transient;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -13,6 +14,7 @@ public class CopySesionDTO {
     private final String dateTimeFormat = "yyyy-MM-dd'T'HH:mm";
 
     @NotNull
+    @Min(1)
     private Integer numDays;
 
     @NotNull
