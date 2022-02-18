@@ -337,6 +337,9 @@ public class EventoController {
         if (!sesion.getEvento().equals(evento))
             return "redirect:/auth/login?error=unauthorized";
 
+        if(bindingResult.hasErrors())
+            return "redirect:/eventos/" + eventoId + "?error=validation";
+
         List<SesionDTO> sesiones = new ArrayList<>();
 
         int daysBetween = copySesionDTO.getNumDays();

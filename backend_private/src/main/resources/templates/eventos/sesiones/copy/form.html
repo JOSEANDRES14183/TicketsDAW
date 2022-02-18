@@ -14,7 +14,7 @@
             </div>
             <div class="mb-3">
                 <label th:for="nDays" class="form-label" th:text="#{everyNDays}">Cada N dias</label>
-                <input type="number" class="form-control w-25" th:field="*{numDays}" required>
+                <input type="number" class="form-control w-25" th:field="*{numDays}" min="1" required>
             </div>
             <button type="submit" class="btn btn-primary" th:text="#{save}"></button>
             <a class="btn btn-secondary" th:href="'/eventos/' + ${eventoId}" th:text="#{back}">Volver</a>
