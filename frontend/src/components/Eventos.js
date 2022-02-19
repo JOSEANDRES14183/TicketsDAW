@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {Nav, NavItem, NavLink} from "reactstrap";
+import {Nav, NavItem, NavLink, Spinner} from "reactstrap";
 import EventoList from "./EventoList";
 import SearchFilter from "./SearchFilter";
 
 function Eventos(){
 
-    const [isLoading, setLoading] = useState(false);
+    const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     const [eventos,setEventos] = useState([]);
@@ -18,18 +18,26 @@ function Eventos(){
     useEffect(()=>{
         setLoading(true);
         axios.get("http://" + process.env.REACT_APP_API_HOST + "/api/eventos")
-            .then(result =>
-                    setEventos(result.data),
-                setLoading(false),
-            )
-            .catch(error =>
-                    setError(error),
-                setLoading(false)
-            );
+            .then(result => {
+                setEventos(result.data);
+                setLoading(false);
+            })
+            .catch(error => {
+                setError(error);
+                setLoading(false);
+            });
     },[]);
 
     if (isLoading){
-        return <p>Loading...</p>
+        return (
+            <div className={"container-md my-3"}>
+                <Spinner
+                    type={"border"}
+                    color={"primary"}>
+                    Loading...
+                </Spinner>
+            </div>
+        );
     }
 
     if(error){

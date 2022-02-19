@@ -1,3 +1,5 @@
+import {Link} from "react-router-dom";
+
 function EventoCard(props){
 
     return(
@@ -9,6 +11,7 @@ function EventoCard(props){
                         <h6>{props.evento.titulo}</h6>
                         <p className={"text-secondary fw-bold"}>{props.evento.categoria.nombre}</p>
                         <p>{props.evento.descripcion}</p>
+                        <Link to={"/"+props.evento.id}>Ve al evento</Link>
                     </div>
                 </div>
             </article>

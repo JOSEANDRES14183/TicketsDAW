@@ -14,7 +14,7 @@ class EventoController extends Controller
 
     public function show($id)
     {
-        return Evento::find($id);
+        return Evento::with('fotoPerfil')->find($id);
     }
 
 
