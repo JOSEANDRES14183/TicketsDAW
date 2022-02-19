@@ -46,7 +46,7 @@ build/
 /src/main/resources/static/font/bootstrap-icons.css
 /src/main/resources/static/font/fonts/*
 
-/src/main/resources/application.properties
+/src/main/resources/application*.properties
 
 /node
 /node_modules

@@ -1,5 +1,6 @@
 package com.daw.ticketsdaw.Services;
 
+import com.daw.ticketsdaw.Entities.Evento;
 import com.daw.ticketsdaw.Entities.Sesion;
 import com.daw.ticketsdaw.Exceptions.InvalidSaveException;
 import com.daw.ticketsdaw.Repositories.SesionRepository;
@@ -34,7 +35,7 @@ public class SesionService {
 
     private boolean checkDateAvailability(Sesion newSesion){
         //Possible optimization https://stackoverflow.com/questions/22007341/spring-jpa-selecting-specific-columns
-        List<Sesion> sesiones = sesionRepository.findAll();
+        List<Sesion> sesiones = sesionRepository.findAllBySala(newSesion.getSala());
         for (var sesion : sesiones) {
             if(sesion.getId() != newSesion.getId() && checkSesionOverlap(sesion, newSesion))
                 return false;
@@ -59,5 +60,9 @@ public class SesionService {
 
     public void delete(Sesion sesion){
         sesionRepository.delete(sesion);
+    }
+
+    public long countPublicByEvento(Evento evento){
+        return sesionRepository.countByEventoAndEstaOcultoIsFalse(evento);
     }
 }

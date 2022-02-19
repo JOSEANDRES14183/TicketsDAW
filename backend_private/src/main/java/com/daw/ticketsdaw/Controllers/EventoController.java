@@ -4,6 +4,7 @@ import com.daw.ticketsdaw.DTOs.*;
 
 import com.daw.ticketsdaw.Entities.*;
 import com.daw.ticketsdaw.Services.*;
+import org.apache.commons.lang3.time.DateUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -17,7 +18,9 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 @RequestMapping("/eventos")
@@ -115,7 +118,7 @@ public class EventoController {
             if(!eventoPrevState.isEstaOculto())
                 return "redirect:/eventos?error=edit_visible";
 
-            if(!checkOrganizador(evento, session)){
+            if(!checkOrganizador(eventoPrevState, session)){
                 return "redirect:/auth/login?error=unauthorized";
             }
         }
@@ -131,6 +134,16 @@ public class EventoController {
             model.addAttribute("categorias", categoriaService.read());
             model.addAttribute("error", "Validation error");
             return "eventos/create";
+        }
+
+        //Check mandatory fields if Evento is visible
+        if(!eventoDTO.isEstaOculto()){
+            if(!(eventoDTO.getId() != null && sesionService.countPublicByEvento(eventosService.read(eventoDTO.getId())) > 0)){
+                model.addAttribute("evento", evento);
+                model.addAttribute("categorias", categoriaService.read());
+                model.addAttribute("error", "Validation error: You can't set an event to public without having public sessions in it");
+                return "eventos/create";
+            }
         }
 
         RecursoMedia fotoPerfil = null;
@@ -304,6 +317,116 @@ public class EventoController {
         return "eventos/sesiones/session-no-numerada-form";
     }
 
+    @GetMapping({"/{eventoId}/sesiones/{sesionId}/copy"})
+    public String copySesionForm(ModelMap model, @PathVariable Integer eventoId, @PathVariable Integer sesionId, HttpSession session){
+        Evento evento = eventosService.read(eventoId);
+
+        if(!checkOrganizador(evento, session))
+            return "redirect:/auth/login?error=unauthorized";
+
+        Sesion sesion = sesionService.read(sesionId);
+
+        if (!sesion.getEvento().equals(evento))
+            return "redirect:/auth/login?error=unauthorized";
+
+        model.addAttribute("copyDTO", new CopySesionDTO());
+        model.addAttribute("returnURL", "/eventos/" + eventoId + "/sesiones_no_num/" + sesionId + "/copy");
+        return "eventos/sesiones/copy/form";
+    }
+
+    @PostMapping({"/{eventoId}/sesiones/{sesionId}/copy"})
+    @Transactional(rollbackFor = {IOException.class})
+    public String copySesion(@Valid @ModelAttribute CopySesionDTO copySesionDTO, BindingResult bindingResult, @PathVariable Integer eventoId, @PathVariable int sesionId, HttpSession session) throws IOException {
+        Evento evento = eventosService.read(eventoId);
+
+        if(!checkOrganizador(evento, session))
+            return "redirect:/auth/login?error=unauthorized";
+
+        Sesion sesion = sesionService.read(sesionId);
+
+        if (!sesion.getEvento().equals(evento))
+            return "redirect:/auth/login?error=unauthorized";
+
+        if(bindingResult.hasErrors())
+            return "redirect:/eventos/" + eventoId + "?error=validation";
+
+        List<SesionDTO> sesiones = new ArrayList<>();
+
+        int daysBetween = copySesionDTO.getNumDays();
+
+        for (Date d = DateUtils.addDays(sesion.getFechaIni(), daysBetween); d.before(copySesionDTO.getEndDate()); d = DateUtils.addDays(d, daysBetween)) {
+            sesiones.add(generateSesionDTO(sesion, d));
+        }
+
+        //Generate SesionNoNumerada from DTO
+
+        boolean savedWithoutOverlap = saveSesionCopies(evento, sesiones);
+
+        return "redirect:/eventos/" + eventoId + (savedWithoutOverlap ? "" : "?warning=overlap");
+    }
+
+    private SesionDTO generateSesionDTO(Sesion sesion, Date dateNew){
+        SesionDTO sesionDTO = null;
+        if(sesion instanceof SesionNoNumerada)
+            sesionDTO = modelMapper.map(sesion, SesionNoNumeradaDTO.class);
+        if(sesion instanceof SesionNumerada)
+            sesionDTO = modelMapper.map(sesion, SesionNumeradaDTO.class);
+
+        sesionDTO.setId(null);
+        sesionDTO.setEstaOculto(true);
+
+        int finVentaDiffSeconds = (int) TimeUnit.SECONDS.convert( sesionDTO.getFechaFinVenta().getTime() - sesionDTO.getFechaIni().getTime(), TimeUnit.MILLISECONDS);
+        sesionDTO.setFechaIni(dateNew);
+        sesionDTO.setFechaFinVenta(DateUtils.addSeconds(dateNew, finVentaDiffSeconds));
+
+
+        if(sesionDTO instanceof SesionNoNumeradaDTO) {
+            SesionNoNumeradaDTO sesionNoNumeradaDTO = (SesionNoNumeradaDTO) sesionDTO;
+            SesionNoNumerada sesionNoNumerada = (SesionNoNumerada) sesion;
+
+            List<String> nombreTipo = new ArrayList<>();
+            List<Integer> maxEntradasTipo = new ArrayList<>();
+            List<Float> precioTipo = new ArrayList<>();
+            for (var tipo:
+                    sesionNoNumerada.getTiposEntrada()) {
+                nombreTipo.add(tipo.getPrimaryKey().getNombre());
+                maxEntradasTipo.add(tipo.getMaxEntradas());
+                precioTipo.add(tipo.getPrecio());
+            }
+            sesionNoNumeradaDTO.setNombreTipo(nombreTipo);
+            sesionNoNumeradaDTO.setMaxEntradasTipo(maxEntradasTipo);
+            sesionNoNumeradaDTO.setPrecioTipo(precioTipo);
+        }
+
+        return sesionDTO;
+    }
+
+    private boolean saveSesionCopies(Evento evento, List<SesionDTO> sesionDTOs){
+        boolean savedWithoutOverlap = true;
+        for(var sesionDTO : sesionDTOs){
+            Sesion sesionCopy = null;
+            if(sesionDTO instanceof SesionNoNumeradaDTO)
+                sesionCopy = modelMapper.map(sesionDTO, SesionNoNumerada.class);
+            if(sesionDTO instanceof SesionNumeradaDTO)
+                sesionCopy = modelMapper.map(sesionDTO, SesionNumerada.class);
+
+            sesionCopy.setEvento(evento);
+
+            if(!sesionService.save(sesionCopy))
+                savedWithoutOverlap = false;
+
+            if(sesionCopy instanceof SesionNoNumerada){
+                List<TipoEntrada> tipoEntradaList = generateTiposEntrada((SesionNoNumerada) sesionCopy, (SesionNoNumeradaDTO) sesionDTO);
+
+                for (var tipo :
+                        tipoEntradaList) {
+                    tipoEntradaService.save(tipo);
+                }
+            }
+        }
+        return savedWithoutOverlap;
+    }
+
     @PostMapping({"/{eventoId}/sesiones_no_num"})
     @Transactional(rollbackFor = {Exception.class})
     public String saveSesionNoNum(ModelMap model, @Valid @ModelAttribute SesionNoNumeradaDTO sesionDTO, BindingResult bindingResult, @PathVariable Integer eventoId, HttpSession session) throws IOException {
@@ -331,6 +454,22 @@ public class EventoController {
             model.addAttribute("sesion", sesion);
             model.addAttribute("error", "Validation error");
             return "eventos/sesiones/session-no-numerada-form";
+        }
+
+        //Check mandatory fields if the Sesion is visible
+        if(!sesionDTO.isEstaOculto()){
+            if(sesionDTO.getMaxEntradasTipo().size() <= 0){
+                model.addAttribute("evento", evento);
+                model.addAttribute("salas", salaService.readVisible());
+
+                //Parse current TiposEntrada to return to the form
+                List<TipoEntrada> tipoEntradaList = generateTiposEntrada(sesion, sesionDTO);
+                sesion.setTiposEntrada(tipoEntradaList);
+
+                model.addAttribute("sesion", sesion);
+                model.addAttribute("error", "Validation error: You must declare at least 1 ticket type");
+                return "eventos/sesiones/session-no-numerada-form";
+            }
         }
 
         if(sesionDTO.getId() != null){

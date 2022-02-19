@@ -173,6 +173,7 @@
                       <div id="additionalInfo"></div>
                   </div>
                     <div class="modal-footer">
+                        <a class="btn btn-warning" id="copySesionBtn" th:text="#{copy}">Copy</a>
                         <a class="btn btn-info" id="updateSesionBtn" th:text="#{modify}">Modificar</a>
                         <a class="btn btn-danger" id="deleteSesionBtn" th:text="#{delete}">Eliminar</a>
                         <button class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{close}">Cerrar</button>
@@ -329,9 +330,20 @@
             document.querySelector("#additionalInfo").innerHTML=text;
             document.querySelector("#updateSesionBtn").setAttribute("href", "/eventos/"+[[${evento.id}]]+"/sesiones_no_num/"+sesion["id"]+"/update");
         } else {
+            let text = "";
+            text+="<h5>"+[[#{additional-info}]]+"</h5>";
+            text+="<table class='table table-borderless'>" +
+                "<tbody>" +
+                "<tr>" +
+                "<th>"+[[#{price}]]+"</th>" +
+                "<td>"+sesion["precio"] + "€" +"</td>" +
+                "</tr>";
+            text+="</tbody> </table>";
+            document.querySelector("#additionalInfo").innerHTML=text;
             document.querySelector("#updateSesionBtn").setAttribute("href", "/eventos/"+[[${evento.id}]]+"/sesiones_num/"+sesion["id"]+"/update");
         }
 
+        document.querySelector("#copySesionBtn").setAttribute("href", "/eventos/"+[[${evento.id}]]+"/sesiones/"+sesion["id"]+"/copy");
         document.querySelector("#deleteSesionBtn").setAttribute("href", "/eventos/"+[[${evento.id}]]+"/sesiones/"+sesion["id"]+"/delete");
 
     }
