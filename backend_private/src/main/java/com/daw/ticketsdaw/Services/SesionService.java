@@ -34,7 +34,7 @@ public class SesionService {
 
     private boolean checkDateAvailability(Sesion newSesion){
         //Possible optimization https://stackoverflow.com/questions/22007341/spring-jpa-selecting-specific-columns
-        List<Sesion> sesiones = sesionRepository.findAll();
+        List<Sesion> sesiones = sesionRepository.findAllBySala(newSesion.getSala());
         for (var sesion : sesiones) {
             if(sesion.getId() != newSesion.getId() && checkSesionOverlap(sesion, newSesion))
                 return false;
