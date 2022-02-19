@@ -7,8 +7,8 @@ function EventoCard(props){
                          src={'http://'+process.env.REACT_APP_API_HOST + '/api/media/' +props.evento.foto_perfil.nombre_archivo}/>
                     <div className={"d-flex flex-column p-3"}>
                         <h6>{props.evento.titulo}</h6>
+                        <p className={"text-secondary fw-bold"}>{props.evento.categoria.nombre}</p>
                         <p>{props.evento.descripcion}</p>
-                        <p>{props.evento.categoria.nombre}</p>
                     </div>
                 </div>
             </article>

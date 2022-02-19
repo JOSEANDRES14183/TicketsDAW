@@ -13,7 +13,6 @@ function Eventos(){
     const [category, setCategory] = useState("All");
     const [search, setSearch] = useState("");
 
-    const changeCategory = c => setCategory(c);
     const changeSearch = s => setSearch(s);
 
     useEffect(()=>{
@@ -43,22 +42,27 @@ function Eventos(){
                 <div className={"row"}>
                     <Nav className={"col-8"}>
                         <NavItem>
-                            <NavLink>
-                                Teatro
+                            <NavLink role="button" onClick={() => setCategory("All")}>
+                                All
                             </NavLink>
                         </NavItem>
                         <NavItem>
-                            <NavLink>
+                            <NavLink role="button" onClick={() => setCategory("Teatros")}>
+                                Teatros
+                            </NavLink>
+                        </NavItem>
+                        <NavItem>
+                            <NavLink role="button" onClick={() => setCategory("Musical")}>
                                 Musical
                             </NavLink>
                         </NavItem>
                         <NavItem>
-                            <NavLink>
+                            <NavLink role="button" onClick={() => setCategory("Cine")}>
                                 Cine
                             </NavLink>
                         </NavItem>
                     </Nav>
-                    <SearchFilter handleChange={changeCategory}/>
+                    <SearchFilter handleChange={changeSearch}/>
                 </div>
             </div>
             <EventoList
