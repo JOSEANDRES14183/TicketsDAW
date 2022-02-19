@@ -1,47 +1,22 @@
 import Header from './Header.js';
 import Footer from './Footer.js';
-import axios from "axios";
-import {useEffect, useState} from "react";
-import EventoCard from "./EventoCard";
+import {Routes, Route} from "react-router-dom";
+import Eventos from "./Eventos";
+import Soporte from "./Soporte";
+import SobreNosotros from "./SobreNosotros";
+import Evento from "./Evento";
 
 function App() {
-
-    const [isLoading, setLoading] = useState(false);
-    const [data, setData] = useState([]);
-    const [error, setError] = useState(null);
-
-    useEffect(()=>{
-        setLoading(true);
-        axios.get("http://" + process.env.REACT_APP_API_HOST + "/api/eventos")
-            .then(result =>
-                setData(result.data),
-                setLoading(false),
-            )
-            .catch(error => 
-                setError(error),
-                setLoading(false)
-            );
-    },[setData]);
-
-    if (isLoading){
-        return <p>Loading...</p>
-    }
-
-    if(error){
-        return <p>{error}</p>
-    }
-
   return (
     <>
         <Header />
         <main>
-            <section className={"mt-4 container-md d-flex justify-content-center gap-3"}>
-                {data.map(function (item,key){
-                    return (
-                        <EventoCard key={key} evento={item}/>
-                    )
-                })}
-            </section>
+            <Routes>
+                <Route exact path={"/"} element={<Eventos />} />
+                <Route exact path={"/:id"} element={<Evento />} />
+                <Route path={"/soporte"} element={<Soporte />}/>
+                <Route path={"/about-us"} element={<SobreNosotros />}/>
+            </Routes>
         </main>
         <Footer />
     </>

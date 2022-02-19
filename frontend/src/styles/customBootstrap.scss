@@ -40,3 +40,21 @@ $utilities-text-colors: map-merge($utilities-text-colors, $colors-personalitzats
 main{
   margin-bottom: 20px;
 }
+
+.evento img{
+  width: 200px;
+  height: 100%;
+}
+
+.evento{
+  height: 200px;
+}
+
+.rounded-25{
+  border-radius: 25px;
+}
+
+.evento img.rounded-25{
+  border-bottom-right-radius: unset;
+  border-top-right-radius: unset;
+}

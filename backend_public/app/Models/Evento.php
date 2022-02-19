@@ -22,5 +22,15 @@ class Evento extends Model
         return $this->hasMany(Sesion::class,'id_evento');
     }
 
+    public function fotoPerfil()
+    {
+        return $this->belongsTo(RecursoMedia::class,'foto_perfil');
+    }
+
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class,'id_categoria');
+    }
+
 
 }
