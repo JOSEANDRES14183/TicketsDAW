@@ -39,6 +39,14 @@ function Evento(){
         );
     }
 
+    if (evento.length===0){
+        return (
+            <div className={"py-3 container-md"}>
+                <p className={"mt-5 text-center text-secondary"}>No se ha encontrado ningún evento</p>
+            </div>
+        );
+    }
+
     return (
             <div className={"py-3 container-md"}>
                 <Link to={"/"}>
