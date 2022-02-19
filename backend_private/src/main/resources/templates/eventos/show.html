@@ -330,6 +330,16 @@
             document.querySelector("#additionalInfo").innerHTML=text;
             document.querySelector("#updateSesionBtn").setAttribute("href", "/eventos/"+[[${evento.id}]]+"/sesiones_no_num/"+sesion["id"]+"/update");
         } else {
+            let text = "";
+            text+="<h5>"+[[#{additional-info}]]+"</h5>";
+            text+="<table class='table table-borderless'>" +
+                "<tbody>" +
+                "<tr>" +
+                "<th>"+[[#{price}]]+"</th>" +
+                "<td>"+sesion["precio"] + "€" +"</td>" +
+                "</tr>";
+            text+="</tbody> </table>";
+            document.querySelector("#additionalInfo").innerHTML=text;
             document.querySelector("#updateSesionBtn").setAttribute("href", "/eventos/"+[[${evento.id}]]+"/sesiones_num/"+sesion["id"]+"/update");
         }
 
