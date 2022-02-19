@@ -1,5 +1,6 @@
 package com.daw.ticketsdaw.Services;
 
+import com.daw.ticketsdaw.Entities.Evento;
 import com.daw.ticketsdaw.Entities.Sesion;
 import com.daw.ticketsdaw.Exceptions.InvalidSaveException;
 import com.daw.ticketsdaw.Repositories.SesionRepository;
@@ -59,5 +60,9 @@ public class SesionService {
 
     public void delete(Sesion sesion){
         sesionRepository.delete(sesion);
+    }
+
+    public long countPublicByEvento(Evento evento){
+        return sesionRepository.countByEventoAndEstaOcultoIsFalse(evento);
     }
 }

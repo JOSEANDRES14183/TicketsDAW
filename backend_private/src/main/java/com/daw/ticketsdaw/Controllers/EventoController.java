@@ -118,7 +118,7 @@ public class EventoController {
             if(!eventoPrevState.isEstaOculto())
                 return "redirect:/eventos?error=edit_visible";
 
-            if(!checkOrganizador(evento, session)){
+            if(!checkOrganizador(eventoPrevState, session)){
                 return "redirect:/auth/login?error=unauthorized";
             }
         }
@@ -134,6 +134,16 @@ public class EventoController {
             model.addAttribute("categorias", categoriaService.read());
             model.addAttribute("error", "Validation error");
             return "eventos/create";
+        }
+
+        //Check mandatory fields if Evento is visible
+        if(!eventoDTO.isEstaOculto()){
+            if(!(eventoDTO.getId() != null && sesionService.countPublicByEvento(eventosService.read(eventoDTO.getId())) > 0)){
+                model.addAttribute("evento", evento);
+                model.addAttribute("categorias", categoriaService.read());
+                model.addAttribute("error", "Validation error: You can't set an event to public without having public sessions in it");
+                return "eventos/create";
+            }
         }
 
         RecursoMedia fotoPerfil = null;
@@ -444,6 +454,22 @@ public class EventoController {
             model.addAttribute("sesion", sesion);
             model.addAttribute("error", "Validation error");
             return "eventos/sesiones/session-no-numerada-form";
+        }
+
+        //Check mandatory fields if the Sesion is visible
+        if(!sesionDTO.isEstaOculto()){
+            if(sesionDTO.getMaxEntradasTipo().size() <= 0){
+                model.addAttribute("evento", evento);
+                model.addAttribute("salas", salaService.readVisible());
+
+                //Parse current TiposEntrada to return to the form
+                List<TipoEntrada> tipoEntradaList = generateTiposEntrada(sesion, sesionDTO);
+                sesion.setTiposEntrada(tipoEntradaList);
+
+                model.addAttribute("sesion", sesion);
+                model.addAttribute("error", "Validation error: You must declare at least 1 ticket type");
+                return "eventos/sesiones/session-no-numerada-form";
+            }
         }
 
         if(sesionDTO.getId() != null){

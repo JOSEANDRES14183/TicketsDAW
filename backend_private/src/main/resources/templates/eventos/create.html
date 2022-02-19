@@ -93,7 +93,7 @@
 
                 <div class="mb-3">
                     <label for="fotoPerfil" class="form-label text-primary h6" th:text="#{profile-pic}">Foto de perfil</label>
-                    <input type="file" class="form-control w-75" id="fotoPerfil" name="fotoPerfil" required>
+                    <input type="file" class="form-control w-75" id="fotoPerfil" name="fotoPerfil" th:attr="required=${evento.getId() == null}">
                     <p class="small text-secondary fst-italic" th:inline="text">*[[#{allowed-formats}]] .jpg, .png, .webp</p>
                 </div>
                 <div class="mb-3">
