@@ -9,6 +9,8 @@
     <section class="container-md">
 
         <div class="w-50 mx-auto bg-white shadow-sm rounded-25 p-4">
+            <h1 th:if="${sesion.id == null}" class="mb-4 border-bottom text-primary pb-2" th:text="#{sesion-num-form-create}">Crear sesion numerada</h1>
+            <h1 th:unless="${sesion.id == null}" class="mb-4 border-bottom text-primary pb-2" th:text="#{sesion-num-form-update}">Modificar sesion numerada</h1>
             <div th:replace="fragments/layout :: errorBox"></div>
             <form method="POST" th:action="'/eventos/'+${evento.id}+'/sesiones_num'" th:object="${sesion}" class="needs-validation" novalidate>
                 <div th:replace="fragments/sesion-form :: sesion-inputs"></div>
