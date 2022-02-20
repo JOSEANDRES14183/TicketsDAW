@@ -22,6 +22,7 @@ function EventoList(props){
                     return (
                         <EventoCard key={key} evento={item}/>
                     )
+
                 })}
             </div>
         </section>

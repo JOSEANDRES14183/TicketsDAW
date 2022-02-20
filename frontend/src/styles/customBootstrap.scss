@@ -58,3 +58,14 @@ main{
   border-bottom-right-radius: unset;
   border-top-right-radius: unset;
 }
+
+.spinner-border{
+  width: 100px;
+  height: 100px;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  margin: auto;
+}
