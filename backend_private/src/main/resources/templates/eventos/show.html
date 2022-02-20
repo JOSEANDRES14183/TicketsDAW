@@ -76,7 +76,7 @@
 
         <div class="mb-4 mt-3">
             <h3 class="mb-3" th:text="#{description}">Descripción</h3>
-            <p th:text="${evento.descripcion.length()<0} ? ${evento.descripcion} : #{no-desc}"></p>
+            <p th:text="${evento.descripcion.length()>0} ? ${evento.descripcion} : #{no-desc}"></p>
         </div>
 
         <div class="mb-4">
