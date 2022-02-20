@@ -30,11 +30,10 @@
 
 <script th:inline="javascript">
   let butacasJSON = [[${butacas}]];
-
   let butacas = JSON.parse(butacasJSON);
   let layout = document.querySelector("#layout > tbody");
 
-  if (butacas.length<2) {
+  if (butacas.length<=1 && butacas[0].length<=1 && butacas[0][0]===null) {
     butacas = new Array(10);
     for (let i = 0; i < butacas.length; i++) {
       butacas[i] = new Array(10).fill(null);
