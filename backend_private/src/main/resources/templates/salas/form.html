@@ -12,7 +12,7 @@
 
         <div class="w-50 mx-auto bg-white shadow-sm rounded-25 p-4">
             <div th:replace="fragments/layout :: errorBox"></div>
-            <form method="POST" th:action="'/salas'" th:object="${sala}">
+            <form method="POST" th:action="'/salas'" th:object="${sala}" class="needs-validation" novalidate>
                 <div th:unless="${sala.id == null}">
                     <input type="hidden" th:field="*{id}">
                 </div>
@@ -24,7 +24,7 @@
                         </span>
                         <input type="text" th:field="*{nombre}" class="form-control"
                                id="nombre" name="nombre" th:placeholder="#{name}"
-                               aria-describedby="nombreIcon">
+                               aria-describedby="nombreIcon" required minlength="3" maxlength="20">
                     </div>
                 </div>
                 <div class="mb-3">
@@ -34,7 +34,7 @@
                         </span>
                         <input type="text" th:field="*{direccion}" class="form-control"
                                id="direccion" name="direccion" th:placeholder="#{address}"
-                               aria-describedby="direccionIcon">
+                               aria-describedby="direccionIcon" required minlength="3" maxlength="20">
                     </div>
                 </div>
                 <div class="mb-3">
@@ -43,7 +43,7 @@
                             <i class="bi bi-geo"></i>
                         </span>
                         <select class="form-select" th:field="*{ciudad}"
-                                id="ciudad" name="ciudad" aria-describedby="ciudadIcon">
+                                id="ciudad" name="ciudad" aria-describedby="ciudadIcon" required>
                             <option th:each="ciudad: ${ciudades}"
                                     th:value="${ciudad.id}"
                                     th:text="${ciudad.nombre}"/>
@@ -67,7 +67,7 @@
                             <i class="bi bi-people-fill"></i>
                         </span>
                         <input type="number" th:field="*{aforoMax}" class="form-control"
-                               id="aforoMax" name="aforoMax" aria-describedby="aforoIcon">
+                               id="aforoMax" name="aforoMax" aria-describedby="aforoIcon" required min="0">
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary mt-3" th:text="#{save}">Guardar</button>
@@ -112,6 +112,8 @@
     }
 
 </script>
+
+<script th:src="@{/js/clientValidation.js}"></script>
 
 <script src="https://maps.googleapis.com/maps/api/js?
 key=AIzaSyCIBWMOCC_XY2ia1tPFUKYjY4ACzhqbEA0&callback=myMap"></script>
