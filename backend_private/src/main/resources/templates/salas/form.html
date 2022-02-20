@@ -11,6 +11,8 @@
     <section class="container-md">
 
         <div class="w-50 mx-auto bg-white shadow-sm rounded-25 p-4">
+            <h1 th:if="${sala.id == null}" class="mb-4 border-bottom text-primary pb-2" th:text="#{sala-form-create}">Crear sala</h1>
+            <h1 th:unless="${sala.id == null}" class="mb-4 border-bottom text-primary pb-2" th:text="#{sala-form-update}">Modificar sala</h1>
             <div th:replace="fragments/layout :: errorBox"></div>
             <form method="POST" th:action="'/salas'" th:object="${sala}" class="needs-validation" novalidate>
                 <div th:unless="${sala.id == null}">

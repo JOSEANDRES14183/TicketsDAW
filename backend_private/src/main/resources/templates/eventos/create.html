@@ -10,6 +10,8 @@
     <section class="container-md">
 
         <div class="w-50 mx-auto bg-white shadow-sm rounded-25 p-4">
+            <h1 th:if="${evento.id == null}" class="mb-4 border-bottom text-primary pb-2" th:text="#{evento-form-create}">Crear evento</h1>
+            <h1 th:unless="${evento.id == null}" class="mb-4 border-bottom text-primary pb-2" th:text="#{evento-form-update}">Modificar evento</h1>
             <div th:replace="fragments/layout :: errorBox"></div>
             <form method="POST" th:action="'/eventos'" th:object="${evento}" enctype="multipart/form-data" class="needs-validation" novalidate>
                 <div th:unless="${evento.getId() == null}">
