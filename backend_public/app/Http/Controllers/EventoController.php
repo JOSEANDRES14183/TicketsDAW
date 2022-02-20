@@ -15,7 +15,6 @@ class EventoController extends Controller
         return Evento::with('sesiones.sala.butacas')
             ->with('fotoPerfil')
             ->with('categoria')
-            ->with('organizador')
             ->get();
     }
 
