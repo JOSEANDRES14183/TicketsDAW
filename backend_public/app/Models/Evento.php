@@ -32,5 +32,10 @@ class Evento extends Model
         return $this->belongsTo(Categoria::class,'id_categoria');
     }
 
+    public function organizador()
+    {
+        return $this->belongsTo(Usuario::class,'id_organizador');
+    }
+
 
 }
