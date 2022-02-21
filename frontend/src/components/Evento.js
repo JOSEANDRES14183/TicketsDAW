@@ -13,7 +13,7 @@ function Evento(){
     const params = useParams();
 
     useEffect(()=>{
-        axios.get("http://" + process.env.REACT_APP_API_HOST + "/api/eventos/"+params.id)
+        axios.get(process.env.REACT_APP_API_PROTOCOL + process.env.REACT_APP_API_HOST + "/api/eventos/"+params.id)
             .then(result => {
                 setEvento(result.data);
                 setLoading(false);
@@ -62,7 +62,7 @@ function Evento(){
                     </div>
                     <div className={"col"}>
                         <img className={"border-1 border-end img-fluid"}
-                             src={'http://'+process.env.REACT_APP_API_HOST + '/api/media/' +evento.foto_perfil.nombre_archivo}/>
+                             src={process.env.REACT_APP_API_PROTOCOL + process.env.REACT_APP_API_HOST + '/api/media/' +evento.foto_perfil.nombre_archivo}/>
                     </div>
                 </div>
 
