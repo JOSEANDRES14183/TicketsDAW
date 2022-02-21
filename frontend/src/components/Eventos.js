@@ -17,7 +17,7 @@ function Eventos(){
 
     useEffect(()=>{
         setLoading(true);
-        axios.get("http://" + process.env.REACT_APP_API_HOST + "/api/eventos")
+        axios.get(process.env.REACT_APP_API_PROTOCOL + process.env.REACT_APP_API_HOST + "/api/eventos")
             .then(result => {
                 setEventos(result.data);
                 setLoading(false);
