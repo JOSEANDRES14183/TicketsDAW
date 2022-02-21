@@ -24,3 +24,7 @@ Route::get('eventos', [EventoController::class,'index']);
 Route::get('eventos/{id}', [EventoController::class,'show']);
 
 Route::get('media/{filename}', [RecursoMediaController::class,'image']);
+
+//Route::get('organizador/{id}',function ($id){
+//    return new \App\Http\Resources\OrganizadorResource(\App\Models\Usuario::find($id));
+//});

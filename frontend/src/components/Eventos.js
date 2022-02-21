@@ -28,7 +28,7 @@ function Eventos(){
             });
     },[]);
 
-    if (isLoading){
+    if (isLoading) {
         return (
             <div className={"container-md my-3"}>
                 <Spinner
