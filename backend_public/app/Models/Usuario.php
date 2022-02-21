@@ -21,4 +21,9 @@ class Usuario extends Model
         return $this->hasOne(OrganizadorData::class,'id');
     }
 
+    public function eventos()
+    {
+        return $this->hasMany(Evento::class,'id_organizador');
+    }
+
 }

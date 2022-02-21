@@ -5,6 +5,7 @@ import Eventos from "./Eventos";
 import Soporte from "./Soporte";
 import SobreNosotros from "./SobreNosotros";
 import Evento from "./Evento";
+import Organizador from "./Organizador";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
             <Routes>
                 <Route exact path={"/"} element={<Eventos />} />
                 <Route path={"/:id"} element={<Evento />} />
+                <Route path={"/organizador/:id"} element={<Organizador />} />
                 <Route path={"/soporte"} element={<Soporte />}/>
                 <Route path={"/about-us"} element={<SobreNosotros />}/>
             </Routes>
