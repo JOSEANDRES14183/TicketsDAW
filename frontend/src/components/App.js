@@ -13,7 +13,7 @@ function App() {
         <main>
             <Routes>
                 <Route exact path={"/"} element={<Eventos />} />
-                <Route exact path={"/:id"} element={<Evento />} />
+                <Route path={"/:id"} element={<Evento />} />
                 <Route path={"/soporte"} element={<Soporte />}/>
                 <Route path={"/about-us"} element={<SobreNosotros />}/>
             </Routes>

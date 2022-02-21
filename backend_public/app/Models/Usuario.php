@@ -12,6 +12,8 @@ class Usuario extends Model
     protected $table = 'usuario';
     protected $primaryKey = 'id';
 
+    protected $hidden =['password_hash'];
+
     protected $with = ['organizadorData'];
 
     public function organizadorData()
