@@ -10,5 +10,12 @@ class OrganizadorData extends Model
     use HasFactory;
     protected $table = 'organizador';
     protected $primaryKey = 'id';
+
+    protected $with = ['fotoPerfil'];
+
     public $incrementing = false;
+
+    public function fotoPerfil(){
+        return $this->belongsTo(RecursoMedia::class,'foto_perfil');
+    }
 }
