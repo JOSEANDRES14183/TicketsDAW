@@ -20,5 +20,9 @@ class Sesion extends Model
         return $this->belongsTo(Evento::class,'id_evento');
     }
 
+    public function tiposEntrada(){
+        return $this->hasMany(TipoEntrada::class,'id_sesion');
+    }
+
 
 }
