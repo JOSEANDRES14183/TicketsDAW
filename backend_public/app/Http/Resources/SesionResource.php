@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SesionResource extends JsonResource
@@ -15,19 +14,14 @@ class SesionResource extends JsonResource
      */
     public function toArray($request)
     {
-        $date = Carbon::createFromFormat('Y-m-d H:i:s', $this->fecha_ini);
-        $date->addMinutes($this->evento->duracion_estandar);
-
         return [
-            'title' => $this->evento->duracion_estandar.' min.',
-            'start' => $this->fecha_ini,
-            'end' => $date->toDateTimeString(),
-            'backgroundColor' => 'red',
-            'borderColor' => '#E50000',
-            'extendedProps'=>[
-                'sesion_id' => $this->id
-            ]
+            'id' => $this->id,
+            'entradas_max' => $this->entradas_max,
+            'fecha_fin_venta' => $this->fecha_fin_venta,
+            'fecha_ini' => $this->fecha_ini,
+            'duracion' => $this->duracion,
+            'tipos_entrada' => $this->tiposEntrada,
+            'sala' => new SalaResource($this->sala)
         ];
     }
-
 }
