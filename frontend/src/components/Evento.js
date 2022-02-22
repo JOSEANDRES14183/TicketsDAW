@@ -54,18 +54,35 @@ function Evento(){
                         Volver
                     </Button>
                 </Link>
-
-                <div className={"row"}>
-                    <div className={"col-7 d-flex flex-column"}>
-                        <h2>{evento.titulo}</h2>
-                        <p>{evento.descripcion}</p>
-                    </div>
-                    <div className={"col"}>
+                <section className="row py-3">
+                    <div className="col-4">
                         <img className={"border-1 border-end img-fluid"}
                              src={process.env.REACT_APP_API_PROTOCOL + process.env.REACT_APP_API_HOST + '/api/media/' +evento.foto_perfil.nombre_archivo}/>
                     </div>
-                </div>
+                    <div className="col-8">
+                        <h2>{evento.titulo}</h2>
+                        <p><i className="bi bi-clock" /> {evento.duracion_estandar} min.</p>
+                        <p><i className="bi bi-bookmarks" /> {evento.categoria.nombre}</p>
 
+                    </div>
+                </section>
+                {evento.descripcion.length > 0 &&
+                <section className="row py-3 border-1 border-top">
+                    <div className="col-12">
+                        <h3>Descripción</h3>
+                        <p>{evento.descripcion}</p>
+                    </div>
+                </section>
+                }
+                <section className="row py-3 border-1 border-top">
+                    <div className="col-12">
+                        <h3>Restricciones y normas</h3>
+                        {evento.edad_minima > 0 &&
+                            <p><i className="bi bi-exclamation-diamond"></i> Apto para mayores de {evento.edad_minima} años</p>
+                        }
+                        <p><i className="bi bi-book-half"/> Haz click aquí para descargar las normas del evento</p>
+                    </div>
+                </section>
             </div>
     );
 }
