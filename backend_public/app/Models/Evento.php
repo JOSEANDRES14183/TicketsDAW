@@ -10,10 +10,7 @@ class Evento extends Model
     use HasFactory;
 
     protected $table = 'evento';
-
     protected $primaryKey = 'id';
-
-    protected $with = ["sesiones.sala","fotoPerfil","categoria"];
 
     //It is necessary to define if the primary key is not incremental
     //https://laravel.com/docs/9.x/eloquent#introduction

@@ -11,7 +11,7 @@ function EventoCard(props){
                     <div className={"d-flex flex-column p-3"}>
                         <h6>{props.evento.titulo}</h6>
                         <p className={"text-secondary fw-bold"}>{props.evento.categoria.nombre}</p>
-                        <p><i className="bi bi-geo-alt-fill" /> {props.evento.sesiones[0].sala.direccion}</p>
+                        <p><i className="bi bi-geo-alt-fill" /> {props.evento.latest_sesion.sala.direccion}</p>
                     </div>
                 </div>
             </article>
