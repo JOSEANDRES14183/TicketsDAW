@@ -13,7 +13,7 @@ class Evento extends Model
 
     protected $primaryKey = 'id';
 
-    protected $with = ["sesiones.sala","fotoPerfil","categoria"];
+    protected $with = ["sesiones","fotoPerfil","categoria"];
 
     //It is necessary to define if the primary key is not incremental
     //https://laravel.com/docs/9.x/eloquent#introduction
