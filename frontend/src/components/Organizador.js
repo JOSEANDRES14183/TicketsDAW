@@ -2,6 +2,7 @@ import {useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Spinner} from "reactstrap";
+import EventoList from "./EventoList";
 
 function Organizador(){
 
@@ -46,19 +47,26 @@ function Organizador(){
     }
 
     return (
-        <section className={"container-md"}>
-            <div className={"row"}>
-                <div className={"col-5"}>
-                    <img className={"img-fluid"}
-                         src={process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + '/api/media/' +organizador.organizador_data.foto_perfil.nombre_archivo}
-                         alt={"Imagen de perfil de "+organizador.nombre_usuario}/>
+        <>
+            <section className={"bg-black"}>
+                <div className={"container-md py-4"}>
+                    <div className={"row text-white"}>
+                        <div className={"col-5 d-flex justify-content-center"}>
+                            <img className={"img-fluid"}
+                                 src={process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + '/api/media/' +organizador.organizador_data.foto_perfil.nombre_archivo}
+                                 alt={"Imagen de perfil de "+organizador.nombre_usuario}/>
+                        </div>
+                        <div className={"col-7 pt-3"}>
+                            <h1 className={"mb-3"}>{organizador.organizador_data.nombre}</h1>
+                            <p>{organizador.organizador_data.descripcion}</p>
+                        </div>
+                    </div>
                 </div>
-                <div className={"col-7"}>
-                    <h2>{organizador.organizador_data.nombre}</h2>
-                    <p>{organizador.organizador_data.descripcion}</p>
-                </div>
-            </div>
-        </section>
+            </section>
+            <section>
+                <EventoList eventos={organizador.eventos}/>
+            </section>
+        </>
     );
 
 }

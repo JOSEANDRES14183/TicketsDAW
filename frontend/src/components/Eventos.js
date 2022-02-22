@@ -3,6 +3,7 @@ import axios from "axios";
 import {Nav, NavItem, NavLink, Spinner} from "reactstrap";
 import EventoList from "./EventoList";
 import SearchFilter from "./SearchFilter";
+import EventoListFiltered from "./EventoListFiltered";
 
 function Eventos(){
 
@@ -73,7 +74,7 @@ function Eventos(){
                     <SearchFilter handleChange={changeSearch}/>
                 </div>
             </div>
-            <EventoList
+            <EventoListFiltered
                 eventos={eventos}
                 category={category}
                 search={search}/>
