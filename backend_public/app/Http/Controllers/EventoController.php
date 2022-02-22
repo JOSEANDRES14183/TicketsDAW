@@ -12,10 +12,7 @@ class EventoController extends Controller
 {
     public function index()
     {
-        return Evento::with('sesiones.sala.butacas')
-            ->with('fotoPerfil')
-            ->with('categoria')
-            ->with('organizador')
+        return Evento::with('organizador')
             ->get();
     }
 
