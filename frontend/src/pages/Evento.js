@@ -13,7 +13,7 @@ function Evento(){
     const params = useParams();
 
     useEffect(()=>{
-        axios.get(process.env.REACT_APP_API_PROTOCOL + process.env.REACT_APP_API_HOST + "/api/eventos/"+params.id)
+        axios.get(process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + "/api/eventos/"+params.id)
             .then(result => {
                 setEvento(result.data);
                 setLoading(false);
@@ -57,7 +57,7 @@ function Evento(){
                 <section className="row py-3">
                     <div className="col-4">
                         <img className={"border-1 border-end img-fluid"}
-                             src={process.env.REACT_APP_API_PROTOCOL + process.env.REACT_APP_API_HOST + '/api/media/' +evento.foto_perfil.nombre_archivo}/>
+                             src={process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + '/api/media/' +evento.foto_perfil.nombre_archivo}/>
                     </div>
                     <div className="col-8">
                         <h2>{evento.titulo}</h2>

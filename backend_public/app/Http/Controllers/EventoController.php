@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\EventoCollection;
+use App\Http\Resources\EventoResource;
 use App\Models\Evento;
 use Illuminate\Http\Request;
 
@@ -12,16 +14,12 @@ class EventoController extends Controller
 {
     public function index()
     {
-        return Evento::with('sesiones.sala.butacas')
-            ->with('fotoPerfil')
-            ->with('categoria')
-            ->with('organizador')
-            ->get();
+        return EventoResource::collection(Evento::with('organizador')->get());
     }
 
     public function show($id)
     {
-        return Evento::with('fotoPerfil')->find($id);
+        return new EventoResource(Evento::find($id));
     }
 
 

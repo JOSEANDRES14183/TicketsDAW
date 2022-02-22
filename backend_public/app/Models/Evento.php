@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Http\Resources\UsuarioResource;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,8 +11,6 @@ class Evento extends Model
 
     protected $table = 'evento';
     protected $primaryKey = 'id';
-
-    protected $with = ['organizador'];
 
     //It is necessary to define if the primary key is not incremental
     //https://laravel.com/docs/9.x/eloquent#introduction
@@ -36,7 +33,7 @@ class Evento extends Model
 
     public function organizador()
     {
-        return new UsuarioResource($this->belongsTo(Usuario::class,'id_organizador'));
+        return $this->belongsTo(Usuario::class,'id_organizador');
     }
 
 

@@ -25,7 +25,7 @@ public abstract class Usuario implements Serializable {
     private String passwordHash;
 
     @Column(name = "esta_deshabilitado")
-    private boolean estaDeshabilitado  = true;
+    private boolean estaDeshabilitado  = false;
 
     @Column(name = "esta_validado")
     private boolean estaValidado = false;

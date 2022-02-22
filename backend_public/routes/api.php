@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EventoController;
+use App\Http\Controllers\OrganizadorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RecursoMediaController;
@@ -24,3 +25,5 @@ Route::get('eventos', [EventoController::class,'index']);
 Route::get('eventos/{id}', [EventoController::class,'show']);
 
 Route::get('media/{filename}', [RecursoMediaController::class,'image']);
+
+Route::get('organizador/{id}', [OrganizadorController::class,'show']);

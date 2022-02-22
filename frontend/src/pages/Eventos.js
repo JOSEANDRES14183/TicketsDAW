@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Nav, NavItem, NavLink, Spinner} from "reactstrap";
-import EventoList from "./EventoList";
-import SearchFilter from "./SearchFilter";
+import EventoList from "../components/EventoList";
+import SearchFilter from "../components/SearchFilter";
+import EventoListFiltered from "../components/EventoListFiltered";
 
 function Eventos(){
 
@@ -17,7 +18,7 @@ function Eventos(){
 
     useEffect(()=>{
         setLoading(true);
-        axios.get(process.env.REACT_APP_API_PROTOCOL + process.env.REACT_APP_API_HOST + "/api/eventos")
+        axios.get(process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + "/api/eventos")
             .then(result => {
                 setEventos(result.data);
                 setLoading(false);
@@ -28,7 +29,7 @@ function Eventos(){
             });
     },[]);
 
-    if (isLoading){
+    if (isLoading) {
         return (
             <div className={"container-md my-3"}>
                 <Spinner
@@ -73,7 +74,7 @@ function Eventos(){
                     <SearchFilter handleChange={changeSearch}/>
                 </div>
             </div>
-            <EventoList
+            <EventoListFiltered
                 eventos={eventos}
                 category={category}
                 search={search}/>
