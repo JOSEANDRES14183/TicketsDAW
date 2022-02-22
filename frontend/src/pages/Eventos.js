@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Nav, NavItem, NavLink, Spinner} from "reactstrap";
-import EventoList from "./EventoList";
-import SearchFilter from "./SearchFilter";
-import EventoListFiltered from "./EventoListFiltered";
+import EventoList from "../components/EventoList";
+import SearchFilter from "../components/SearchFilter";
+import EventoListFiltered from "../components/EventoListFiltered";
 
 function Eventos(){
 

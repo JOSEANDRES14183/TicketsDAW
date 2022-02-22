@@ -2,7 +2,7 @@ import {useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Spinner} from "reactstrap";
-import EventoList from "./EventoList";
+import EventoList from "../components/EventoList";
 
 function Organizador(){
 

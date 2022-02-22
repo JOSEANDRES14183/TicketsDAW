@@ -1,11 +1,11 @@
 import Header from './Header.js';
 import Footer from './Footer.js';
 import {Routes, Route} from "react-router-dom";
-import Eventos from "./Eventos";
-import Soporte from "./Soporte";
-import SobreNosotros from "./SobreNosotros";
-import Evento from "./Evento";
-import Organizador from "./Organizador";
+import Eventos from "../pages/Eventos";
+import Soporte from "../pages/Soporte";
+import SobreNosotros from "../pages/SobreNosotros";
+import Evento from "../pages/Evento";
+import Organizador from "../pages/Organizador";
 
 function App() {
   return (
