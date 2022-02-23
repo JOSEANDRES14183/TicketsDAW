@@ -49,8 +49,8 @@ function Eventos(){
     return(
         <>
             <div className={"py-3 container-md"}>
-                <div className={"row gap-3"}>
-                    <div className={"col-3"}>
+                <div className={"row gap-md-3"}>
+                    <div className={"col-md-3 col-6"}>
                         <select className={"form-select"}
                                 onChange={(event) => setCategory(event.target.value)}>
                             <option value="All">Todos</option>
@@ -59,7 +59,7 @@ function Eventos(){
                             <option value="Cine">Cine</option>
                         </select>
                     </div>
-                    <div className={"col-3"}>
+                    <div className={"col-md-3 col-6"}>
                         <select className={"form-select"}
                                 onChange={(event) => setDateOrder(event.target.value)}>
                             <option value="noSort">Sin ordenar</option>

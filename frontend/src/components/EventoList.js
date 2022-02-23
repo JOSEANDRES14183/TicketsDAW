@@ -3,7 +3,7 @@ import React from "react";
 
 function EventoList(props){
     return(
-        <section className={"mt-4 container-md"}>
+        <section className={"mt-md-4 mt-2 container-md"}>
             <div className={"row"}>
                 {
                     props.eventos.length>0 ?
