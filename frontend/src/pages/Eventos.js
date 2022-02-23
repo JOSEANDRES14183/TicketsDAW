@@ -63,8 +63,8 @@ function Eventos(){
                         <select className={"form-select"}
                                 onChange={(event) => setDateOrder(event.target.value)}>
                             <option value="noSort">Sin ordenar</option>
-                            <option value="desc">Ordenar por fecha (Más reciente a menos)</option>
-                            <option value="asc">Ordenar por fecha (Menos reciente a más)</option>
+                            <option value="asc">Ordenar por fecha (Más reciente a menos)</option>
+                            <option value="desc">Ordenar por fecha (Menos reciente a más)</option>
                         </select>
                     </div>
                     <SearchFilter handleChange={changeSearch}/>

@@ -13,10 +13,12 @@ function EventoListFiltered(props){
     }
 
     const sortByDate = function (evento1, evento2){
-        if (props.dateOrder==='asc'){
-            return evento1.latest_sesion.fecha_ini - evento2.latest_sesion.fecha_ini;
+        if (props.dateOrder==='noSort'){
+            return evento1 === evento2;
+        } else if (props.dateOrder==='asc'){
+            return Date.parse(evento1.latest_sesion.fecha_ini) - Date.parse(evento2.latest_sesion.fecha_ini);
         } else {
-            return evento2.latest_sesion.fecha_ini - evento1.latest_sesion.fecha_ini;
+            return Date.parse(evento2.latest_sesion.fecha_ini) - Date.parse(evento1.latest_sesion.fecha_ini);
         }
     }
 
