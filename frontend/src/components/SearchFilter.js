@@ -7,7 +7,7 @@ function SearchFilter(props){
     return(
         <input
             onChange={handleChange}
-            className={"px-3 col-4 rounded-pill p-1 border-1 border-dark"}
+            className={"col px-3 py-1 rounded-pill mx-2 my-3 m-md-0 border"}
             type="text"
             placeholder={"search..."}/>
     );

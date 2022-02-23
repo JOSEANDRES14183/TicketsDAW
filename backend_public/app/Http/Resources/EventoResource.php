@@ -27,7 +27,6 @@ class EventoResource extends JsonResource
             'categoria' => $this->categoria,
             'latest_sesion' => new SesionResource($this->sesiones->sortBy('fecha_ini')->first()),
             'sesiones' => SesionFullCalendarResource::collection($this->sesiones),
-
         ];
     }
 }
