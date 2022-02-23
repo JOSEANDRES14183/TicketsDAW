@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\OrganizadorResource;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,7 @@ class OrganizadorController extends Controller
         if ($organizador->organizadorData == null || $organizador->esta_validado == false || $organizador->esta_deshabilitado == true){
             return null;
         }
-        return $organizador;
+        return new OrganizadorResource($organizador);
     }
 
 }
