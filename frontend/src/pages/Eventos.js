@@ -12,6 +12,7 @@ function Eventos(){
 
     const [eventos,setEventos] = useState([]);
     const [category, setCategory] = useState("All");
+    const [dateOrder, setDateOrder] = useState("noSort");
     const [search, setSearch] = useState("");
 
     const changeSearch = s => setSearch(s);
@@ -48,34 +49,30 @@ function Eventos(){
     return(
         <>
             <div className={"py-3 container-md"}>
-                <div className={"row"}>
-                    <Nav className={"col-8"}>
-                        <NavItem>
-                            <NavLink role="button" onClick={() => setCategory("All")}>
-                                All
-                            </NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink role="button" onClick={() => setCategory("Teatros")}>
-                                Teatros
-                            </NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink role="button" onClick={() => setCategory("Musical")}>
-                                Musical
-                            </NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink role="button" onClick={() => setCategory("Cine")}>
-                                Cine
-                            </NavLink>
-                        </NavItem>
-                    </Nav>
+                <div className={"row gap-3"}>
+                    <div className={"col-3"}>
+                        <select className={"form-select"}
+                                onChange={(event) => setCategory(event.target.value)}>
+                            <option value="All">Todos</option>
+                            <option value="Teatros">Teatros</option>
+                            <option value="Musical">Musical</option>
+                            <option value="Cine">Cine</option>
+                        </select>
+                    </div>
+                    <div className={"col-3"}>
+                        <select className={"form-select"}
+                                onChange={(event) => setDateOrder(event.target.value)}>
+                            <option value="noSort">Sin ordenar</option>
+                            <option value="desc">Ordenar por fecha (Más reciente a menos)</option>
+                            <option value="asc">Ordenar por fecha (Menos reciente a más)</option>
+                        </select>
+                    </div>
                     <SearchFilter handleChange={changeSearch}/>
                 </div>
             </div>
             <EventoListFiltered
                 eventos={eventos}
+                dateOrder={dateOrder}
                 category={category}
                 search={search}/>
         </>
