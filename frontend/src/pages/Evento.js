@@ -2,6 +2,9 @@ import {Link, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Button, Spinner} from "reactstrap";
+import FullCalendar from '@fullcalendar/react'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import bootstrap5Plugin from '@fullcalendar/bootstrap5';
 
 function Evento(){
 
@@ -63,7 +66,12 @@ function Evento(){
                         <h2>{evento.titulo}</h2>
                         <p><i className="bi bi-clock" /> {evento.duracion_estandar} min.</p>
                         <p><i className="bi bi-bookmarks" /> {evento.categoria.nombre}</p>
-
+                        <FullCalendar plugins={[dayGridPlugin, bootstrap5Plugin]}
+                                      initialView="dayGridMonth"
+                                      eventDisplay='block'
+                                      themeSystem='bootstrap5'
+                                      events={evento.sesiones}
+                        />
                     </div>
                 </section>
                 {evento.descripcion.length > 0 &&
