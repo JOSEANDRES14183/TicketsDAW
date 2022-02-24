@@ -5,6 +5,7 @@ import {Button, Spinner} from "reactstrap";
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import bootstrap5Plugin from '@fullcalendar/bootstrap5';
+import SesionInfo from "../components/SesionInfo";
 
 function Evento(){
 
@@ -12,6 +13,8 @@ function Evento(){
     const [error, setError] = useState(null);
 
     const [evento, setEvento] = useState([]);
+
+    const [count, setCount] = useState(0);
 
     const params = useParams();
 
@@ -61,6 +64,7 @@ function Evento(){
                     <div className="col-4">
                         <img className={"border-1 border-end img-fluid"}
                              src={process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + '/api/media/' +evento.foto_perfil.nombre_archivo}/>
+                        <button onClick={() => setCount(count+1)}> Click me </button>
                     </div>
                     <div className="col-8">
                         <h2>{evento.titulo}</h2>
@@ -73,6 +77,9 @@ function Evento(){
                                       events={evento.sesiones}
                         />
                     </div>
+                </section>
+                <section className="py-3 border-1 border-top">
+                    <SesionInfo></SesionInfo>
                 </section>
                 {evento.descripcion.length > 0 &&
                 <section className="row py-3 border-1 border-top">

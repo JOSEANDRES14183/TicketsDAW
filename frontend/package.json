@@ -6,6 +6,7 @@
     "@fullcalendar/bootstrap5": "^5.10.2",
     "@fullcalendar/daygrid": "^5.10.1",
     "@fullcalendar/react": "^5.10.1",
+    "@googlemaps/react-wrapper": "^1.1.25",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
