@@ -11,7 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -21,19 +26,18 @@ import java.util.Arrays;
 public class RecursoMediaService extends AbstractFileService{
     @Autowired
     RecursoMediaRepository mediaRepository;
+    @Autowired
+    Environment environment;
 
     public RecursoMedia createFromFile(MultipartFile multipartFile) throws IOException {
         String fileName = generateSafeFileName(multipartFile.getOriginalFilename());
 
         RecursoMedia recursoMedia = new RecursoMedia();
         recursoMedia.setPrioridad(0);
-
         recursoMedia.setNombreArchivo(fileName);
-
         mediaRepository.save(recursoMedia);
 
         saveMultipartAs(multipartFile, fileName);
-
         return recursoMedia;
     }
 
