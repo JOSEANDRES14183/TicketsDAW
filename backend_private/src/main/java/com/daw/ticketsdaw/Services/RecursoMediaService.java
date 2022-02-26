@@ -34,7 +34,13 @@ public class RecursoMediaService extends AbstractFileService{
 
         RecursoMedia recursoMedia = new RecursoMedia();
         recursoMedia.setPrioridad(0);
-        recursoMedia.setNombreArchivo(fileName);
+
+        if (!StringUtils.substringAfterLast(fileName,".").equals("pdf")){
+            recursoMedia.setNombreArchivo(addWebpExtension(fileName));
+        } else {
+            recursoMedia.setNombreArchivo(fileName);
+        }
+
         mediaRepository.save(recursoMedia);
 
         saveMultipartAs(multipartFile, fileName);
@@ -46,11 +52,14 @@ public class RecursoMediaService extends AbstractFileService{
 
         RecursoMedia recursoMedia = baseRecursoMedia;
 
-        recursoMedia.setNombreArchivo(fileName);
+        if (!StringUtils.substringAfterLast(fileName,".").equals("pdf")){
+            recursoMedia.setNombreArchivo(addWebpExtension(fileName));
+        } else {
+            recursoMedia.setNombreArchivo(fileName);
+        }
+
         recursoMedia.setEventoGaleriaImagenes(evento);
-
         mediaRepository.save(recursoMedia);
-
         saveMultipartAs(multipartFile, fileName);
 
         return recursoMedia;
@@ -73,4 +82,5 @@ public class RecursoMediaService extends AbstractFileService{
         final String[] validExtensions = {"png", "jpg", "webp"};
         return Arrays.stream(validExtensions).anyMatch(fileExt::equals);
     }
+
 }

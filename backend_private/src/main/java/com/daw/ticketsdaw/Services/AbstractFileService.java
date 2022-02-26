@@ -59,4 +59,8 @@ public abstract class AbstractFileService {
     }
 
     abstract boolean checkFileExt(String fileExt);
+
+    protected String addWebpExtension(String filename){
+        return StringUtils.substringBeforeLast(filename, ".") + ".webp";
+    }
 }
