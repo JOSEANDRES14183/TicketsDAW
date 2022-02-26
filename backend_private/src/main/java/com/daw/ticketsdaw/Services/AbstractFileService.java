@@ -7,6 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,8 +32,35 @@ public abstract class AbstractFileService {
 
     protected void saveMultipartAs(MultipartFile multipartFile, String fileName) throws IOException {
         Path path = Paths.get(environment.getProperty("tickets.uploads.path") + fileName);
-        multipartFile.transferTo(path);
+        String fileExt =  StringUtils.substringAfterLast(fileName, ".");
+
+        if (fileExt.equals("pdf")){
+            multipartFile.transferTo(path);
+        } else {
+            String newFileName = StringUtils.substringBeforeLast(fileName, ".") + ".webp";
+            BufferedImage bufferedImage = ImageIO.read(multipartFile.getResource().getInputStream());
+            File output = new File(environment.getProperty("tickets.uploads.path") + newFileName);
+
+            ImageOutputStream imageOutputStream = ImageIO.createImageOutputStream(new FileOutputStream(output));
+            ImageWriter imageWriter = ImageIO.getImageWritersByFormatName(fileExt).next();
+            ImageWriteParam imageWriteParam = imageWriter.getDefaultWriteParam();
+
+            imageWriter.setOutput(imageOutputStream);
+            imageWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+            imageWriteParam.setCompressionQuality(0.3f);
+
+            imageWriter.write(null,new IIOImage(bufferedImage,null,null),imageWriteParam);
+
+            output.createNewFile();
+
+            imageOutputStream.close();
+            imageWriter.dispose();
+        }
     }
 
     abstract boolean checkFileExt(String fileExt);
+
+    protected String addWebpExtension(String filename){
+        return StringUtils.substringBeforeLast(filename, ".") + ".webp";
+    }
 }
