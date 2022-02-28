@@ -4,7 +4,7 @@ function GoogleMaps({center, zoom,}){
     const ref = useRef(null);
     const [map, setMap] = useState(null);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (ref.current && !map) {
             setMap(new window.google.maps.Map(ref.current, {
                 center,
@@ -12,6 +12,12 @@ function GoogleMaps({center, zoom,}){
             }));
         }
     }, [ref, map]);
+
+    useEffect(() => {
+        if(map){
+            map.setCenter(center)
+        }
+    }, [center, zoom]);
 
     return(
         <div ref={ref} className={"h-100 w-100"}>

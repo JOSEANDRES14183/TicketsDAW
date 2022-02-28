@@ -14,7 +14,8 @@ function Evento(){
 
     const [evento, setEvento] = useState([]);
 
-    const [count, setCount] = useState(0);
+    const [count1, setCount1] = useState(0);
+    const [count2, setCount2] = useState(0);
 
     const params = useParams();
 
@@ -64,7 +65,10 @@ function Evento(){
                     <div className="col-4">
                         <img className={"border-1 border-end img-fluid"}
                              src={process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + '/api/media/' +evento.foto_perfil.nombre_archivo}/>
-                        <button onClick={() => setCount(count+1)}> Click me </button>
+                        <button onClick={() => setCount1(count1+1)}> Click me 1</button>
+                        <p>{count1}</p>
+                        <button onClick={() => setCount2(count2+1)}> Click me 2</button>
+                        <p>{count2}</p>
                     </div>
                     <div className="col-8">
                         <h2>{evento.titulo}</h2>
@@ -79,7 +83,7 @@ function Evento(){
                     </div>
                 </section>
                 <section className="py-3 border-1 border-top">
-                    <SesionInfo></SesionInfo>
+                    <SesionInfo lat={count1} lng={count2}></SesionInfo>
                 </section>
                 {evento.descripcion.length > 0 &&
                 <section className="row py-3 border-1 border-top">
