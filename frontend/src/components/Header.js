@@ -56,10 +56,6 @@ function Header(props){
                         </NavItem>
                     </Nav>
 
-                    <p>
-                        <Translate string={"ejemplo"} />
-                    </p>
-
                     <LanguagePicker changeLang = {props.changeLang}/>
 
                     <Button color={"primary"}>CREAR UN EVENTO</Button>
