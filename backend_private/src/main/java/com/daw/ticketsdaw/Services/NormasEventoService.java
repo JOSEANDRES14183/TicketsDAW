@@ -3,6 +3,7 @@ package com.daw.ticketsdaw.Services;
 import com.daw.ticketsdaw.Entities.NormasEvento;
 import com.daw.ticketsdaw.Entities.RecursoMedia;
 import com.daw.ticketsdaw.Repositories.NormasEventoRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,12 @@ public class NormasEventoService extends AbstractFileService{
         String fileName = generateSafeFileName(multipartFile.getOriginalFilename());
 
         NormasEvento normasEvento = new NormasEvento();
-        normasEvento.setNombrePdf(fileName);
+
+        if (!StringUtils.substringAfterLast(fileName,".").equals("pdf")){
+            normasEvento.setNombrePdf(addWebpExtension(fileName));
+        } else {
+            normasEvento.setNombrePdf(fileName);
+        }
 
         normasRepository.save(normasEvento);
 

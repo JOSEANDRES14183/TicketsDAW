@@ -16,10 +16,10 @@ class SesionFullCalendarResource extends JsonResource
     public function toArray($request)
     {
         $date = Carbon::createFromFormat('Y-m-d H:i:s', $this->fecha_ini);
-        $date->addMinutes($this->evento->duracion_estandar);
+        $date->addMinutes($this->duracion);
 
         return [
-            'title' => $this->evento->duracion_estandar.' min.',
+            'title' => $this->duracion.' min.',
             'start' => $this->fecha_ini,
             'end' => $date->toDateTimeString(),
             'backgroundColor' => 'red',

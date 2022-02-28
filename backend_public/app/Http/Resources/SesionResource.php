@@ -14,13 +14,16 @@ class SesionResource extends JsonResource
      */
     public function toArray($request)
     {
+
         return [
             'id' => $this->id,
             'entradas_max' => $this->entradas_max,
             'fecha_fin_venta' => $this->fecha_fin_venta,
             'fecha_ini' => $this->fecha_ini,
             'duracion' => $this->duracion,
-            'tipos_entrada' => $this->tiposEntrada,
+            'isNumerada' => $this->isNumerada(),
+            'sesionNumData' => $this->when($this->isNumerada(), $this->sesionNumData),
+            'tipos_entrada' => $this->when(!$this->isNumerada(), $this->tiposEntrada),
             'sala' => new SalaResource($this->sala)
         ];
     }

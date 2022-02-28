@@ -12,6 +12,10 @@ class Sesion extends Model
     protected $table = 'sesion';
     protected $primaryKey = 'id';
 
+    public function isNumerada(){
+        return (bool) $this->sesionNumData;
+    }
+
     public function sala(){
         return $this->belongsTo(Sala::class,'id_sala');
     }
@@ -22,6 +26,10 @@ class Sesion extends Model
 
     public function tiposEntrada(){
         return $this->hasMany(TipoEntrada::class,'id_sesion');
+    }
+
+    public function sesionNumData(){
+        return $this->hasOne(SesionNumData::class,'id');
     }
 
 

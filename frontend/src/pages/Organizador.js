@@ -53,12 +53,12 @@ function Organizador(){
                     <div className={"row text-white"}>
                         <div className={"col-5 d-flex justify-content-center"}>
                             <img className={"img-fluid"}
-                                 src={process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + '/api/media/' +organizador.organizador_data.foto_perfil.nombre_archivo}
-                                 alt={"Imagen de perfil de "+organizador.nombre_usuario}/>
+                                 src={process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + '/api/media/' +organizador.foto_perfil.nombre_archivo}
+                                 alt={"Imagen de perfil de "+organizador.nombre}/>
                         </div>
                         <div className={"col-7 pt-3"}>
-                            <h1 className={"mb-3"}>{organizador.organizador_data.nombre}</h1>
-                            <p>{organizador.organizador_data.descripcion}</p>
+                            <h1 className={"mb-3"}>{organizador.nombre}</h1>
+                            <p>{organizador.descripcion}</p>
                         </div>
                     </div>
                 </div>

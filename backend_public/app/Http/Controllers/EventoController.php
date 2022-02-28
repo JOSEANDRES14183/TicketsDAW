@@ -14,7 +14,7 @@ class EventoController extends Controller
 {
     public function index()
     {
-        return EventoResource::collection(Evento::with('organizador')->get());
+        return EventoResource::collection(Evento::where('esta_oculto',false)->get());
     }
 
     public function show($id)
