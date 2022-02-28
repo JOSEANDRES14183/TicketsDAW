@@ -8,8 +8,10 @@ import {
     Button,
 } from "reactstrap";
 import iesmanacor_logo from "../assets/images/iesmanacor_logo.png"
+import LanguagePicker from "./LanguagePicker";
+import Translate from "../locales/Translate";
 
-function Header(){
+function Header(props){
     return(
         <header>
             <Navbar className={"border-bottom"}
@@ -53,6 +55,13 @@ function Header(){
                             </NavLink>
                         </NavItem>
                     </Nav>
+
+                    <p>
+                        <Translate string={"ejemplo"} />
+                    </p>
+
+                    <LanguagePicker changeLang = {props.changeLang}/>
+
                     <Button color={"primary"}>CREAR UN EVENTO</Button>
                 </div>
 
