@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\EventoCollection;
-use App\Http\Resources\EventoResource;
-use App\Models\Evento;
-use Illuminate\Http\Request;
+use App\Http\Resources\SesionResource;
+use App\Models\Sesion;
 
 class SesionController extends Controller
 {
