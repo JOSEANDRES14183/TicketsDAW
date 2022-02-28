@@ -1,11 +1,12 @@
 import {LocaleContext} from "../contexts/LocaleContext";
-
 import es from "./es.json"
 import ca from "./ca.json"
 import en from "./en.json"
+import {useContext} from "react";
 
 function Translate(props){
 
+    const value = useContext(LocaleContext);
     const langs = {
         es,
         ca,
@@ -13,9 +14,9 @@ function Translate(props){
     }
 
     return (
-        <LocaleContext.Consumer>
-            {value=>langs[value][props.string]}
-        </LocaleContext.Consumer>
+        <>
+            {langs[value][props.string]}
+        </>
     );
 }
 

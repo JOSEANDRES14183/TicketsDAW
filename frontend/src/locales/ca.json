@@ -1,3 +1,15 @@
 {
-  "lang" : "ca"
+  "translation": {
+    "lang": "ca",
+    "events": "Events",
+    "about-us": "Sobre nosaltres",
+    "support": "Suport",
+    "create-event": "Crea un event",
+    "category": {
+      "all" : "Totes",
+      "teatros" : "Teatres",
+      "musical" : "Musical",
+      "cine" : "Cinema"
+    }
+  }
 }

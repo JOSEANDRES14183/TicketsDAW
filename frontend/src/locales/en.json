@@ -1,3 +1,15 @@
 {
-  "lang" : "en"
+  "translation": {
+    "lang": "en",
+    "events": "Events",
+    "about-us": "About Us",
+    "support": "Support",
+    "create-event": "Create an event",
+    "category": {
+      "all" : "All",
+      "teatros" : "Theaters",
+      "musical" : "Musical",
+      "cine" : "Film"
+    }
+  }
 }

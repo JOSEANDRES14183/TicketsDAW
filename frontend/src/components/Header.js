@@ -9,9 +9,12 @@ import {
 } from "reactstrap";
 import iesmanacor_logo from "../assets/images/iesmanacor_logo.png"
 import LanguagePicker from "./LanguagePicker";
-import Translate from "../locales/Translate";
+import {useTranslation} from "react-i18next";
 
-function Header(props){
+function Header(){
+
+    const {t} = useTranslation();
+
     return(
         <header>
             <Navbar className={"border-bottom"}
@@ -41,24 +44,26 @@ function Header(props){
                          navbar>
                         <NavItem>
                             <NavLink href={"/"}>
-                                Eventos
+                                {t('events')}
                             </NavLink>
                         </NavItem>
                         <NavItem>
                             <NavLink href={"/soporte"}>
-                                Soporte
+                                {t('support')}
                             </NavLink>
                         </NavItem>
                         <NavItem>
                             <NavLink href={"/about-us"}>
-                                Sobre nosotros
+                                {t('about-us')}
                             </NavLink>
                         </NavItem>
                     </Nav>
 
-                    <LanguagePicker changeLang = {props.changeLang}/>
+                    <LanguagePicker />
 
-                    <Button color={"primary"}>CREAR UN EVENTO</Button>
+                    <Button className="text-uppercase" color={"primary"}>
+                        {t('create-event')}
+                    </Button>
                 </div>
 
             </Navbar>

@@ -4,8 +4,11 @@ import {Nav, NavItem, NavLink, Spinner} from "reactstrap";
 import EventoList from "../components/EventoList";
 import SearchFilter from "../components/SearchFilter";
 import EventoListFiltered from "../components/EventoListFiltered";
+import {useTranslation} from "react-i18next";
 
 function Eventos(){
+
+    const {t} = useTranslation();
 
     const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -53,10 +56,18 @@ function Eventos(){
                     <div className={"col-md-3 col-6"}>
                         <select className={"form-select"}
                                 onChange={(event) => setCategory(event.target.value)}>
-                            <option value="All">Todos</option>
-                            <option value="Teatros">Teatros</option>
-                            <option value="Musical">Musical</option>
-                            <option value="Cine">Cine</option>
+                            <option value="All">
+                                {t('category.all')}
+                            </option>
+                            <option value="Teatros">
+                                {t('category.teatros')}
+                            </option>
+                            <option value="Musical">
+                                {t('category.musical')}
+                            </option>
+                            <option value="Cine">
+                                {t('category.cine')}
+                            </option>
                         </select>
                     </div>
                     <div className={"col-md-3 col-6"}>

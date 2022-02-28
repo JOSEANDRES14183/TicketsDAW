@@ -6,20 +6,13 @@ import Soporte from "../pages/Soporte";
 import SobreNosotros from "../pages/SobreNosotros";
 import Evento from "../pages/Evento";
 import Organizador from "../pages/Organizador";
-import React, {useState} from "react";
-import {LocaleContext} from "../contexts/LocaleContext";
+import React from "react";
 
 function App() {
 
-    const [currentLocale, setCurrentLocale] = useState("es");
-
-    const changeLang = (lang) => {
-        setCurrentLocale(lang);
-    }
-
   return (
-    <LocaleContext.Provider value={currentLocale}>
-        <Header changeLang={changeLang}/>
+    <>
+        <Header />
         <main>
             <Routes>
                 <Route exact path={"/"} element={<Eventos />} />
@@ -30,7 +23,7 @@ function App() {
             </Routes>
         </main>
         <Footer />
-    </LocaleContext.Provider>
+    </>
   );
 
 }
