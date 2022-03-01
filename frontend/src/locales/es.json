@@ -10,6 +10,12 @@
       "teatros" : "Teatros",
       "musical" : "Musical",
       "cine" : "Cine"
-    }
+    },
+    "sort" : {
+      "no-sort" : "Sin ordernar",
+      "by-date-asc" : "Ordenar por fecha (Más reciente a menos)",
+      "by-date-desc" : "Ordenar por fecha (Menos reciente a más)"
+    },
+    "search" : "busca"
   }
 }

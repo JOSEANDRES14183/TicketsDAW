@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Nav, NavItem, NavLink, Spinner} from "reactstrap";
-import EventoList from "../components/EventoList";
 import SearchFilter from "../components/SearchFilter";
 import EventoListFiltered from "../components/EventoListFiltered";
 import {useTranslation} from "react-i18next";
@@ -73,9 +72,11 @@ function Eventos(){
                     <div className={"col-md-3 col-6"}>
                         <select className={"form-select"}
                                 onChange={(event) => setDateOrder(event.target.value)}>
-                            <option value="noSort">Sin ordenar</option>
-                            <option value="asc">Ordenar por fecha (Más reciente a menos)</option>
-                            <option value="desc">Ordenar por fecha (Menos reciente a más)</option>
+                            <option value="noSort">
+                                {t('sort.no-sort')}
+                            </option>
+                            <option value="asc">{t('sort.by-date-asc')}</option>
+                            <option value="desc">{t('sort.by-date-desc')}</option>
                         </select>
                     </div>
                     <SearchFilter handleChange={changeSearch}/>

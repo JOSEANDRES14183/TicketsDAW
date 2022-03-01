@@ -1,6 +1,9 @@
 import {Link} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 function EventoCard(props){
+
+    const {t} = useTranslation();
 
     return(
             <article className={"col-12 col-md-6 mb-1 p-2 evento overflow-hidden"}>
@@ -10,7 +13,9 @@ function EventoCard(props){
                          src={process.env.REACT_APP_API_PROTOCOL_PREFIX+process.env.REACT_APP_API_HOST + '/api/media/' +props.evento.foto_perfil.nombre_archivo}/>
                     <div className={"d-flex flex-grow-1 flex-column p-3"}>
                         <h6>{props.evento.titulo}</h6>
-                        <p className={"text-secondary fw-bold"}>{props.evento.categoria.nombre}</p>
+                        <p className={"text-secondary fw-bold"}>
+                            {t('category.'+props.evento.categoria.nombre.toLowerCase())}
+                        </p>
                         <p><i className="bi bi-geo-alt-fill" /> {props.evento.latest_sesion.sala.direccion}</p>
                         <p className={"text-end text-primary h4 pe-3"}>
                             {props.evento.latest_sesion.isNumerada ? props.evento.latest_sesion.sesionNumData.precio : props.evento.latest_sesion.tipos_entrada[0].precio}€
