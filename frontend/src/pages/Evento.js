@@ -57,6 +57,10 @@ function Evento(){
         );
     }
 
+    const eventClick = (info) =>{
+        setSesionId(info.event.extendedProps.sesion_id)
+    }
+
     return (
             <div className={"py-3 container-md"}>
                 <Link to={"/"}>
@@ -68,7 +72,6 @@ function Evento(){
                     <div className="col-4">
                         <img className={"border-1 border-end img-fluid"}
                              src={process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + '/api/media/' +evento.foto_perfil.nombre_archivo}/>
-                        <input type="number" name="test" id="test" onChange={(e) => setSesionId(e.target.value)}/>
                         <p>{sesionId}</p>
                     </div>
                     <div className="col-8">
@@ -80,6 +83,7 @@ function Evento(){
                                       eventDisplay='block'
                                       themeSystem='bootstrap5'
                                       events={evento.sesiones}
+                                      eventClick={eventClick}
                         />
                     </div>
                 </section>
