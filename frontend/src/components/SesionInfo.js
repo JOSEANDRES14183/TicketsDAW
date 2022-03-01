@@ -3,6 +3,7 @@ import {Status, Wrapper} from "@googlemaps/react-wrapper";
 import GoogleMaps from "./GoogleMaps";
 import axios from "axios";
 import {Spinner} from "reactstrap";
+import GoogleMapsMarker from "./GoogleMapsMarker";
 
 function SesionInfo({sesionId, visible}){
     const [isLoading, setLoading] = useState(true);
@@ -57,7 +58,9 @@ function SesionInfo({sesionId, visible}){
                     <div className="col-4" style={{height: "300px"}}>
                         <p>{}</p>
                         <Wrapper apiKey={process.env.REACT_APP_API_GOOGLE_MAPS_KEY}>
-                            <GoogleMaps center={{"lat": lat, "lng": lng}} zoom={9} />
+                            <GoogleMaps center={{"lat": lat, "lng": lng}} zoom={15}>
+                                <GoogleMapsMarker position={{"lat": lat, "lng": lng}}></GoogleMapsMarker>
+                            </GoogleMaps>
                         </Wrapper>
                     </div>
                     <div className="col-8">

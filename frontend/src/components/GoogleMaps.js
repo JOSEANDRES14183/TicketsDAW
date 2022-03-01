@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 
-function GoogleMaps({center, zoom,}){
+function GoogleMaps({children, center, zoom,}){
     const ref = useRef(null);
     const [map, setMap] = useState(null);
 
@@ -16,12 +16,20 @@ function GoogleMaps({center, zoom,}){
     useEffect(() => {
         if(map){
             map.setCenter(center)
+
         }
     }, [center, zoom]);
 
     return(
-        <div ref={ref} className={"h-100 w-100"}>
-        </div>
+        <>
+            <div ref={ref} className={"h-100 w-100"} />
+            {React.Children.map(children, (child) => {
+                if (React.isValidElement(child)) {
+                    // set the map prop on the child component
+                    return React.cloneElement(child, { map });
+                }
+            })}
+        </>
     );
 
 }
