@@ -4,6 +4,7 @@ import GoogleMaps from "./GoogleMaps";
 import axios from "axios";
 import {Form, FormGroup, Input, Label, Spinner} from "reactstrap";
 import GoogleMapsMarker from "./GoogleMapsMarker";
+import SeatMap from "./SeatMap";
 
 function SesionInfo({sesionId, visible}){
     const [isLoading, setLoading] = useState(true);
@@ -82,8 +83,8 @@ function SesionInfo({sesionId, visible}){
                             </Form>
                         }
                         {sesion.isNumerada &&
-                            <Form>
-                                <p>Placeholder numerada</p>
+                            <Form className="h-100 rounded-3 bg-light">
+                                <SeatMap seats={sesion.sala.butacas}></SeatMap>
                             </Form>
                         }
                     </div>
