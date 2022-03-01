@@ -25,11 +25,11 @@ class ErrorBoundaryHide extends React.Component {
     }
 
     render() {
-        return(
-            <React.Fragment key={this.state.errorCount}>
-                {this.props.children}
-            </React.Fragment>
-        )
+        // return(
+        //     <React.Fragment key={this.state.errorCount}>
+        //         {this.props.children}
+        //     </React.Fragment>
+        // )
         if (this.state.hasError) {
             // You can render any custom fallback UI
             return <h2>Something went wrong.</h2>;
