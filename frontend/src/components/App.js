@@ -6,8 +6,10 @@ import Soporte from "../pages/Soporte";
 import SobreNosotros from "../pages/SobreNosotros";
 import Evento from "../pages/Evento";
 import Organizador from "../pages/Organizador";
+import React from "react";
 
 function App() {
+
   return (
     <>
         <Header />

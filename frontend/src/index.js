@@ -7,6 +7,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js.map';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from "react-router-dom";
+import './locales/i18n'
 
 ReactDOM.render(
   <React.StrictMode>

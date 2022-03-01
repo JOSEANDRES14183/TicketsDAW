@@ -1,0 +1,21 @@
+{
+  "translation": {
+    "lang": "ca",
+    "events": "Events",
+    "about-us": "Sobre nosaltres",
+    "support": "Suport",
+    "create-event": "Crea un event",
+    "category": {
+      "all" : "Totes",
+      "teatros" : "Teatres",
+      "musical" : "Musical",
+      "cine" : "Cinema"
+    },
+    "sort" : {
+      "no-sort" : "Sense ordenar",
+      "by-date-asc" : "Ordenar per data (Més recent a menys)",
+      "by-date-desc" : "Ordenar per data (Menys recent a més)"
+    },
+    "search" : "cerca"
+  }
+}
