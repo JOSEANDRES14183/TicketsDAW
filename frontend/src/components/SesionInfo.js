@@ -52,17 +52,19 @@ function SesionInfo({sesionId, visible}){
     return(
         <>
             {visible &&
-            <div className={"row"}>
-                <div className="col-4" style={{height: "300px"}}>
-                    <p>{}</p>
-                    <Wrapper apiKey={process.env.REACT_APP_API_GOOGLE_MAPS_KEY}>
-                        <GoogleMaps center={{"lat": lat, "lng": lng}} zoom={9} />
-                    </Wrapper>
+            <section className="py-3 border-1 border-top">
+                <div className={"row"}>
+                    <div className="col-4" style={{height: "300px"}}>
+                        <p>{}</p>
+                        <Wrapper apiKey={process.env.REACT_APP_API_GOOGLE_MAPS_KEY}>
+                            <GoogleMaps center={{"lat": lat, "lng": lng}} zoom={9} />
+                        </Wrapper>
+                    </div>
+                    <div className="col-8">
+                        <h1>{}</h1>
+                    </div>
                 </div>
-                <div className="col-8">
-                    <h1>{}</h1>
-                </div>
-            </div>
+            </section>
             }
         </>
     );

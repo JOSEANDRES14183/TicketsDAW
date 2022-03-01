@@ -26,7 +26,6 @@ function Evento(){
                 setEvento(result.data);
                 setLoading(false);
                 setSesionId(result.data.latest_sesion.id);
-                setShowSesion(true);
             })
             .catch(error => {
                 setError(error);
@@ -58,7 +57,8 @@ function Evento(){
     }
 
     const eventClick = (info) =>{
-        setSesionId(info.event.extendedProps.sesion_id)
+        setSesionId(info.event.extendedProps.sesion_id);
+        setShowSesion(true);
     }
 
     return (
@@ -87,11 +87,11 @@ function Evento(){
                         />
                     </div>
                 </section>
-                <section className="py-3 border-1 border-top">
-                    <ErrorBoundaryHide>
-                        <SesionInfo sesionId={sesionId} visible={showSesion}></SesionInfo>
-                    </ErrorBoundaryHide>
-                </section>
+
+                <ErrorBoundaryHide>
+                    <SesionInfo sesionId={sesionId} visible={showSesion}></SesionInfo>
+                </ErrorBoundaryHide>
+
                 {evento.descripcion.length > 0 &&
                 <section className="row py-3 border-1 border-top">
                     <div className="col-12">
