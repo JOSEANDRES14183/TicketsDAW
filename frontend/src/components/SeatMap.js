@@ -94,6 +94,7 @@ function SeatMap({seats}) {
             return currSeat;
         })
 
+        setSeatMap(seatsMapCopy)
         //renderFn(d3.select(ref.current))
     }
 
