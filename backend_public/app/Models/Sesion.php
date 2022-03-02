@@ -32,5 +32,12 @@ class Sesion extends Model
         return $this->hasOne(SesionNumData::class,'id');
     }
 
+    //Relaciones ternaria
+    public function butacas()
+    {}
+
+    public function entrada()
+    {}
+
 
 }
