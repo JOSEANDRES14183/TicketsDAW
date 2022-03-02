@@ -21,7 +21,6 @@ function Evento(){
     const [evento, setEvento] = useState([]);
 
     const [sesionId, setSesionId] = useState(null);
-    const [showSesion, setShowSesion] = useState(false);
 
     const params = useParams();
 
@@ -30,7 +29,6 @@ function Evento(){
             .then(result => {
                 setEvento(result.data);
                 setLoading(false);
-                setSesionId(result.data.latest_sesion.id);
             })
             .catch(error => {
                 setError(error);
@@ -63,7 +61,6 @@ function Evento(){
 
     const eventClick = (info) =>{
         setSesionId(info.event.extendedProps.sesion_id);
-        setShowSesion(true);
     }
 
     return (
@@ -102,7 +99,7 @@ function Evento(){
                 </section>
 
                 <ErrorBoundaryHide>
-                    <SesionInfo sesionId={sesionId} visible={showSesion}></SesionInfo>
+                    <SesionInfo sesionId={sesionId}></SesionInfo>
                 </ErrorBoundaryHide>
 
                 {evento.descripcion.length > 0 &&
