@@ -24,6 +24,7 @@ class EventoResource extends JsonResource
             'es_nominativo' => $this->es_nominativo,
             'duracion_estandar' => $this->duracion_estandar,
             'foto_perfil' => $this->fotoPerfil,
+            'organizador' => new OrganizadorResource($this->organizador),
             'categoria' => $this->categoria,
             'latest_sesion' => new SesionResource($this->sesiones->sortBy('fecha_ini')->first()),
             'sesiones' => SesionFullCalendarResource::collection($this->sesiones),
