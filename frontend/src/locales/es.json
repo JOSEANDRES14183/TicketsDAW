@@ -1,0 +1,21 @@
+{
+  "translation": {
+    "lang": "es",
+    "events": "Eventos",
+    "about-us": "Sobre nosotros",
+    "support": "Soporte",
+    "create-event": "Crear un evento",
+    "category": {
+      "all" : "Todas",
+      "teatros" : "Teatros",
+      "musical" : "Musical",
+      "cine" : "Cine"
+    },
+    "sort" : {
+      "no-sort" : "Sin ordernar",
+      "by-date-asc" : "Ordenar por fecha (Más reciente a menos)",
+      "by-date-desc" : "Ordenar por fecha (Menos reciente a más)"
+    },
+    "search" : "busca"
+  }
+}
