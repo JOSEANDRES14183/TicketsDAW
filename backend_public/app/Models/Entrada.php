@@ -13,31 +13,31 @@ class Entrada extends Model
     protected $table = 'entrada';
     protected $primaryKey = 'id';
 
+    //Esto no devuelve una relacion de Eloquent, por lo que al llamarlo lo tienes que hacer así: $this->tipoEntrada()
     public function tipoEntrada()
     {
-        return DB::table('tipo_entrada')
-            ->where('nombre','=',$this->nombre_tipo_entrada)
-            ->where('id_sesion','=',$this->id_sesion)
+        return TipoEntrada::where('nombre','=',$this->nombre_tipo_entrada)
+            ->where('id_sesion','=',$this->id_sesion_numerada)
             ->first();
     }
 
-    public function butacas()
+    //Esto no devuelve una relacion de Eloquent, por lo que al llamarlo lo tienes que hacer así: $this->butaca()
+    public function butaca()
     {
-        return $this->belongsToMany(Butaca::class,'entrada_sesion_butaca','id_sala_butaca');
-//        $butacaKeys = DB::table('entrada_sesion_butaca')
-//            ->where('id_entrada','=',$this->id)
-//            ->get(['id_sala_butaca','pos_x_butaca','pos_y_butaca']);
-//
-//        return Butaca::where('id_sala','=',$butacaKeys['id_sala_butaca'])
-//            ->where('pos_x','=','pos_x_butaca')
-//            ->where('pos_y','=','pos_y_butaca')
-//            ->first();
+        return Butaca::where('id_sala','=',$this->id_sala_butaca)
+            ->where('pos_x','=',$this->pos_x_butaca)
+            ->where('pos_x','=',$this->pos_y_butaca)
+            ->first();
     }
 
     public function sesion()
     {
-        return $this->belongsToMany(Sesion::class,"entrada_sesion_butaca",'id_sesion')
-            ->first();
+        return $this->belongsTo(Sesion::class,"id_sesion");
+    }
+
+    public function operacionCompra()
+    {
+        return $this->belongsTo(OperacionCompra::class,"id_operacion_compra");
     }
 
 
