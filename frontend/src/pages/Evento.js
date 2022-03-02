@@ -7,6 +7,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import bootstrap5Plugin from '@fullcalendar/bootstrap5';
 import SesionInfo from "../components/SesionInfo";
 import ErrorBoundaryHide from "../components/ErrorBoundaryHide";
+import OrganizadorBanner from "../components/OrganizadorBanner";
 
 function Evento(){
 
@@ -73,6 +74,7 @@ function Evento(){
                         <img className={"border-1 border-end img-fluid"}
                              src={process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + '/api/media/' +evento.foto_perfil.nombre_archivo}/>
                         <p>{sesionId}</p>
+                        <OrganizadorBanner user={evento.organizador}></OrganizadorBanner>
                     </div>
                     <div className="col-8">
                         <h2>{evento.titulo}</h2>
