@@ -2,6 +2,7 @@ import {Link, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Button, Spinner} from "reactstrap";
+import CarouselEvento from "../components/CarouselEvento";
 
 function Evento(){
 
@@ -65,6 +66,8 @@ function Evento(){
                              src={process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + '/api/media/' +evento.foto_perfil.nombre_archivo}/>
                     </div>
                 </div>
+
+                <CarouselEvento imagenes={evento.imagenes}/>
 
             </div>
     );
