@@ -15,7 +15,6 @@ class EventoResource extends JsonResource
      */
     public function toArray($request)
     {
-
         return [
             'id' => $this->id,
             'titulo' => $this->titulo,
@@ -27,6 +26,7 @@ class EventoResource extends JsonResource
             'categoria' => $this->categoria,
             'latest_sesion' => new SesionResource($this->sesiones->sortBy('fecha_ini')->first()),
             'sesiones' => SesionFullCalendarResource::collection($this->sesiones),
+            'imagenes' => ImgCarouselResource::collection($this->imagenes)
         ];
     }
 }

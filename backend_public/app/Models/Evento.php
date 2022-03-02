@@ -36,5 +36,10 @@ class Evento extends Model
         return $this->belongsTo(Usuario::class,'id_organizador');
     }
 
+    public function imagenes()
+    {
+        return $this->hasMany(RecursoMedia::class,'id_evento_galeria_img');
+    }
+
 
 }
