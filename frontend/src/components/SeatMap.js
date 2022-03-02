@@ -6,9 +6,57 @@ const MARGIN = { top: 30, right: 30, bottom: 30, left: 30 };
 
 //https://www.react-graph-gallery.com/scatter-plot
 function SeatMap({seats}) {
-    const multiplyFactor = 48;
+    const ref = useD3(
+        (svg) => {
+            const multiplyFactor = 48;
 
-    const axesRef = useRef(null);
+            svg
+                .select("g.plotArea")
+                .selectAll("circle")
+                .remove()
+                .data(seats)
+                .enter()
+                .append("circle")
+                .attr("r", 16)
+                .attr("opacity", 1)
+                .attr("stroke", "#000")
+                .attr("fillOpacity", 0.7)
+                .attr("strokeWidth", 1)
+                .attr("fill", (d) => d.seleccionada ? "#B8FFF9" : "#9a6fb0")
+                .attr("cx", (d) => d.pos_x*multiplyFactor)
+                .attr("cy", (d) => d.pos_y*multiplyFactor)
+                .attr("onclick", (d) => seatClick(d))
+
+            function handleZoom(e) {
+                svg.select('g')
+                    .attr('transform', e.transform);
+            }
+
+            let zoom = d3.zoom()
+                .on('zoom', handleZoom);
+
+            svg
+                .call(zoom);
+
+            const allShapes = seats.map((d, i) => {
+                return (
+                    <circle
+                        key={i}
+                        r={16}
+                        cx={d.pos_x*multiplyFactor}
+                        cy={d.pos_y*multiplyFactor}
+                        opacity={1}
+                        stroke="#000"
+                        fill={d.seleccionada ? "#B8FFF9" : "#9a6fb0"}
+                        fillOpacity={0.7}
+                        strokeWidth={1}
+                        onClick={() => seatClick(i)}
+                    />
+                );
+        }, [seats.length]
+    )
+
+    // const axesRef = useRef(null);
     // const boundsWidth = width - MARGIN.right - MARGIN.left;
     // const boundsHeight = height - MARGIN.top - MARGIN.bottom;
 
@@ -38,37 +86,17 @@ function SeatMap({seats}) {
     //     svgElement.append("g").call(yAxisGenerator);
     // }, [xScale, yScale, boundsHeight]);
 
-    const allShapes = seats.map((d, i) => {
-        return (
-            <circle
-                key={i}
-                r={16}
-                cx={d.pos_x*multiplyFactor}
-                cy={d.pos_y*multiplyFactor}
-                opacity={1}
-                stroke="#9a6fb0"
-                fill="#9a6fb0"
-                fillOpacity={0.7}
-                strokeWidth={1}
-            />
-        );
-    });
-
-    function handleZoom(e) {
-        d3.select('svg g')
-            .attr('transform', e.transform);
+    function seatClick(seat){
+        seat.seleccionada = true;
     }
 
-    let zoom = d3.zoom()
-        .on('zoom', handleZoom);
-
-    d3.select('svg')
-        .call(zoom);
+    });
 
     return(
         <svg
+            ref={ref}
             // width={width} height={height}
-            id="d3graph"
+            // id="d3graph"
         style={{
             height: "100%",
             width: "100%"
@@ -76,9 +104,10 @@ function SeatMap({seats}) {
             <g
                 // width={boundsWidth}
                 // height={boundsHeight}
+                className="plotArea"
                 transform={`translate(${[MARGIN.left, MARGIN.top].join(",")})`}
             >
-                {allShapes}
+                {/*{allShapes}*/}
             </g>
             {/* Second is for the axes */}
             {/*<g*/}

@@ -15,7 +15,7 @@ function Evento(){
 
     const [evento, setEvento] = useState([]);
 
-    const [sesionId, setSesionId] = useState(3);
+    const [sesionId, setSesionId] = useState(null);
     const [showSesion, setShowSesion] = useState(false);
 
     const params = useParams();
