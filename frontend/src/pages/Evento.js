@@ -8,8 +8,12 @@ import bootstrap5Plugin from '@fullcalendar/bootstrap5';
 import SesionInfo from "../components/SesionInfo";
 import ErrorBoundaryHide from "../components/ErrorBoundaryHide";
 import OrganizadorBanner from "../components/OrganizadorBanner";
+import {useTranslation} from "react-i18next";
 
 function Evento(){
+
+    const {t} = useTranslation();
+
 
     const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -84,8 +88,15 @@ function Evento(){
                                       initialView="dayGridMonth"
                                       eventDisplay='block'
                                       themeSystem='bootstrap5'
+                                      locale={t("lang")}
                                       events={evento.sesiones}
                                       eventClick={eventClick}
+                                      // dayCellDidMount={function (arg){
+                                      //     if(arg.date.getDate() > 15 ){
+                                      //         arg.el.style.backgroundColor = "red";
+                                      //
+                                      //     }
+                                      // }}
                         />
                     </div>
                 </section>
