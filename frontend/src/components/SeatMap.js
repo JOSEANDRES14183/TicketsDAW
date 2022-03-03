@@ -86,7 +86,7 @@ function SeatMap({seats}) {
 
     const seatClick = (seat) => {
         let seatCopy = {...seat};
-        seatCopy.seleccionada = true;
+        seatCopy.seleccionada = !seatCopy.seleccionada;
 
         let seatsMapCopy = JSON.parse(JSON.stringify(seatMapRef.current));
 
