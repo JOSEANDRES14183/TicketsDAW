@@ -14,6 +14,7 @@ public class EventoDTO {
     @NotNull
     @Size(min = 3, max = 20)
     private String titulo;
+    @NotNull
     @Size(max = 300)
     private String descripcion;
     @NotNull

@@ -2,14 +2,26 @@ import {Link, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Button, Spinner} from "reactstrap";
+import FullCalendar from '@fullcalendar/react'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import bootstrap5Plugin from '@fullcalendar/bootstrap5';
+import SesionInfo from "../components/SesionInfo";
+import ErrorBoundaryHide from "../components/ErrorBoundaryHide";
+import OrganizadorBanner from "../components/OrganizadorBanner";
+import {useTranslation} from "react-i18next";
 import CarouselEvento from "../components/CarouselEvento";
 
 function Evento(){
+
+    const {t} = useTranslation();
+
 
     const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     const [evento, setEvento] = useState([]);
+
+    const [sesionId, setSesionId] = useState(null);
 
     const params = useParams();
 
@@ -48,6 +60,10 @@ function Evento(){
         );
     }
 
+    const eventClick = (info) =>{
+        setSesionId(info.event.extendedProps.sesion_id);
+    }
+
     return (
             <div className={"py-3 container-md"}>
                 <Link to={"/"}>
@@ -55,20 +71,56 @@ function Evento(){
                         Volver
                     </Button>
                 </Link>
-
-                <div className={"row"}>
-                    <div className={"col-7 d-flex flex-column"}>
-                        <h2>{evento.titulo}</h2>
-                        <p>{evento.descripcion}</p>
-                    </div>
-                    <div className={"col"}>
+                <section className="row py-3">
+                    <div className="col-4">
                         <img className={"border-1 border-end img-fluid"}
                              src={process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + '/api/media/' +evento.foto_perfil.nombre_archivo}/>
+                        <p>{sesionId}</p>
+                        <OrganizadorBanner user={evento.organizador}></OrganizadorBanner>
                     </div>
-                </div>
+                    <div className="col-8">
+                        <h2>{evento.titulo}</h2>
+                        <p><i className="bi bi-clock" /> {evento.duracion_estandar} min.</p>
+                        <p><i className="bi bi-bookmarks" /> {evento.categoria.nombre}</p>
+                        <FullCalendar plugins={[dayGridPlugin, bootstrap5Plugin]}
+                                      initialView="dayGridMonth"
+                                      eventDisplay='block'
+                                      themeSystem='bootstrap5'
+                                      locale={t("lang")}
+                                      events={evento.sesiones}
+                                      eventClick={eventClick}
+                                      // dayCellDidMount={function (arg){
+                                      //     if(arg.date.getDate() > 15 ){
+                                      //         arg.el.style.backgroundColor = "red";
+                                      //
+                                      //     }
+                                      // }}
+                        />
+                    </div>
+                </section>
 
-                <CarouselEvento imagenes={evento.imagenes}/>
+                <ErrorBoundaryHide>
+                    <SesionInfo sesionId={sesionId}></SesionInfo>
+                </ErrorBoundaryHide>
 
+                {evento.descripcion.length > 0 &&
+                <section className="row py-3 border-1 border-top">
+                    <div className="col-12">
+                        <h3>Descripción</h3>
+                        <p>{evento.descripcion}</p>
+                    </div>
+                </section>
+                }
+                <section className="row py-3 border-1 border-top">
+                    <div className="col-12">
+                        <h3>Restricciones y normas</h3>
+                        {evento.edad_minima > 0 &&
+                            <p><i className="bi bi-exclamation-diamond"></i> Apto para mayores de {evento.edad_minima} años</p>
+                        }
+                        <p><i className="bi bi-book-half"/> Haz click aquí para descargar las normas del evento</p>
+                    </div>
+                </section>
+                {/*<CarouselEvento imagenes={evento.imagenes}/>*/}
             </div>
     );
 }
