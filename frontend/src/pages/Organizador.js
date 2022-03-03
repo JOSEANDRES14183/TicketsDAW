@@ -63,7 +63,7 @@ function Organizador(){
                     </div>
                 </div>
             </section>
-            <section>
+            <section className={"mt-md-4 mt-2 container-md"}>
                 <EventoList eventos={organizador.eventos}/>
             </section>
         </>

@@ -16,6 +16,8 @@
       "by-date-asc" : "Ordenar por fecha (Más reciente a menos)",
       "by-date-desc" : "Ordenar por fecha (Menos reciente a más)"
     },
-    "search" : "busca"
+    "search" : "busca",
+    "show-all-events" : "Mostrar todos los eventos",
+    "events-not-found" : "No se han encontrado eventos"
   }
 }
