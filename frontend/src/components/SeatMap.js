@@ -9,9 +9,9 @@ function SeatMap({seats}) {
 
     const [seatMap, setSeatMap] = useState(null);
 
-    useEffect(()=>{
+    useEffect(async ()=>{
         //setSeatMap(Object.assign([], seats))
-        setSeatMap(JSON.parse(JSON.stringify(seats)))
+        await setSeatMap(JSON.parse(JSON.stringify(seats)))
     }, [seats])
 
     const renderFn = (svg) => {
@@ -28,6 +28,16 @@ function SeatMap({seats}) {
 
         //https://github.com/d3/d3-selection/blob/v3.0.0/README.md#selection_on
 
+        // https://stackoverflow.com/questions/57847594/react-hooks-accessing-up-to-date-state-from-within-a-callback
+        // https://stackoverflow.com/questions/56782079/react-hooks-stale-state
+
+
+        //Remove all previous svg elements
+        // svg
+        //     .select("g.plotArea")
+        //     .selectAll("circle")
+        //     .remove()
+
         svg
             .select("g.plotArea")
             .selectAll("circle")
@@ -42,9 +52,14 @@ function SeatMap({seats}) {
             .attr("fill", (d) => d.seleccionada ? "#B8FFF9" : "#9a6fb0")
             .attr("cx", (d) => d.pos_x*multiplyFactor)
             .attr("cy", (d) => d.pos_y*multiplyFactor)
-            .on("click", function(event,datum){
+            .on("click", function (event,datum) {
+                console.log("$$$$$$$$$$$$$$$$$$$$$$")
+                console.log(seats)
+                console.log(seatMap)
                 seatClick(datum)
-            })
+            }
+            .bind(seatMap)
+            )
         //(d) => seatClick(d)
 
         svg
@@ -78,7 +93,7 @@ function SeatMap({seats}) {
 
     const ref = useD3(renderFn, [seatMap]);
 
-    const seatClick = (seat) => {
+    const seatClick = async (seat) => {
         console.log("============================")
         console.log(seat)
         console.log(seats)
@@ -94,7 +109,13 @@ function SeatMap({seats}) {
             return currSeat;
         })
 
-        setSeatMap(seatsMapCopy)
+        await setSeatMap(seatsMapCopy)
+
+        console.log("///////////////////////////")
+        console.log(seat)
+        console.log(seats)
+        console.log(seatMap)
+
         //renderFn(d3.select(ref.current))
     }
 
