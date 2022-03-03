@@ -23,9 +23,9 @@ function Eventos(){
 
     const changeSearch = s => setSearch(s);
 
-    useEffect(()=>{
+    const getEvents = (date) => {
         setLoading(true);
-        axios.get(process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + "/api/eventos")
+        axios.get(process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + "/api/eventos" + date)
             .then(result => {
                 setEventos(result.data);
                 setLoading(false);
@@ -34,6 +34,10 @@ function Eventos(){
                 setError(error);
                 setLoading(false);
             });
+    }
+
+    useEffect(()=>{
+        getEvents("");
     },[]);
 
     if (isLoading) {
@@ -87,14 +91,17 @@ function Eventos(){
                 </div>
             </section>
 
-            <section className={"container-lg"}>
-
+            <section className={"container-md mt-3"}>
                 <div className={"row"}>
                     <div className={" col-3"}>
-                        <Calendar
-                            onChange={(fecha) => console.log(dayjs(fecha).format('DD-MM-YYYY'))}
+                        <Calendar className={"border-0 shadow-sm p-2"}
+                            onChange={(fecha) => getEvents("?date="+dayjs(fecha).format('YYYY-MM-DD'))}
                             locale={t('lang')}
                         />
+                        <Button onClick={() => getEvents("")}
+                            className="mt-3" color={"primary"}>
+                            {t('show-all-events')}
+                        </Button>
                     </div>
 
                     <div className={"col"}>
