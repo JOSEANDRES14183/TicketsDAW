@@ -120,7 +120,12 @@ function Evento(){
                         <p><i className="bi bi-book-half"/> Haz click aquí para descargar las normas del evento</p>
                     </div>
                 </section>
-                {/*<CarouselEvento imagenes={evento.imagenes}/>*/}
+                {evento.imagenes.length > 0 &&
+                    <section className="row py-3 border-1 border-top">
+                        <h3>Galeria de imágenes</h3>
+                        <CarouselEvento imagenes={evento.imagenes}/>
+                    </section>
+                }
             </div>
     );
 }
