@@ -78,17 +78,21 @@ function SesionInfo({sesionId}){
                 </div>
                 <div className="col-8">
                     {!sesion.isNumerada &&
-                        <Form>
-                            {sesion.tipos_entrada.map((tipo, i) =>
-                                    <FormGroup key={i} className="d-flex justify-content-between align-items-center tipoEntrada rounded bg-light p-2">
+                        <Form className={"h-100 d-flex justify-content-between flex-column align-items-end"} action={process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + "/api/purchase"} method={"post"}>
+                            <div className={"w-100"}>
+                                <input type="hidden" name="id_sesion" value={sesion.sala.id} />
+                                {sesion.tipos_entrada.map((tipo, i) =>
+                                    <FormGroup key={i} className="d-flex justify-content-between align-items-center tipoEntrada rounded bg-light p-2 w-100">
                                         <Label for={"tipoEntrada" + i}>{tipo.nombre}</Label>
                                         <div className="d-flex flex-row align-items-center">
                                             <span className="me-2">{tipo.precio + "€"}</span>
-                                            <Input id={"tipoEntrada" + i} name={tipo.id_sesion + "_" + tipo.nombre} type="number" min="0" defaultValue="0"></Input>
+                                            <Input id={"tipoEntrada" + i} name={tipo.nombre} type="number" min="0" defaultValue="0"></Input>
                                         </div>
                                     </FormGroup>
                                 )
-                            }
+                                }
+                            </div>
+                            <button className={"btn btn-primary"} type="submit">COMPRAR</button>
                         </Form>
                     }
                     {sesion.isNumerada &&
