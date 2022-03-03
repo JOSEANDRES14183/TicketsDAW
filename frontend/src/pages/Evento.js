@@ -73,9 +73,8 @@ function Evento(){
                 </Link>
                 <section className="row py-3">
                     <div className="col-4">
-                        <img className={"border-1 border-end img-fluid"}
+                        <img className={"border-1 border-end img-fluid mb-3"}
                              src={process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + '/api/media/' +evento.foto_perfil.nombre_archivo}/>
-                        <p>{sesionId}</p>
                         <OrganizadorBanner user={evento.organizador}></OrganizadorBanner>
                     </div>
                     <div className="col-8">

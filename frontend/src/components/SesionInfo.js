@@ -73,8 +73,8 @@ function SesionInfo({sesionId}){
                             </GoogleMaps>
                         </Wrapper>
                     </div>
-                    <p>{sesion.sala.direccion}</p>
-                    <p>{"Fecha de inicio: " + sesion.fecha_ini}</p>
+                    <p><i className="bi bi-geo-alt"></i> {sesion.sala.direccion}</p>
+                    <p><i className="bi bi-calendar-week"></i> {sesion.fecha_ini}</p>
                 </div>
                 <div className="col-8">
                     {!sesion.isNumerada &&
