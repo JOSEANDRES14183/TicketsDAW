@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\EventoCollection;
 use App\Http\Resources\EventoResource;
 use App\Models\Evento;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use phpDocumentor\Reflection\Types\False_;
 
@@ -19,9 +20,12 @@ class EventoController extends Controller
             return EventoResource::collection(Evento::where('esta_oculto',false)->get());
         }
 
+//        $requestedDate = Carbon::createFromFormat('Y-m-d',$request->date);
+
         return EventoResource::collection(Evento::where('esta_oculto',false)
-            ->whereHas('sesiones', function ($sesiones){
-                $sesiones->;
+
+            ->whereHas('sesiones', function ($sesiones) use ($request){
+                $sesiones->whereDate('fecha_ini','=',date($request->date));
             })->get());
     }
 
