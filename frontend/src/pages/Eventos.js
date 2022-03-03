@@ -1,9 +1,13 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {Nav, NavItem, NavLink, Spinner} from "reactstrap";
+import {Button, Nav, NavItem, NavLink, Offcanvas, OffcanvasBody, OffcanvasHeader, Spinner} from "reactstrap";
 import SearchFilter from "../components/SearchFilter";
 import EventoListFiltered from "../components/EventoListFiltered";
 import {useTranslation} from "react-i18next";
+import Calendar from "react-calendar";
+import 'react-calendar/dist/Calendar.css';
+import {formatDate} from "@fullcalendar/react";
+import dayjs from "dayjs";
 
 function Eventos(){
 
@@ -50,7 +54,7 @@ function Eventos(){
 
     return(
         <>
-            <div className={"py-3 container-md"}>
+            <section className={"py-3 container-md"}>
                 <div className={"row gap-md-3"}>
                     <div className={"col-md-3 col-6"}>
                         <select className={"form-select"}
@@ -81,12 +85,29 @@ function Eventos(){
                     </div>
                     <SearchFilter handleChange={changeSearch}/>
                 </div>
-            </div>
-            <EventoListFiltered
-                eventos={eventos}
-                dateOrder={dateOrder}
-                category={category}
-                search={search}/>
+            </section>
+
+            <section className={"container-lg"}>
+
+                <div className={"row"}>
+                    <div className={" col-3"}>
+                        <Calendar
+                            onChange={(fecha) => console.log(dayjs(fecha).format('DD-MM-YYYY'))}
+                            locale={t('lang')}
+                        />
+                    </div>
+
+                    <div className={"col"}>
+                        <EventoListFiltered
+                            eventos={eventos}
+                            dateOrder={dateOrder}
+                            category={category}
+                            search={search}/>
+                    </div>
+                </div>
+            </section>
+
+
         </>
     );
 
