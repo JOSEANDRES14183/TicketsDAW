@@ -9,6 +9,7 @@ import SesionInfo from "../components/SesionInfo";
 import ErrorBoundaryHide from "../components/ErrorBoundaryHide";
 import OrganizadorBanner from "../components/OrganizadorBanner";
 import {useTranslation} from "react-i18next";
+import CarouselEvento from "../components/CarouselEvento";
 
 function Evento(){
 
@@ -119,6 +120,7 @@ function Evento(){
                         <p><i className="bi bi-book-half"/> Haz click aquí para descargar las normas del evento</p>
                     </div>
                 </section>
+                {/*<CarouselEvento imagenes={evento.imagenes}/>*/}
             </div>
     );
 }

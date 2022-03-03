@@ -12,7 +12,9 @@ class Butaca extends Model
     protected $table = 'butaca';
     protected $primaryKey = 'id_sala';
 
-    public function sala(){
+    public function sala()
+    {
         return $this->belongsTo(Sala::class,'id_sala');
     }
+
 }

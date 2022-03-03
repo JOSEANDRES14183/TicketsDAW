@@ -32,5 +32,4 @@ class Sesion extends Model
         return $this->hasOne(SesionNumData::class,'id');
     }
 
-
 }
