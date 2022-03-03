@@ -8,6 +8,7 @@ import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
 import {formatDate} from "@fullcalendar/react";
 import dayjs from "dayjs";
+import Loading from "../components/Loading";
 
 function Eventos(){
 
@@ -20,6 +21,8 @@ function Eventos(){
     const [category, setCategory] = useState("All");
     const [dateOrder, setDateOrder] = useState("noSort");
     const [search, setSearch] = useState("");
+
+    const [date, setDate] = useState(null);
 
     const changeSearch = s => setSearch(s);
 
@@ -39,18 +42,6 @@ function Eventos(){
     useEffect(()=>{
         getEvents("");
     },[]);
-
-    if (isLoading) {
-        return (
-            <div className={"container-md my-3"}>
-                <Spinner
-                    type={"border"}
-                    color={"primary"}>
-                    Loading...
-                </Spinner>
-            </div>
-        );
-    }
 
     if(error){
         return <p>{error}</p>
@@ -94,22 +85,32 @@ function Eventos(){
             <section className={"container-md mt-3"}>
                 <div className={"row"}>
                     <div className={" col-3"}>
-                        <Calendar className={"border-0 shadow-sm p-2"}
-                            onChange={(fecha) => getEvents("?date="+dayjs(fecha).format('YYYY-MM-DD'))}
+                        <Calendar className={"border-0 shadow-sm p-2"} value={date}
+                            onChange={(fecha) => {
+                                setDate(fecha);
+                                getEvents("?date=" + dayjs(fecha).format('YYYY-MM-DD'))
+                            }}
                             locale={t('lang')}
                         />
-                        <Button onClick={() => getEvents("")}
+                        <Button onClick={() => {
+                            setDate(null);
+                            getEvents("");
+                        }}
                             className="mt-3" color={"primary"}>
                             {t('show-all-events')}
                         </Button>
                     </div>
 
                     <div className={"col"}>
-                        <EventoListFiltered
-                            eventos={eventos}
-                            dateOrder={dateOrder}
-                            category={category}
-                            search={search}/>
+                        {isLoading
+                            ? <Loading />
+                            : <EventoListFiltered
+                                eventos={eventos}
+                                dateOrder={dateOrder}
+                                category={category}
+                                search={search}/>
+                        }
+
                     </div>
                 </div>
             </section>
