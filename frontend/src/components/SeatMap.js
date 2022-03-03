@@ -9,6 +9,11 @@ function SeatMap({seats}) {
 
     const [seatMap, setSeatMap] = useState(null);
 
+    // https://stackoverflow.com/questions/57847594/react-hooks-accessing-up-to-date-state-from-within-a-callback
+    // https://stackoverflow.com/questions/56782079/react-hooks-stale-state
+    const seatMapRef = useRef();
+    seatMapRef.current = seatMap;
+
     useEffect(async ()=>{
         //setSeatMap(Object.assign([], seats))
         await setSeatMap(JSON.parse(JSON.stringify(seats)))
@@ -28,8 +33,6 @@ function SeatMap({seats}) {
 
         //https://github.com/d3/d3-selection/blob/v3.0.0/README.md#selection_on
 
-        // https://stackoverflow.com/questions/57847594/react-hooks-accessing-up-to-date-state-from-within-a-callback
-        // https://stackoverflow.com/questions/56782079/react-hooks-stale-state
 
 
         //Remove all previous svg elements
@@ -101,7 +104,7 @@ function SeatMap({seats}) {
 
         seat.seleccionada = true;
 
-        let seatsMapCopy = JSON.parse(JSON.stringify(seatMap));
+        let seatsMapCopy = JSON.parse(JSON.stringify(seatMapRef.current));
 
         seatsMapCopy = seatsMapCopy.map((currSeat) => {
             if(currSeat.pos_x == seat.pos_x && currSeat.pos_y == seat.pos_y)
