@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Spinner} from "reactstrap";
 import EventoList from "../components/EventoList";
+import Loading from "../components/Loading";
 
 function Organizador(){
 
@@ -29,11 +30,7 @@ function Organizador(){
     if (isLoading) {
         return (
             <div className={"container-md my-3"}>
-                <Spinner
-                    type={"border"}
-                    color={"primary"}>
-                    Loading...
-                </Spinner>
+                <Loading />
             </div>
         );
     }
