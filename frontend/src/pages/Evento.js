@@ -114,10 +114,14 @@ function Evento(){
                 <section className="row py-3 border-1 border-top">
                     <div className="col-12">
                         <h3>Restricciones y normas</h3>
-                        {evento.edad_minima > 0 &&
+                        {evento.edad_minima > 0 ?
                             <p><i className="bi bi-exclamation-diamond"></i> Apto para mayores de {evento.edad_minima} años</p>
+                            :
+                            <p><i className="bi bi-info-circle"></i> Apto para todas las edades</p>
                         }
-                        <p><i className="bi bi-book-half"/> Haz click aquí para descargar las normas del evento</p>
+                        {evento.normas_evento &&
+                            <a href={process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + '/api/media/' +evento.normas_evento.nombre_pdf}><i className="bi bi-book-half"/> Haz click aquí para descargar las normas del evento</a>
+                        }
                     </div>
                 </section>
                 {evento.imagenes.length > 0 &&
