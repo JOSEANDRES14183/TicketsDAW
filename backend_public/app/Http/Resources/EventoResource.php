@@ -23,6 +23,7 @@ class EventoResource extends JsonResource
             'es_nominativo' => $this->es_nominativo,
             'duracion_estandar' => $this->duracion_estandar,
             'foto_perfil' => $this->fotoPerfil,
+            'normas_evento' => $this->normasEvento,
             'organizador' => new OrganizadorResourceSimple($this->organizador),
             'categoria' => $this->categoria,
             'latest_sesion' => new SesionResource($this->sesiones->sortBy('fecha_ini')->first()),
