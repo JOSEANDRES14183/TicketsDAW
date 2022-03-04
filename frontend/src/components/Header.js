@@ -67,7 +67,10 @@ function Header(props){
 
                             <LanguagePicker theme={value}/>
 
-                            <Button className="text-uppercase" color={"primary"}>
+                            <Button
+                                onClick={() => window.location.href = process.env.REACT_APP_PRIVATE_HOST}
+                                className="text-uppercase"
+                                color={"primary"}>
                                 {t('create-event')}
                             </Button>
                         </div>
