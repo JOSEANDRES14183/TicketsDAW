@@ -63,6 +63,13 @@ function SesionInfo({sesionId}){
         return(null);
     }
 
+    const handleFormSubmit = (e) => {
+        e.preventDefault()
+        console.log(e)
+        console.log(e.target)
+        console.log(new FormData(e.target))
+    }
+
     //debugger;
     return(
         <section className="py-3 border-1 border-top">
@@ -80,7 +87,7 @@ function SesionInfo({sesionId}){
                 </div>
                 <div className="col-md-8 col-12">
                     {!sesion.isNumerada &&
-                        <Form className={"h-100 d-flex justify-content-between flex-column align-items-end"} action={process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + "/api/purchase"} method={"post"}>
+                        <Form onSubmit={(e)=>{handleFormSubmit(e)}} className={"h-100 d-flex justify-content-between flex-column align-items-end"} action={process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + "/api/purchase"} method={"post"}>
                             <div className={"w-100"}>
                                 <input type="hidden" name="id_sesion" value={sesion.sala.id} />
                                 {sesion.tipos_entrada.map((tipo, i) =>
