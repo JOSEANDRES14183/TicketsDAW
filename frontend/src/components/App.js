@@ -6,13 +6,22 @@ import Soporte from "../pages/Soporte";
 import SobreNosotros from "../pages/SobreNosotros";
 import Evento from "../pages/Evento";
 import Organizador from "../pages/Organizador";
-import React from "react";
+import React, {useState} from "react";
+import {ThemeContext} from "../contexts/ThemeContext";
 
 function App() {
 
+    const [theme,setTheme] = useState("light")
+
+    const toggleTheme = () => {
+        theme==='dark' ? setTheme('light') : setTheme('dark');
+    }
+
   return (
     <>
-        <Header />
+        <ThemeContext.Provider value={theme}>
+            <Header toggleTheme={toggleTheme}/>
+        </ThemeContext.Provider>
         <main>
             <Routes>
                 <Route exact path={"/"} element={<Eventos />} />
