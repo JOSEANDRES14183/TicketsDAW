@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\EventoController;
 use App\Http\Controllers\OrganizadorController;
+use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SesionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,3 +31,5 @@ Route::get('sesiones/{id}', [SesionController::class,'show']);
 Route::get('media/{filename}', [RecursoMediaController::class,'image']);
 
 Route::get('organizador/{id}', [OrganizadorController::class,'show']);
+
+Route::post('purchase', [PurchaseController::class, 'purchase']);
