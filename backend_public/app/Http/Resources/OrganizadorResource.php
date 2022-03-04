@@ -20,7 +20,7 @@ class OrganizadorResource extends JsonResource
             'descripcion' => $this->organizadorData->descripcion,
             'email' => $this->email,
             'foto_perfil' => $this->organizadorData->fotoPerfil,
-            'eventos' => EventoResource::collection($this->eventos)
+            'eventos' => EventoResource::collection($this->eventos->where('esta_oculto',false))
         ];
     }
 }
