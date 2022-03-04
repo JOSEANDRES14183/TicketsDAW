@@ -5,6 +5,8 @@
     "about-us": "About Us",
     "support": "Support",
     "create-event": "Create an event",
+    "back" : "Back",
+    "buy" : "Buy",
     "category": {
       "all" : "All",
       "teatros" : "Theaters",
@@ -18,6 +20,18 @@
     },
     "search" : "search",
     "show-all-events" : "Show all events",
-    "events-not-found" : "Events not found"
+    "events-not-found" : "Events not found",
+    "event": {
+      "org-by" : "Organized by",
+      "desc" : "Description",
+      "restrictions" : "Restrictions and rules",
+      "img-gallery" : "Image gallery",
+      "all-ages" : "For all ages",
+      "apt-for" : "Suitable for people over",
+      "download-rules" : "Click here to download the event's rulebook"
+    },
+    "uwu": {
+      "turbocucumber": "TURBOCUCUMBER"
+    }
   }
 }

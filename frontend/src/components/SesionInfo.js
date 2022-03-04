@@ -5,6 +5,8 @@ import axios from "axios";
 import {Form, FormGroup, Input, Label, Spinner} from "reactstrap";
 import GoogleMapsMarker from "./GoogleMapsMarker";
 import SeatMap from "./SeatMap";
+import dayjs from "dayjs";
+import {t} from "i18next";
 
 function SesionInfo({sesionId}){
     const [isLoading, setLoading] = useState(true);
@@ -65,18 +67,18 @@ function SesionInfo({sesionId}){
     return(
         <section className="py-3 border-1 border-top">
             <div className={"row"}>
-                <div className="col-4">
-                    <div style={{height: "300px"}}>
+                <div className="col-md-4 col-12">
+                    <div className={"mb-3"} style={{height: "300px"}}>
                         <Wrapper apiKey={process.env.REACT_APP_API_GOOGLE_MAPS_KEY}>
                             <GoogleMaps center={{"lat": lat, "lng": lng}} zoom={15}>
                                 <GoogleMapsMarker position={{"lat": lat, "lng": lng}}></GoogleMapsMarker>
                             </GoogleMaps>
                         </Wrapper>
                     </div>
-                    <p>{sesion.sala.direccion}</p>
-                    <p>{"Fecha de inicio: " + sesion.fecha_ini}</p>
+                    <p className={"mb-3"}><i className="bi bi-geo-alt"></i> {sesion.sala.direccion}</p>
+                    <p className={"mb-3"}><i className="bi bi-calendar-week"></i> {dayjs(sesion.fecha_ini).format("DD-MM-YYYY HH:MM")}</p>
                 </div>
-                <div className="col-8">
+                <div className="col-md-8 col-12">
                     {!sesion.isNumerada &&
                         <Form className={"h-100 d-flex justify-content-between flex-column align-items-end"} action={process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + "/api/purchase"} method={"post"}>
                             <div className={"w-100"}>
@@ -92,7 +94,7 @@ function SesionInfo({sesionId}){
                                 )
                                 }
                             </div>
-                            <button className={"btn btn-primary"} type="submit">COMPRAR</button>
+                            <button className={"btn btn-primary"} type="submit">{t("buy")}</button>
                         </Form>
                     }
                     {sesion.isNumerada &&

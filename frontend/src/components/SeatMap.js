@@ -9,24 +9,29 @@ function SeatMap({seats}) {
 
     const [seatMap, setSeatMap] = useState(null);
 
+    // https://stackoverflow.com/questions/57847594/react-hooks-accessing-up-to-date-state-from-within-a-callback
+    // https://stackoverflow.com/questions/56782079/react-hooks-stale-state
+    const seatMapRef = useRef();
+    seatMapRef.current = seatMap;
+
     useEffect(()=>{
-        //setSeatMap(Object.assign([], seats))
         setSeatMap(JSON.parse(JSON.stringify(seats)))
     }, [seats])
 
     const renderFn = (svg) => {
-        console.log("-----------------------------------")
-        console.log(seats)
-        console.log(seatMap)
-
         if(!seatMap){
-            console.log("Turbocucumber cancela el vuelo!")
             return
         }
 
         const multiplyFactor = 48;
 
         //https://github.com/d3/d3-selection/blob/v3.0.0/README.md#selection_on
+
+        //Remove all previous svg elements
+        // svg
+        //     .select("g.plotArea")
+        //     .selectAll("circle")
+        //     .remove()
 
         svg
             .select("g.plotArea")
@@ -42,10 +47,10 @@ function SeatMap({seats}) {
             .attr("fill", (d) => d.seleccionada ? "#B8FFF9" : "#9a6fb0")
             .attr("cx", (d) => d.pos_x*multiplyFactor)
             .attr("cy", (d) => d.pos_y*multiplyFactor)
-            .on("click", function(event,datum){
+            .on("click", function (event,datum) {
                 seatClick(datum)
-            })
-        //(d) => seatClick(d)
+            }
+            )
 
         svg
             .select("g.plotArea")
@@ -59,7 +64,7 @@ function SeatMap({seats}) {
             .selectAll("circle")
             .data(seatMap)
             .transition()
-            .duration(100) //TODO: Remove this duration
+            .duration(100)
             .attr("fill", (d) => d.seleccionada ? "#B8FFF9" : "#9a6fb0")
             .attr("cx", (d) => d.pos_x*multiplyFactor)
             .attr("cy", (d) => d.pos_y*multiplyFactor)
@@ -70,6 +75,7 @@ function SeatMap({seats}) {
         }
 
         let zoom = d3.zoom()
+            .scaleExtent([0.3,5])
             .on('zoom', handleZoom);
 
         svg
@@ -79,37 +85,28 @@ function SeatMap({seats}) {
     const ref = useD3(renderFn, [seatMap]);
 
     const seatClick = (seat) => {
-        console.log("============================")
-        console.log(seat)
-        console.log(seats)
-        console.log(seatMap)
+        let seatCopy = {...seat};
+        seatCopy.seleccionada = !seatCopy.seleccionada;
 
-        seat.seleccionada = true;
-
-        let seatsMapCopy = JSON.parse(JSON.stringify(seatMap));
+        let seatsMapCopy = JSON.parse(JSON.stringify(seatMapRef.current));
 
         seatsMapCopy = seatsMapCopy.map((currSeat) => {
             if(currSeat.pos_x == seat.pos_x && currSeat.pos_y == seat.pos_y)
-                return Object.assign({}, seat)
+                return seatCopy;
             return currSeat;
         })
 
         setSeatMap(seatsMapCopy)
-        //renderFn(d3.select(ref.current))
     }
 
     return(
         <svg
             ref={ref}
-        style={{
-            height: "100%",
-            width: "100%"
-        }}>
+        className={"seatMap"}>
             <g
                 className="plotArea"
                 transform={`translate(${[MARGIN.left, MARGIN.top].join(",")})`}
             >
-                {/*{allShapes}*/}
             </g>
         </svg>
     )

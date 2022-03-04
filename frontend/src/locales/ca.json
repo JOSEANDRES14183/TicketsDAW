@@ -5,6 +5,8 @@
     "about-us": "Sobre nosaltres",
     "support": "Suport",
     "create-event": "Crea un event",
+    "back" : "Tornar",
+    "buy" : "Comprar",
     "category": {
       "all" : "Totes",
       "teatros" : "Teatres",
@@ -18,6 +20,18 @@
     },
     "search" : "cerca",
     "show-all-events" : "Mostrar tots els events",
-    "events-not-found" : "No se han trobat events"
+    "events-not-found" : "No se han trobat events",
+    "event": {
+      "org-by" : "Organitzat per",
+      "desc" : "Descripció",
+      "restrictions" : "Restriccions i normes",
+      "img-gallery" : "Galeria d'imatges",
+      "all-ages" : "Per a totes les edats",
+      "apt-for" : "Apte per a persones sobre",
+      "download-rules" : "Fes click aquí per a descarregar les normes del event"
+    },
+    "uwu": {
+      "turbocucumber": "TURBOCOGOMBRE"
+    }
   }
 }
