@@ -95,7 +95,7 @@ function Evento(){
             <div className={"py-3 container-md"}>
                 <Link to={"/"}>
                     <Button className={"my-3"} color={"primary"}>
-                        Volver
+                        {t("back")}
                     </Button>
                 </Link>
                 <section className="row py-3">
@@ -107,7 +107,7 @@ function Evento(){
                     <div className="col-md-8 col-12 mt-3 mt-md-0">
                         <h2>{evento.titulo}</h2>
                         <p><i className="bi bi-clock" /> {evento.duracion_estandar} min.</p>
-                        <p className={"mb-3 mb-md-0"}><i className="bi bi-bookmarks" /> {evento.categoria.nombre}</p>
+                        <p className={"mb-3 mb-md-0"}><i className="bi bi-bookmarks" /> {t("category." + evento.categoria.nombre.toLowerCase())}</p>
                         <FullCalendar plugins={[dayGridPlugin, bootstrap5Plugin]}
                                       initialView="dayGridMonth"
                                       eventDisplay='block'
@@ -136,7 +136,7 @@ function Evento(){
                 {evento.descripcion.length > 0 &&
                 <section className="row py-3 border-1 border-top">
                     <div className="col-12">
-                        <h3>Descripción</h3>
+                        <h3>{t("event.desc")}</h3>
                         <p>{evento.descripcion}</p>
                         <OrganizadorBanner className={"d-md-none"} user={evento.organizador}></OrganizadorBanner>
                     </div>
@@ -144,20 +144,20 @@ function Evento(){
                 }
                 <section className="row py-3 border-1 border-top">
                     <div className="col-12">
-                        <h3>Restricciones y normas</h3>
+                        <h3>{t("event.restrictions")}</h3>
                         {evento.edad_minima > 0 ?
-                            <p><i className="bi bi-exclamation-diamond"></i> Apto para mayores de {evento.edad_minima} años</p>
+                            <p><i className="bi bi-exclamation-diamond"></i> {t("event.apt-for")} {evento.edad_minima}</p>
                             :
-                            <p><i className="bi bi-info-circle"></i> Apto para todas las edades</p>
+                            <p><i className="bi bi-info-circle"></i> {t("event.all-ages")}</p>
                         }
                         {evento.normas_evento &&
-                            <a href={process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + '/api/media/' +evento.normas_evento.nombre_pdf}><i className="bi bi-book-half"/> Haz click aquí para descargar las normas del evento</a>
+                            <a href={process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + '/api/media/' +evento.normas_evento.nombre_pdf}><i className="bi bi-book-half"/> {t("event.download-rules")}</a>
                         }
                     </div>
                 </section>
                 {evento.imagenes.length > 0 &&
                     <section className="row py-3 border-1 border-top">
-                        <h3>Galeria de imágenes</h3>
+                        <h3>{t("event.img-gallery")}</h3>
                         <CarouselEvento imagenes={evento.imagenes}/>
                     </section>
                 }

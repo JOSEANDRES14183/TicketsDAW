@@ -5,6 +5,8 @@ import axios from "axios";
 import {Form, FormGroup, Input, Label, Spinner} from "reactstrap";
 import GoogleMapsMarker from "./GoogleMapsMarker";
 import SeatMap from "./SeatMap";
+import dayjs from "dayjs";
+import {t} from "i18next";
 
 function SesionInfo({sesionId}){
     const [isLoading, setLoading] = useState(true);
@@ -74,7 +76,7 @@ function SesionInfo({sesionId}){
                         </Wrapper>
                     </div>
                     <p className={"mb-3"}><i className="bi bi-geo-alt"></i> {sesion.sala.direccion}</p>
-                    <p className={"mb-3"}><i className="bi bi-calendar-week"></i> {sesion.fecha_ini}</p>
+                    <p className={"mb-3"}><i className="bi bi-calendar-week"></i> {dayjs(sesion.fecha_ini).format("DD-MM-YYYY HH:MM")}</p>
                 </div>
                 <div className="col-md-8 col-12">
                     {!sesion.isNumerada &&
@@ -92,7 +94,7 @@ function SesionInfo({sesionId}){
                                 )
                                 }
                             </div>
-                            <button className={"btn btn-primary"} type="submit">COMPRAR</button>
+                            <button className={"btn btn-primary"} type="submit">{t("buy")}</button>
                         </Form>
                     }
                     {sesion.isNumerada &&

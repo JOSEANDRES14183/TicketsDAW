@@ -1,5 +1,6 @@
 import EventoCard from "./EventoCard";
 import React from "react";
+import {t} from "i18next";
 
 function OrganizadorBanner({user, className}){
     return(
@@ -8,7 +9,7 @@ function OrganizadorBanner({user, className}){
             className={"bg-light d-flex justify-content-between align-items-center shadow-sm userBanner " + className}>
             <img className={"h-100"}
                  src={process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + '/api/media/' +user.foto_perfil.nombre_archivo}/>
-            <div className="d-flex justify-content-center align-content-center p-1 flex-grow-1"><p>Organizado por <span className="fw-bold">{user.nombre}</span></p></div>
+            <div className="d-flex justify-content-center align-content-center p-1 flex-grow-1"><p>{t("event.org-by")} <span className="fw-bold">{user.nombre}</span></p></div>
         </a>
     );
 

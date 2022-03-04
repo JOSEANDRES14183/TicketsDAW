@@ -5,6 +5,8 @@
     "about-us": "Sobre nosotros",
     "support": "Soporte",
     "create-event": "Crear un evento",
+    "back" : "Volver",
+    "buy" : "Comprar",
     "category": {
       "all" : "Todas",
       "teatros" : "Teatros",
@@ -18,6 +20,18 @@
     },
     "search" : "busca",
     "show-all-events" : "Mostrar todos los eventos",
-    "events-not-found" : "No se han encontrado eventos"
+    "events-not-found" : "No se han encontrado eventos",
+    "event": {
+      "org-by" : "Organizado por",
+      "desc" : "Descripción",
+      "restrictions" : "Restricciones y normas",
+      "img-gallery" : "Galeria de imágenes",
+      "all-ages" : "Para todas las edades",
+      "apt-for" : "Para personas mayores de",
+      "download-rules" : "Haz click aquí para descargar las normas del evento"
+    },
+    "uwu": {
+      "turbocucumber": "TURBOPEPINO"
+    }
   }
 }
