@@ -77,9 +77,17 @@ main{
   height: 100px;
 }
 
-.tipoEntrada{
+.seatMap{
+  width: 100%;
+  height: 75vh;
 }
 
 .tipoEntrada input{
   width: 70px;
+}
+
+@include media-breakpoint-up(md) {
+  .seatMap{
+    height: 100%;
+  }
 }

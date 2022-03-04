@@ -102,10 +102,7 @@ function SeatMap({seats}) {
     return(
         <svg
             ref={ref}
-        style={{
-            height: "100%",
-            width: "100%"
-        }}>
+        className={"seatMap"}>
             <g
                 className="plotArea"
                 transform={`translate(${[MARGIN.left, MARGIN.top].join(",")})`}

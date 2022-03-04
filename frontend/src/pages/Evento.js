@@ -23,6 +23,12 @@ function Evento(){
 
     const [sesionId, setSesionId] = useState(null);
 
+    const [fullCalendarHeader, setFullCalendarHeader] = useState({
+        start: 'title', // will normally be on the left. if RTL, will be on the right
+        center: '',
+        end: 'today prev,next' // will normally be on the right. if RTL, will be on the left
+    });
+
     const params = useParams();
 
     useEffect(()=>{
@@ -34,7 +40,28 @@ function Evento(){
             .catch(error => {
                 setError(error);
             });
-        },[]);
+        }, [params]);
+
+    useEffect(()=>{
+        updateCalendarToolbar();
+    }, [])
+
+    const updateCalendarToolbar = () => {
+        if(window.innerWidth >= 576){
+            setFullCalendarHeader({
+                start: 'title', // will normally be on the left. if RTL, will be on the right
+                center: '',
+                end: 'today prev,next' // will normally be on the right. if RTL, will be on the left
+            })
+        }
+        else{
+            setFullCalendarHeader({
+                start: 'title', // will normally be on the left. if RTL, will be on the right
+                center: '',
+                end: 'prev,next' // will normally be on the right. if RTL, will be on the left
+            })
+        }
+    }
 
     if(error){
         return <p>{error}</p>
@@ -72,15 +99,15 @@ function Evento(){
                     </Button>
                 </Link>
                 <section className="row py-3">
-                    <div className="col-4">
+                    <div className="col-md-4 col-12">
                         <img className={"border-1 border-end img-fluid mb-3"}
                              src={process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + '/api/media/' +evento.foto_perfil.nombre_archivo}/>
-                        <OrganizadorBanner user={evento.organizador}></OrganizadorBanner>
+                        <OrganizadorBanner className={"d-md-flex d-none"} user={evento.organizador}></OrganizadorBanner>
                     </div>
-                    <div className="col-8">
+                    <div className="col-md-8 col-12 mt-3 mt-md-0">
                         <h2>{evento.titulo}</h2>
                         <p><i className="bi bi-clock" /> {evento.duracion_estandar} min.</p>
-                        <p><i className="bi bi-bookmarks" /> {evento.categoria.nombre}</p>
+                        <p className={"mb-3 mb-md-0"}><i className="bi bi-bookmarks" /> {evento.categoria.nombre}</p>
                         <FullCalendar plugins={[dayGridPlugin, bootstrap5Plugin]}
                                       initialView="dayGridMonth"
                                       eventDisplay='block'
@@ -88,6 +115,10 @@ function Evento(){
                                       locale={t("lang")}
                                       events={evento.sesiones}
                                       eventClick={eventClick}
+                                      headerToolbar={fullCalendarHeader}
+                                      windowResize={() => {
+                                          updateCalendarToolbar()
+                                      }}
                                       // dayCellDidMount={function (arg){
                                       //     if(arg.date.getDate() > 15 ){
                                       //         arg.el.style.backgroundColor = "red";
@@ -107,6 +138,7 @@ function Evento(){
                     <div className="col-12">
                         <h3>Descripción</h3>
                         <p>{evento.descripcion}</p>
+                        <OrganizadorBanner className={"d-md-none"} user={evento.organizador}></OrganizadorBanner>
                     </div>
                 </section>
                 }
