@@ -82,7 +82,7 @@ function SesionInfo({sesionId}){
                     {!sesion.isNumerada &&
                         <Form className={"h-100 d-flex justify-content-between flex-column align-items-end"} action={process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + "/api/purchase"} method={"post"}>
                             <div className={"w-100"}>
-                                <input type="hidden" name="id_sesion" value={sesion.sala.id} />
+                                <input type="hidden" name="id_sesion" value={sesion.id} />
                                 {sesion.tipos_entrada.map((tipo, i) =>
                                     <FormGroup key={i} className="d-flex justify-content-between align-items-center tipoEntrada rounded bg-light p-2 w-100">
                                         <Label for={"tipoEntrada" + i}>{tipo.nombre}</Label>
