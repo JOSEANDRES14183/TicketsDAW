@@ -1,9 +1,14 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {Nav, NavItem, NavLink, Spinner} from "reactstrap";
+import {Button, Nav, NavItem, NavLink, Offcanvas, OffcanvasBody, OffcanvasHeader, Spinner} from "reactstrap";
 import SearchFilter from "../components/SearchFilter";
 import EventoListFiltered from "../components/EventoListFiltered";
 import {useTranslation} from "react-i18next";
+import Calendar from "react-calendar";
+import 'react-calendar/dist/Calendar.css';
+import {formatDate} from "@fullcalendar/react";
+import dayjs from "dayjs";
+import Loading from "../components/Loading";
 
 function Eventos(){
 
@@ -17,11 +22,13 @@ function Eventos(){
     const [dateOrder, setDateOrder] = useState("noSort");
     const [search, setSearch] = useState("");
 
+    const [date, setDate] = useState(null);
+
     const changeSearch = s => setSearch(s);
 
-    useEffect(()=>{
+    const getEvents = (date) => {
         setLoading(true);
-        axios.get(process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + "/api/eventos")
+        axios.get(process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + "/api/eventos" + date)
             .then(result => {
                 setEventos(result.data);
                 setLoading(false);
@@ -30,19 +37,11 @@ function Eventos(){
                 setError(error);
                 setLoading(false);
             });
-    },[]);
-
-    if (isLoading) {
-        return (
-            <div className={"container-md my-3"}>
-                <Spinner
-                    type={"border"}
-                    color={"primary"}>
-                    Loading...
-                </Spinner>
-            </div>
-        );
     }
+
+    useEffect(()=>{
+        getEvents("");
+    },[]);
 
     if(error){
         return <p>{error}</p>
@@ -50,7 +49,7 @@ function Eventos(){
 
     return(
         <>
-            <div className={"py-3 container-md"}>
+            <section className={"py-3 container-md"}>
                 <div className={"row gap-md-3"}>
                     <div className={"col-md-3 col-6"}>
                         <select className={"form-select"}
@@ -81,12 +80,42 @@ function Eventos(){
                     </div>
                     <SearchFilter handleChange={changeSearch}/>
                 </div>
-            </div>
-            <EventoListFiltered
-                eventos={eventos}
-                dateOrder={dateOrder}
-                category={category}
-                search={search}/>
+            </section>
+
+            <section className={"container-md mt-3"}>
+                <div className={"row"}>
+                    <div className={" col-3"}>
+                        <Calendar className={"border-0 shadow-sm p-2"} value={date}
+                            onChange={(fecha) => {
+                                setDate(fecha);
+                                getEvents("?date=" + dayjs(fecha).format('YYYY-MM-DD'))
+                            }}
+                            locale={t('lang')}
+                        />
+                        <Button onClick={() => {
+                            setDate(null);
+                            getEvents("");
+                        }}
+                            className="mt-3" color={"primary"}>
+                            {t('show-all-events')}
+                        </Button>
+                    </div>
+
+                    <div className={"col"}>
+                        {isLoading
+                            ? <Loading />
+                            : <EventoListFiltered
+                                eventos={eventos}
+                                dateOrder={dateOrder}
+                                category={category}
+                                search={search}/>
+                        }
+
+                    </div>
+                </div>
+            </section>
+
+
         </>
     );
 

@@ -6,8 +6,8 @@ function EventoCard(props){
     const {t} = useTranslation();
 
     return(
-            <article className={"col-12 col-md-6 mb-1 p-2 evento overflow-hidden"}>
-                <div className={"d-flex border border-secondary rounded-25 h-100 shadow-sm position-relative"}>
+            <article className={"col-12 col-xl-6 mb-1 p-2 evento overflow-hidden"}>
+                <div className={"d-flex rounded-25 h-100 shadow-sm position-relative"}>
                     <Link to={"/"+props.evento.id} className={"w-100 h-100 position-absolute top-0 left-0"}></Link>
                     <img className={"rounded-25 border-1 border-end img-fluid"}
                          src={process.env.REACT_APP_API_PROTOCOL_PREFIX+process.env.REACT_APP_API_HOST + '/api/media/' +props.evento.foto_perfil.nombre_archivo}/>

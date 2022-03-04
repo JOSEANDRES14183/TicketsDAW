@@ -16,6 +16,8 @@
       "by-date-asc" : "Sort by date (Later to sooner)",
       "by-date-desc" : "Sort by date (Sooner to later)"
     },
-    "search" : "search"
+    "search" : "search",
+    "show-all-events" : "Show all events",
+    "events-not-found" : "Events not found"
   }
 }

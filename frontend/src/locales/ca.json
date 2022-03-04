@@ -16,6 +16,8 @@
       "by-date-asc" : "Ordenar per data (Més recent a menys)",
       "by-date-desc" : "Ordenar per data (Menys recent a més)"
     },
-    "search" : "cerca"
+    "search" : "cerca",
+    "show-all-events" : "Mostrar tots els events",
+    "events-not-found" : "No se han trobat events"
   }
 }
