@@ -25,8 +25,8 @@ function Header(props){
                             color={value}
                             expand={"md"}
                             container={"md"}
-                            light={value==='light' ? 'light' : ''}
-                            dark={value==='dark' ? 'dark' : ''}>
+                            light={value === 'light'}
+                            dark={value === 'dark'}>
 
                         <NavbarBrand href={"/"}>
                             <img src={iesmanacor_logo}
