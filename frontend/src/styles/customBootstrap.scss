@@ -86,6 +86,13 @@ header .btn:hover{
   height: 75vh;
 }
 
+.uiButton{
+  background-color: transparent;
+  appearance: none;
+  border: 0;
+  font-size: 30px;
+}
+
 .tipoEntrada input{
   width: 70px;
 }
