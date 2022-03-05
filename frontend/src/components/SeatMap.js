@@ -5,7 +5,7 @@ import * as d3 from "d3";
 const MARGIN = { top: 30, right: 30, bottom: 30, left: 30 };
 
 //https://www.react-graph-gallery.com/scatter-plot
-function SeatMap({seats, submitPurchase, refreshSesion}) {
+function SeatMap({seats, submitPurchase, refreshSesion, idSesion}) {
 
     const [seatMap, setSeatMap] = useState(null);
 
@@ -102,6 +102,7 @@ function SeatMap({seats, submitPurchase, refreshSesion}) {
     const purchaseClick = () => {
         let object = {};
         object.butacas = JSON.parse(JSON.stringify(seatMapRef.current));
+        object.id_sesion = idSesion;
         submitPurchase(object);
     }
 

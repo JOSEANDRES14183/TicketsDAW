@@ -1,7 +1,6 @@
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {Spinner} from "reactstrap";
 import Loading from "../components/Loading";
 
 function Compra(){
@@ -33,6 +32,8 @@ function Compra(){
             <Loading />
         );
     }
+
+    console.log(operacionCompra);
 
     return (
         <section className={"container-md"}>
