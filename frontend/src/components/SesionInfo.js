@@ -23,17 +23,7 @@ function SesionInfo({sesionId}){
         let isMounted = true;
         if(sesionId){
             if(isMounted){
-                axios.get(process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + "/api/sesiones/"+sesionId)
-                    .then(result => {
-                        setSesion(result.data);
-                        setLat(result.data.sala.latitud)
-                        setLng(result.data.sala.longitud)
-                        setLoading(false);
-                        setVisible(true);
-                    })
-                    .catch(error => {
-                        setError(error);
-                    });
+                fetchSesion();
             }
         }
         else if(isMounted){
@@ -42,6 +32,20 @@ function SesionInfo({sesionId}){
         }
         return () => { isMounted = false }
     },[sesionId]);
+
+    const fetchSesion = () => {
+        axios.get(process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + "/api/sesiones/"+sesionId)
+            .then(result => {
+                setSesion(result.data);
+                setLat(result.data.sala.latitud)
+                setLng(result.data.sala.longitud)
+                setLoading(false);
+                setVisible(true);
+            })
+            .catch(error => {
+                setError(error);
+            });
+    }
 
     if(error){
         return <p>{error}</p>
@@ -64,10 +68,24 @@ function SesionInfo({sesionId}){
     }
 
     const handleFormSubmit = (e) => {
-        e.preventDefault()
-        console.log(e)
-        console.log(e.target)
-        console.log(new FormData(e.target))
+        e.preventDefault();
+        let data = new FormData(e.target);
+
+        let object = {};
+
+        for(var pair of data.entries()) {
+            object[pair[0]] = pair[1];
+        }
+
+        submitPurchase(object)
+    }
+
+    const submitPurchase = (obj) => {
+        console.log(JSON.stringify(obj))
+    }
+
+    const refreshSesion = () => {
+        fetchSesion();
     }
 
     //debugger;
@@ -106,7 +124,7 @@ function SesionInfo({sesionId}){
                     }
                     {sesion.isNumerada &&
                         <Form className="h-100 rounded-3 bg-light">
-                            <SeatMap seats={sesion.sala.butacas}></SeatMap>
+                            <SeatMap seats={sesion.sala.butacas} submitPurchase={submitPurchase} refreshSesion={refreshSesion}></SeatMap>
                         </Form>
                     }
                 </div>
