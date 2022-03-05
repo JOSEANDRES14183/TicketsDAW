@@ -31,7 +31,13 @@ class EventoController extends Controller
 
     public function show($id)
     {
-        return new EventoResource(Evento::find($id));
+        $evento = Evento::find($id);
+        if ($evento!=null){
+            return new EventoResource($evento);
+        }
+
+        return $evento;
+
     }
 
 
