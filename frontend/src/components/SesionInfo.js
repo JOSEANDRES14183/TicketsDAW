@@ -81,7 +81,13 @@ function SesionInfo({sesionId}){
     }
 
     const submitPurchase = (obj) => {
-        console.log(JSON.stringify(obj))
+        axios.post(process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + "/api/purchase", obj)
+            .then(response => {
+                // if()
+            })
+            .catch(error => {
+                setError(error);
+            });
     }
 
     const refreshSesion = () => {
