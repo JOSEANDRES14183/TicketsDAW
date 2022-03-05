@@ -13,6 +13,10 @@ class Entrada extends Model
     protected $table = 'entrada';
     protected $primaryKey = 'id';
 
+    protected $guarded = [];
+
+    public $timestamps = false;
+
     //Esto no devuelve una relacion de Eloquent, por lo que al llamarlo lo tienes que hacer así: $this->tipoEntrada()
     public function tipoEntrada()
     {
