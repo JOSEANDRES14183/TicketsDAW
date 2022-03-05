@@ -23,17 +23,7 @@ function SesionInfo({sesionId}){
         let isMounted = true;
         if(sesionId){
             if(isMounted){
-                axios.get(process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + "/api/sesiones/"+sesionId)
-                    .then(result => {
-                        setSesion(result.data);
-                        setLat(result.data.sala.latitud)
-                        setLng(result.data.sala.longitud)
-                        setLoading(false);
-                        setVisible(true);
-                    })
-                    .catch(error => {
-                        setError(error);
-                    });
+                fetchSesion();
             }
         }
         else if(isMounted){
@@ -42,6 +32,20 @@ function SesionInfo({sesionId}){
         }
         return () => { isMounted = false }
     },[sesionId]);
+
+    const fetchSesion = () => {
+        axios.get(process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + "/api/sesiones/"+sesionId)
+            .then(result => {
+                setSesion(result.data);
+                setLat(result.data.sala.latitud)
+                setLng(result.data.sala.longitud)
+                setLoading(false);
+                setVisible(true);
+            })
+            .catch(error => {
+                setError(error);
+            });
+    }
 
     if(error){
         return <p>{error}</p>
@@ -63,6 +67,33 @@ function SesionInfo({sesionId}){
         return(null);
     }
 
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        let data = new FormData(e.target);
+
+        let object = {};
+
+        for(var pair of data.entries()) {
+            object[pair[0]] = pair[1];
+        }
+
+        submitPurchase(object)
+    }
+
+    const submitPurchase = (obj) => {
+        axios.post(process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + "/api/purchase", obj)
+            .then(response => {
+                // if()
+            })
+            .catch(error => {
+                setError(error);
+            });
+    }
+
+    const refreshSesion = () => {
+        fetchSesion();
+    }
+
     //debugger;
     return(
         <section className="py-3 border-1 border-top">
@@ -80,7 +111,7 @@ function SesionInfo({sesionId}){
                 </div>
                 <div className="col-md-8 col-12">
                     {!sesion.isNumerada &&
-                        <Form className={"h-100 d-flex justify-content-between flex-column align-items-end"} action={process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + "/api/purchase"} method={"post"}>
+                        <Form onSubmit={(e)=>{handleFormSubmit(e)}} className={"h-100 d-flex justify-content-between flex-column align-items-end"} action={process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + "/api/purchase"} method={"post"}>
                             <div className={"w-100"}>
                                 <input type="hidden" name="id_sesion" value={sesion.id} />
                                 {sesion.tipos_entrada.map((tipo, i) =>
@@ -99,7 +130,7 @@ function SesionInfo({sesionId}){
                     }
                     {sesion.isNumerada &&
                         <Form className="h-100 rounded-3 bg-light">
-                            <SeatMap seats={sesion.sala.butacas}></SeatMap>
+                            <SeatMap seats={sesion.sala.butacas} submitPurchase={submitPurchase} refreshSesion={refreshSesion}></SeatMap>
                         </Form>
                     }
                 </div>

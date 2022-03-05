@@ -5,7 +5,7 @@ import * as d3 from "d3";
 const MARGIN = { top: 30, right: 30, bottom: 30, left: 30 };
 
 //https://www.react-graph-gallery.com/scatter-plot
-function SeatMap({seats}) {
+function SeatMap({seats, submitPurchase, refreshSesion}) {
 
     const [seatMap, setSeatMap] = useState(null);
 
@@ -99,17 +99,30 @@ function SeatMap({seats}) {
         setSeatMap(seatsMapCopy)
     }
 
+    const purchaseClick = () => {
+        let object = {};
+        object.butacas = JSON.parse(JSON.stringify(seatMapRef.current));
+        submitPurchase(object);
+    }
+
     return(
-        <svg
-            ref={ref}
-        className={"seatMap"}>
-            <g
-                className="plotArea"
-                transform={`translate(${[MARGIN.left, MARGIN.top].join(",")})`}
-            >
-            </g>
-        </svg>
-    )
+        <div className={"w-100 h-100 position-relative"}>
+            <button type="button" className={"uiButton position-absolute top-0 start-0"} onClick={refreshSesion}>
+                <i className="bi bi-arrow-clockwise"></i>
+            </button>
+            <button type="button" className={"uiButton position-absolute top-0 end-0"} onClick={purchaseClick}>
+                <i className="bi bi-cart3"></i>
+            </button>
+            <svg
+                ref={ref}
+                className={"seatMap"}>
+                <g
+                    className="plotArea"
+                    transform={`translate(${[MARGIN.left, MARGIN.top].join(",")})`}
+                >
+                </g>
+            </svg>
+    </div>)
 }
 
 export default SeatMap;
