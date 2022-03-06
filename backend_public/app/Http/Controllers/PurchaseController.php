@@ -7,6 +7,7 @@ use App\Libraries\Redsys\RedsysAPI;
 use App\Models\Entrada;
 use App\Models\OperacionCompra;
 use App\Models\Sesion;
+use App\Models\Transaccion;
 use Firebase\JWT\Key;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -82,6 +83,17 @@ class PurchaseController extends Controller
     }
 
     public function processDetails(Request $request){
+
+        $token = $request->token;
+
+        $idOperacion = JWT::decode($token,new Key(env("APP_TOKEN_SECRET"),'HS256'))->id;
+
+        $operacionCompra = OperacionCompra::find($idOperacion);
+
+        if($operacionCompra->esta_finalizada || isset($operacionCompra->id_transaccion))
+            return;
+
+        //Redsys initialization
         $miObj = new RedsysAPI;
 
         $amount="1513";
@@ -90,8 +102,18 @@ class PurchaseController extends Controller
         $terminal="001";
         $moneda="978";
         $trans="0";
-        $url="";
+        $url="www.arteux.me";
         $urlOKKO="http://laravelapi.local/api/finalize_purchase";
+
+        //Process additional user submission: Name, email...
+
+        $transaccion = Transaccion::create([
+            'id' => $id,
+            'cantidad' => $amount/100
+        ]);
+
+        $operacionCompra->id_transaccion = $id;
+        $operacionCompra->save();
 
         $miObj->setParameter("DS_MERCHANT_AMOUNT",$amount);
         $miObj->setParameter("DS_MERCHANT_ORDER",$id);
