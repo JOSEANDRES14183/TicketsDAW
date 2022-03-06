@@ -34,7 +34,7 @@ class PurchaseController extends Controller
                 for ($i = $quantity;$i>0;$i--){
                     $entrada = Entrada::create([
                         'id_operacion_compra' => $operacionCompra->id,
-                        'id_sesion_numerada' => $sesion->id,
+                        'id_sesion_no_numerada' => $sesion->id,
                         'nombre_tipo_entrada' => $tipoEntrada
                     ]);
                     array_push($entradas,$entrada);
@@ -61,7 +61,7 @@ class PurchaseController extends Controller
                         'id_sala_butaca' => $butaca['id_sala'],
                         'pos_x_butaca' => $butaca['pos_x'],
                         'pos_y_butaca' => $butaca['pos_y'],
-                        'id_sesion' => $request->id_sesion,
+                        'id_sesion_numerada' => $request->id_sesion,
                     ]);
                     array_push($entradas, $entrada);
                 }

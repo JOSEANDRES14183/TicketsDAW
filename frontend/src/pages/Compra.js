@@ -9,6 +9,7 @@ function Compra(){
     const [error, setError] = useState(null);
 
     const [operacionCompra, setOperacionCompra] = useState([]);
+    const [sesion,setSesion] = useState([]);
 
     const params = useParams();
 
@@ -16,6 +17,7 @@ function Compra(){
         axios.get(process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + "/api/purchase/"+params.id)
             .then(result => {
                 setOperacionCompra(result.data);
+                setSesion(result.data.entradas[0].sesion_numerada ? result.data.entradas[0].sesion_numerada : [])
                 setLoading(false);
             })
             .catch(error => {
@@ -33,11 +35,12 @@ function Compra(){
         );
     }
 
-    console.log(operacionCompra);
+    console.log(operacionCompra.entradas[0].sesion_numerada);
 
     return (
         <section className={"container-md"}>
-            <p>Esta es la pagina de compra</p>
+            <p>{operacionCompra.id}</p>
+            <p>{sesion.id}</p>
         </section>
     );
 }
