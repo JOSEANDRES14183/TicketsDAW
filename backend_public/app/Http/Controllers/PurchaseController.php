@@ -102,9 +102,18 @@ class PurchaseController extends Controller
         return response()->json([
             "submitURL" => "https://sis-t.redsys.es:25443/sis/realizarPago",
             "formElements" => [
-                "Ds_MerchantParameters" => $params,
-                "Ds_SignatureVersion" => $version,
-                "Ds_Signature" => $signature
+                [
+                    "name" => "Ds_MerchantParameters",
+                    "value" => $params
+                ],
+                [
+                    "name" => "Ds_SignatureVersion",
+                    "value" => $version
+                ],
+                [
+                    "name" => "Ds_Signature",
+                    "value" => $signature
+                ]
             ]
         ]);
     }
