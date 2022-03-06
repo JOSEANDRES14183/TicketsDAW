@@ -17,7 +17,9 @@ class SalaResource extends JsonResource
 
         //$this->idSesion
         $butacasWithIdSesion = $this->butacas;
-        $butacasWithIdSesion->idSesion=$this->idSesion;
+        foreach ($butacasWithIdSesion as $butaca){
+            $butaca->idSesion=$this->idSesion;
+        }
 
         return [
             'id' => $this->id,
@@ -26,7 +28,7 @@ class SalaResource extends JsonResource
             'latitud' => $this->latitud,
             'longitud' => $this->longitud,
             'aforo_max' => $this->aforo_max,
-            'butacas' => $butacasWithIdSesion,
+            'butacas' => ButacaResource::collection($butacasWithIdSesion),
         ];
     }
 }
