@@ -61,7 +61,7 @@ class PurchaseController extends Controller
         return new OperacionCompraResource(OperacionCompra::find($id));
     }
 
-    public function redsys(Request $request){
+    public function processDetails(Request $request){
         $miObj = new RedsysAPI;
 
         $amount="1513";
@@ -71,7 +71,7 @@ class PurchaseController extends Controller
         $moneda="978";
         $trans="0";
         $url="";
-        $urlOKKO="https://www.arteux.me/";
+        $urlOKKO="http://laravelapi.local/api/finalize_purchase";
 
         $miObj->setParameter("DS_MERCHANT_AMOUNT",$amount);
         $miObj->setParameter("DS_MERCHANT_ORDER",$id);
@@ -116,5 +116,27 @@ class PurchaseController extends Controller
                 ]
             ]
         ]);
+    }
+
+    public function finalize_purchase(Request $request){
+        $redsys = new RedsysAPI;
+
+        $version = $request -> Ds_SignatureVersion;
+        $datos = $request -> Ds_MerchantParameters;
+        $signatureRecibida = $request -> Ds_Signature;
+
+        $decodec = $redsys->decodeMerchantParameters($datos);
+        $kc = 'sq7HjrUOBfKmC576ILgskD5srU870gJ7'; //Llave de ejemplo
+        $firma = $redsys->createMerchantSignatureNotif($kc,$datos);
+
+        echo PHP_VERSION."<br/>";
+        echo $firma."<br/>";
+        echo $signatureRecibida."<br/>";
+        if ($firma === $signatureRecibida){
+            echo "FIRMA OK";
+            dd($decodec);
+        } else {
+            echo "FIRMA KO";
+        }
     }
 }
