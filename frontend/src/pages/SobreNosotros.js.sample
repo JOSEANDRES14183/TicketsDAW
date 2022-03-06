@@ -1,0 +1,49 @@
+import axios from "axios";
+import {useEffect, useState} from "react";
+import {Spinner} from "reactstrap";
+import * as d3 from 'd3';
+
+function SobreNosotros(){
+
+    useEffect(() => {
+        fetchRedsys()
+    }, [])
+
+    const createForm = (data) => {
+        d3.select("#formParent")
+            .append("form")
+            .attr("method", "POST")
+            .attr("action", data.submitURL)
+            .selectAll("input")
+            .data(data.formElements)
+            .enter()
+            .append("input")
+            .attr("name", (d) => d.name)
+            .attr("value", (d) => d.value)
+    }
+
+    const submitForm = () => {
+        document.querySelector("#formParent form").submit();
+    }
+
+    const fetchRedsys = () => {
+        axios.get("http://laravelapi.local/api/purchase_details?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6OH0.AEWRF1KxG8LgVa77xXWnfjNVQfVuOIsTxthmOjN9lGE")
+            .then(result => {
+                console.log(result)
+                createForm(result.data)
+                submitForm();
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    return(
+        <div className={"container-md"}>
+            <p>Esta es la pagina de Sobre nosotros</p>
+            <div id={"formParent"}></div>
+        </div>
+    );
+}
+
+export default SobreNosotros;

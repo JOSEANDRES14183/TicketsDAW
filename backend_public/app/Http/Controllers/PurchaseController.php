@@ -168,6 +168,7 @@ class PurchaseController extends Controller
         $signatureRecibida = $request -> Ds_Signature;
 
         $decodec = $redsys->decodeMerchantParameters($datos);
+        $responseObj = json_decode($decodec);
         $kc = 'sq7HjrUOBfKmC576ILgskD5srU870gJ7'; //Llave de ejemplo
         $firma = $redsys->createMerchantSignatureNotif($kc,$datos);
 
@@ -176,7 +177,11 @@ class PurchaseController extends Controller
         echo $signatureRecibida."<br/>";
         if ($firma === $signatureRecibida){
             echo "FIRMA OK";
-            dd($decodec);
+            echo "<br>";
+            if($responseObj->Ds_Response >= 0 && $responseObj->Ds_Response <= 99){
+                echo "RESPONSE CODE OK";
+                dd($responseObj);
+            }
         } else {
             echo "FIRMA KO";
         }
