@@ -34,3 +34,5 @@ Route::get('organizador/{id}', [OrganizadorController::class,'show']);
 
 Route::post('purchase', [PurchaseController::class, 'purchase']);
 Route::get('purchase/{id}', [PurchaseController::class, 'show']);
+Route::get('purchase_details', [PurchaseController::class, 'redsys']);
+Route::get('finalize_purchase', [PurchaseController::class, 'redsys']);

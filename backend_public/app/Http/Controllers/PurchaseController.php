@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\OperacionCompraResource;
+use App\Libraries\Redsys\RedsysAPI;
 use App\Models\Entrada;
 use App\Models\OperacionCompra;
 use App\Models\Sesion;
@@ -58,5 +59,53 @@ class PurchaseController extends Controller
     public function show($id)
     {
         return new OperacionCompraResource(OperacionCompra::find($id));
+    }
+
+    public function redsys(Request $request){
+        $miObj = new RedsysAPI;
+
+        $amount="1513";
+        $id=time();
+        $fuc="999008881";
+        $terminal="001";
+        $moneda="978";
+        $trans="0";
+        $url="";
+        $urlOKKO="https://www.arteux.me/";
+
+        $miObj->setParameter("DS_MERCHANT_AMOUNT",$amount);
+        $miObj->setParameter("DS_MERCHANT_ORDER",$id);
+        $miObj->setParameter("DS_MERCHANT_MERCHANTCODE",$fuc);
+        $miObj->setParameter("DS_MERCHANT_CURRENCY",$moneda);
+        $miObj->setParameter("DS_MERCHANT_TRANSACTIONTYPE",$trans);
+        $miObj->setParameter("DS_MERCHANT_TERMINAL",$terminal);
+        $miObj->setParameter("DS_MERCHANT_MERCHANTURL",$url);
+        $miObj->setParameter("DS_MERCHANT_URLOK",$urlOKKO);
+        $miObj->setParameter("DS_MERCHANT_URLKO",$urlOKKO);
+
+        $version="HMAC_SHA256_V1";
+        $kc = 'sq7HjrUOBfKmC576ILgskD5srU870gJ7'; //Llave de ejemplo
+
+//        $request = "";
+        $params = $miObj->createMerchantParameters();
+        $signature = $miObj->createMerchantSignature($kc);
+
+//        $merchantParametersJsonRaw = json_encode([
+//                "DS_MERCHANT_AMOUNT" => "CANTIDAD",
+//                "DS_MERCHANT_CURRENCY" => "978",
+//                "DS_MERCHANT_MERCHANTCODE" => "CANTIDAD",
+//                "DS_MERCHANT_ORDER" => "TEMP",
+//                "DS_MERCHANT_TERMINAL" => "CANTIDAD",
+//                "DS_MERCHANT_TRANSACTIONTYPE" => "CANTIDAD",
+//            ]);
+
+        return response()->json([
+            "submitURL" => "https://sis-t.redsys.es:25443/sis/realizarPago",
+            "formElements" => [
+                "Ds_MerchantParameters" => $params,
+                "Ds_SignatureVersion" => $version,
+                "Ds_Signature" => $signature
+            ]
+        ]);
     }
 }
