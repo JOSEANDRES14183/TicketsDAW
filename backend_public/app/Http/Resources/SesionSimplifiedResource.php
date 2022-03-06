@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class EntradaResource extends JsonResource
+class SesionSimplifiedResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,10 +15,9 @@ class EntradaResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'sesion_numerada' => $this->when($this->sesionNumerada!=null, new SesionSimplifiedResource($this->sesionNumerada)),
-            'tipo_entrada' => $this->when($this->tipoEntrada()!=null, new TipoEntradaResource($this->tipoEntrada())),
-            'butaca' => $this->butaca(),
+            'id'=>$this->id,
+            'sesionNumData' => $this->when($this->isNumerada(), $this->sesionNumData),
+            'isNominativo'=>$this->evento->es_nominativo
         ];
     }
 }
