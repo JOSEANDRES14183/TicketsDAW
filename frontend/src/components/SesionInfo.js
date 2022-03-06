@@ -83,7 +83,9 @@ function SesionInfo({sesionId}){
     const submitPurchase = (obj) => {
         axios.post(process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + "/api/purchase", obj)
             .then(response => {
-                // if()
+                if(response.data.success){
+                    window.location.href= "/purchase/"+response.data.token_operacion;
+                }
             })
             .catch(error => {
                 setError(error);
@@ -130,7 +132,7 @@ function SesionInfo({sesionId}){
                     }
                     {sesion.isNumerada &&
                         <Form className="h-100 rounded-3 bg-light">
-                            <SeatMap seats={sesion.sala.butacas} submitPurchase={submitPurchase} refreshSesion={refreshSesion}></SeatMap>
+                            <SeatMap idSesion={sesion.id} seats={sesion.sala.butacas} submitPurchase={submitPurchase} refreshSesion={refreshSesion}></SeatMap>
                         </Form>
                     }
                 </div>

@@ -14,6 +14,11 @@ class SalaResource extends JsonResource
      */
     public function toArray($request)
     {
+
+        //$this->idSesion
+        $butacasWithIdSesion = $this->butacas;
+        $butacasWithIdSesion->idSesion=$this->idSesion;
+
         return [
             'id' => $this->id,
             'nombre' => $this->nombre,
@@ -21,7 +26,7 @@ class SalaResource extends JsonResource
             'latitud' => $this->latitud,
             'longitud' => $this->longitud,
             'aforo_max' => $this->aforo_max,
-            'butacas' => $this->butacas
+            'butacas' => $butacasWithIdSesion,
         ];
     }
 }

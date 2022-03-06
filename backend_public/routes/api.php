@@ -33,6 +33,9 @@ Route::get('media/{filename}', [RecursoMediaController::class,'image']);
 Route::get('organizador/{id}', [OrganizadorController::class,'show']);
 
 Route::post('purchase', [PurchaseController::class, 'purchase']);
-Route::get('purchase/{id}', [PurchaseController::class, 'show']);
+
+Route::get('purchase/{token}', [PurchaseController::class, 'show']);
+
 Route::get('purchase_details', [PurchaseController::class, 'processDetails']);
 Route::get('finalize_purchase', [PurchaseController::class, 'finalize_purchase']);
+
