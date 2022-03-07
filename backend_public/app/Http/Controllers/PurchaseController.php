@@ -196,9 +196,11 @@ class PurchaseController extends Controller
                 $operacionCompra->esta_finalizada = true;
                 $operacionCompra->save();
 
-                echo "<img src='data:image/png;base64,".$this->generateQR()."'>";
+                $qrSrc = "data:image/png;base64,".$this->generateQR("Id operacion: ".$operacionCompra->id);
 
-                $this->sendEmail($operacionCompra->entradas->first()->correo_asistente);
+                foreach ($operacionCompra->entradas as $entrada){
+                    $this->sendEmail($entrada->correo_asistente, $qrSrc);
+                }
 
                 dd($responseObj);
             }
@@ -207,11 +209,11 @@ class PurchaseController extends Controller
         }
     }
 
-    private function generateQR(){
+    private function generateQR($data){
         $writer = new PngWriter();
 
         // Create QR code
-        $qrCode = QrCode::create('Data')
+        $qrCode = QrCode::create($data)
             ->setEncoding(new Encoding('UTF-8'))
             ->setErrorCorrectionLevel(new ErrorCorrectionLevelLow())
             ->setSize(300)
@@ -225,17 +227,19 @@ class PurchaseController extends Controller
         return base64_encode($result->getString());
     }
 
-    private function sendEmail($email){
+    private function sendEmail($email, $qrSrc){
         $data["email"] = $email;
         $data["title"] = "Tus entradas";
         $data["body"] = "Aquí tienes un PDF con tus entradas";
 
-        $pdf = PDF::loadView('emails.generic', $data);
+        $dataPDF["imgSrc"] = $qrSrc;
+
+        $pdf = PDF::loadView('pdfs.entrada', $dataPDF);
 
         Mail::send('emails.generic', $data, function($message)use($data, $pdf) {
             $message->to($data["email"], $data["email"])
                 ->subject($data["title"])
-                ->attachData($pdf->output(), "text.pdf");
+                ->attachData($pdf->output(), "entrada.pdf");
         });
     }
 }
