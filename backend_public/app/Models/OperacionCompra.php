@@ -20,4 +20,24 @@ class OperacionCompra extends Model
         return $this->hasMany(Entrada::class,"id_operacion_compra");
     }
 
+    public function totalPrice(){
+        $entradas = $this->entradas;
+
+        $precio = 0.0;
+
+        foreach ($entradas as $entrada){
+            $tipoEntrada = $entrada->tipoEntrada();
+            if(isset($tipoEntrada) && $tipoEntrada != null){
+                $precio += $tipoEntrada->precio;
+            }
+
+            $sesionNum = $entrada->sesionNumerada;
+            if(isset($sesionNum) && $sesionNum != null){
+                $precio += $sesionNum->sesionNumData->precio;
+            }
+        }
+
+        return $precio;
+    }
+
 }

@@ -36,6 +36,6 @@ Route::post('purchase', [PurchaseController::class, 'purchase']);
 
 Route::get('purchase/{token}', [PurchaseController::class, 'show']);
 
-Route::get('purchase_details', [PurchaseController::class, 'processDetails']);
+Route::post('purchase_details', [PurchaseController::class, 'processDetails']);
 Route::get('finalize_purchase', [PurchaseController::class, 'finalize_purchase']);
 
