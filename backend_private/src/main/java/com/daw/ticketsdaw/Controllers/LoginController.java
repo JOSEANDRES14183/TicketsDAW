@@ -66,9 +66,11 @@ public class LoginController {
             if (passwordEncoder.matches(password, usuario.getPasswordHash())) {
                 request.getSession().setAttribute("usuario", usuario);
                 if (usuario.getClass() == PropietarioSala.class){
+                    request.getSession().setAttribute("tipoUsuario","propietario");
                     return "redirect:/salas";
                 }
                 if (usuario.getClass() == Organizador.class){
+                    request.getSession().setAttribute("tipoUsuario","organizador");
                     return "redirect:/eventos";
                 }
             }
