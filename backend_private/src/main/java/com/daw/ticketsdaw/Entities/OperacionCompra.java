@@ -5,7 +5,9 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -21,5 +23,8 @@ public class OperacionCompra {
 
     @Column(name = "fecha_compra")
     @DateTimeFormat(pattern = dateTimeFormat)
-    private Date fechaCompra;
+    private LocalDate fechaCompra;
+
+    @OneToMany(mappedBy = "operacionCompra")
+    private List<Entrada> entradas;
 }

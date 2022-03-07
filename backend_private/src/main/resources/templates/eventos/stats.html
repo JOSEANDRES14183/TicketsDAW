@@ -16,18 +16,16 @@
 <header th:replace="fragments/layout :: header('Eventos')"></header>
 
 <main>
-    <div></div>
-    <div th:each="entrada : ${entradas}">
-        <p th:text="${entrada.id}"></p>
-    </div>
+    <div id="graph"></div>
+    <div>hola</div>
 </main>
 
 <footer th:replace="fragments/layout :: footer"></footer>
 
 
 <script th:inline="javascript">
-    const entradas = [[${entradas}]];
-    console.log(entradas);
+    const data = [[${data}]];
+    console.log(data)
 </script>
 
 </body>
