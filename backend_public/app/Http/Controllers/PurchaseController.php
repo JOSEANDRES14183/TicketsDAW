@@ -15,6 +15,14 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 use PhpParser\Node\Expr\Array_;
 use Firebase\JWT\JWT;
+use Endroid\QrCode\Color\Color;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelLow;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Label\Label;
+use Endroid\QrCode\Logo\Logo;
+use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
+use Endroid\QrCode\Writer\PngWriter;
 
 
 class PurchaseController extends Controller
@@ -186,10 +194,31 @@ class PurchaseController extends Controller
                 $operacionCompra = $transaccion->operacionCompra;
                 $operacionCompra->esta_finalizada = true;
                 $operacionCompra->save();
+
+                echo "<img src='data:image/png;base64,".$this->generateQR()."'>";
+
                 dd($responseObj);
             }
         } else {
             echo "FIRMA KO";
         }
+    }
+
+    private function generateQR(){
+        $writer = new PngWriter();
+
+        // Create QR code
+        $qrCode = QrCode::create('Data')
+            ->setEncoding(new Encoding('UTF-8'))
+            ->setErrorCorrectionLevel(new ErrorCorrectionLevelLow())
+            ->setSize(300)
+            ->setMargin(10)
+            ->setRoundBlockSizeMode(new RoundBlockSizeModeMargin())
+            ->setForegroundColor(new Color(55, 136, 216))
+            ->setBackgroundColor(new Color(255,255,255, 127));
+
+        $result = $writer->write($qrCode);
+
+        return base64_encode($result->getString());
     }
 }
