@@ -8,6 +8,7 @@ import Evento from "../pages/Evento";
 import Organizador from "../pages/Organizador";
 import React, {useState} from "react";
 import {ThemeContext} from "../contexts/ThemeContext";
+import Compra from "../pages/Compra";
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
                 <Route exact path={"/"} element={<Eventos />} />
                 <Route path={"/:id"} element={<Evento />} />
                 <Route path={"/organizador/:id"} element={<Organizador />} />
+                <Route path={"/purchase/:token"} element={<Compra />}/>
                 <Route path={"/soporte"} element={<Soporte />}/>
                 <Route path={"/about-us"} element={<SobreNosotros />}/>
             </Routes>

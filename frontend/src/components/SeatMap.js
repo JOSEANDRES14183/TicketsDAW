@@ -5,7 +5,7 @@ import * as d3 from "d3";
 const MARGIN = { top: 30, right: 30, bottom: 30, left: 30 };
 
 //https://www.react-graph-gallery.com/scatter-plot
-function SeatMap({seats, submitPurchase, refreshSesion}) {
+function SeatMap({seats, submitPurchase, refreshSesion, idSesion}) {
 
     const [seatMap, setSeatMap] = useState(null);
 
@@ -17,6 +17,14 @@ function SeatMap({seats, submitPurchase, refreshSesion}) {
     useEffect(()=>{
         setSeatMap(JSON.parse(JSON.stringify(seats)))
     }, [seats])
+
+    const colorSeat = (seat) => {
+        if (seat.ocupada){
+            return "#A5A5A5"
+        } else {
+            return seat.seleccionada ? "#B8FFF9" : "#9a6fb0";
+        }
+    }
 
     const renderFn = (svg) => {
         if(!seatMap){
@@ -44,7 +52,7 @@ function SeatMap({seats, submitPurchase, refreshSesion}) {
             .attr("stroke", "#000")
             .attr("fillOpacity", 0.7)
             .attr("strokeWidth", 1)
-            .attr("fill", (d) => d.seleccionada ? "#B8FFF9" : "#9a6fb0")
+            .attr("fill", (d) => colorSeat(d))
             .attr("cx", (d) => d.pos_x*multiplyFactor)
             .attr("cy", (d) => d.pos_y*multiplyFactor)
             .on("click", function (event,datum) {
@@ -65,7 +73,7 @@ function SeatMap({seats, submitPurchase, refreshSesion}) {
             .data(seatMap)
             .transition()
             .duration(100)
-            .attr("fill", (d) => d.seleccionada ? "#B8FFF9" : "#9a6fb0")
+            .attr("fill", (d) => colorSeat(d))
             .attr("cx", (d) => d.pos_x*multiplyFactor)
             .attr("cy", (d) => d.pos_y*multiplyFactor)
 
@@ -85,23 +93,26 @@ function SeatMap({seats, submitPurchase, refreshSesion}) {
     const ref = useD3(renderFn, [seatMap]);
 
     const seatClick = (seat) => {
-        let seatCopy = {...seat};
-        seatCopy.seleccionada = !seatCopy.seleccionada;
+        if (!seat.ocupada){
+            let seatCopy = {...seat};
+            seatCopy.seleccionada = !seatCopy.seleccionada;
 
-        let seatsMapCopy = JSON.parse(JSON.stringify(seatMapRef.current));
+            let seatsMapCopy = JSON.parse(JSON.stringify(seatMapRef.current));
 
-        seatsMapCopy = seatsMapCopy.map((currSeat) => {
-            if(currSeat.pos_x == seat.pos_x && currSeat.pos_y == seat.pos_y)
-                return seatCopy;
-            return currSeat;
-        })
+            seatsMapCopy = seatsMapCopy.map((currSeat) => {
+                if(currSeat.pos_x == seat.pos_x && currSeat.pos_y == seat.pos_y)
+                    return seatCopy;
+                return currSeat;
+            })
 
-        setSeatMap(seatsMapCopy)
+            setSeatMap(seatsMapCopy)
+        }
     }
 
     const purchaseClick = () => {
         let object = {};
         object.butacas = JSON.parse(JSON.stringify(seatMapRef.current));
+        object.id_sesion = idSesion;
         submitPurchase(object);
     }
 

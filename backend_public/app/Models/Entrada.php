@@ -13,11 +13,15 @@ class Entrada extends Model
     protected $table = 'entrada';
     protected $primaryKey = 'id';
 
+    protected $guarded = [];
+
+    public $timestamps = false;
+
     //Esto no devuelve una relacion de Eloquent, por lo que al llamarlo lo tienes que hacer así: $this->tipoEntrada()
     public function tipoEntrada()
     {
         return TipoEntrada::where('nombre','=',$this->nombre_tipo_entrada)
-            ->where('id_sesion','=',$this->id_sesion_numerada)
+            ->where('id_sesion','=',$this->id_sesion_no_numerada)
             ->first();
     }
 
@@ -26,13 +30,12 @@ class Entrada extends Model
     {
         return Butaca::where('id_sala','=',$this->id_sala_butaca)
             ->where('pos_x','=',$this->pos_x_butaca)
-            ->where('pos_x','=',$this->pos_y_butaca)
-            ->first();
+            ->where('pos_y','=',$this->pos_y_butaca)->first();
     }
 
-    public function sesion()
+    public function sesionNumerada()
     {
-        return $this->belongsTo(Sesion::class,"id_sesion");
+        return $this->belongsTo(Sesion::class,"id_sesion_numerada");
     }
 
     public function operacionCompra()

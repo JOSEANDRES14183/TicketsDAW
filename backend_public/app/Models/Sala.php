@@ -12,6 +12,8 @@ class Sala extends Model
     protected $table = 'sala';
     protected $primaryKey = 'id';
 
+    protected $with = 'ciudad';
+
     public function ciudad(){
         return $this->belongsTo(Ciudad::class,'ciudad');
     }

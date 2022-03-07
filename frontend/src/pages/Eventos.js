@@ -9,6 +9,7 @@ import 'react-calendar/dist/Calendar.css';
 import {formatDate} from "@fullcalendar/react";
 import dayjs from "dayjs";
 import Loading from "../components/Loading";
+import CalendarioSesiones from "../components/CalendarioSesiones";
 
 function Eventos(){
 
@@ -82,26 +83,10 @@ function Eventos(){
                 </div>
             </section>
 
-            <section className={"container-md mt-3"}>
+            <section className={"container-md"}>
                 <div className={"row"}>
-                    <div className={" col-3"}>
-                        <Calendar className={"border-0 shadow-sm p-2"} value={date}
-                            onChange={(fecha) => {
-                                setDate(fecha);
-                                getEvents("?date=" + dayjs(fecha).format('YYYY-MM-DD'))
-                            }}
-                            locale={t('lang')}
-                        />
-                        <Button onClick={() => {
-                            setDate(null);
-                            getEvents("");
-                        }}
-                            className="mt-3" color={"primary"}>
-                            {t('show-all-events')}
-                        </Button>
-                    </div>
-
-                    <div className={"col"}>
+                    <CalendarioSesiones getEvents={getEvents} setDate={setDate} date={date}/>
+                    <div className={"col-12 col-lg"}>
                         {isLoading
                             ? <Loading />
                             : <EventoListFiltered
@@ -110,7 +95,6 @@ function Eventos(){
                                 category={category}
                                 search={search}/>
                         }
-
                     </div>
                 </div>
             </section>
