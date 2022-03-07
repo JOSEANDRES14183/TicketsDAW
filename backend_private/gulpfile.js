@@ -58,6 +58,11 @@ function copyDataTablesResponsiveJs(){
         .pipe(gulp.dest('src/main/resources/static/js'));
 }
 
+function copyD3(){
+    return gulp.src('node_modules/d3/dist/d3.min.js*')
+        .pipe(gulp.dest('src/main/resources/static/js'));
+}
+
 exports.compilaSass = buildStyles;
 exports.copy = copyBootstrapFiles;
-exports.build = parallel(buildStyles, copyBootstrapFiles, copyBootstrapIconsCss, copyBootstrapIconsFonts, copyFullCalendarJs, copyFullCalendarCss, copyJQuery, copyDataTablesCss, copyDataTablesJs, copyDataTablesResponsiveCss, copyDataTablesResponsiveJs);
+exports.build = parallel(buildStyles, copyBootstrapFiles, copyBootstrapIconsCss, copyBootstrapIconsFonts, copyFullCalendarJs, copyFullCalendarCss, copyJQuery, copyDataTablesCss, copyDataTablesJs, copyDataTablesResponsiveCss, copyDataTablesResponsiveJs, copyD3);

@@ -589,6 +589,26 @@ public class EventoController {
         return "redirect:/eventos/" + eventoId + (savedWithoutOverlap ? "" : "?warning=overlap");
     }
 
+    @GetMapping("/estadisticas")
+    public String showEstadisticas(ModelMap modelMap, HttpSession session){
+        Organizador organizador = getOrganizador(session);
+        List<Entrada> entradas = new ArrayList<>();
+        for (Evento evento : organizador.getEventos()){
+            for (Sesion sesion : evento.getSesiones()){
+                if (sesion.getClass()==SesionNumerada.class){
+                    entradas.addAll((((SesionNumerada) sesion).getEntradas()));
+                } else {
+                    for (TipoEntrada tipoEntrada : (((SesionNoNumerada) sesion).getTiposEntrada())){
+                        entradas.addAll(tipoEntrada.getEntradas());
+                    }
+                }
+            }
+        }
+
+        modelMap.addAttribute("entradas", entradas);
+        return "eventos/stats";
+    }
+
     private boolean checkOrganizador(Evento evento, HttpSession session){
         Usuario usuario = (Usuario) session.getAttribute("usuario");
         return evento.getOrganizador().getId() == usuario.getId();
