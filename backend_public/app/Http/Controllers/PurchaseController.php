@@ -107,6 +107,17 @@ class PurchaseController extends Controller
 
         //Process additional user submission: Name, email...
 
+        $entradas = $operacionCompra->entradas;
+
+        $entradasInfo = $request->entradas;
+
+        foreach ($entradas as $key => $entrada){
+            $entrada->nombre_asistente = $entradasInfo[$key]["nombreAsistente"];
+            $entrada->apellidos_asistente = $entradasInfo[$key]["apellidosAsistente"];
+            $entrada->correo_asistente = $entradasInfo[$key]["emailAsistente"];
+            $entrada->save();
+        }
+
         $transaccion = Transaccion::create([
             'id' => $id,
             'cantidad' => $amount/100
@@ -171,6 +182,10 @@ class PurchaseController extends Controller
             echo "<br>";
             if($responseObj->Ds_Response >= 0 && $responseObj->Ds_Response <= 99){
                 echo "RESPONSE CODE OK";
+                $transaccion = Transaccion::find($responseObj->Ds_Order);
+                $operacionCompra = $transaccion->operacionCompra;
+                $operacionCompra->esta_finalizada = true;
+                $operacionCompra->save();
                 dd($responseObj);
             }
         } else {

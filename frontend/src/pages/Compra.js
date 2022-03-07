@@ -56,6 +56,8 @@ function Compra(){
             let data = new FormData(e.target);
             entradasCopy.forEach((entrada)=>{
                 entrada.emailAsistente=data.get('email');
+                entrada.nombreAsistente="";
+                entrada.apellidosAsistente="";
             })
 
         } else {
