@@ -96,14 +96,14 @@ class PurchaseController extends Controller
         //Redsys initialization
         $miObj = new RedsysAPI;
 
-        $amount="1513";
+        $amount=intval($operacionCompra->totalPrice()*100);
         $id=time();
-        $fuc="999008881";
+        $fuc=env("REDSYS_MERCHANTCODE");
         $terminal="001";
         $moneda="978";
         $trans="0";
-        $url="www.arteux.me";
-        $urlOKKO="http://laravelapi.local/api/finalize_purchase";
+        $url=env("APP_REACT_HOSTNAME");
+        $urlOKKO=env("APP_URL") . "/api/finalize_purchase";
 
         //Process additional user submission: Name, email...
 
@@ -125,24 +125,15 @@ class PurchaseController extends Controller
         $miObj->setParameter("DS_MERCHANT_URLOK",$urlOKKO);
         $miObj->setParameter("DS_MERCHANT_URLKO",$urlOKKO);
 
-        $version="HMAC_SHA256_V1";
-        $kc = 'sq7HjrUOBfKmC576ILgskD5srU870gJ7'; //Llave de ejemplo
+        $version=env("REDSYS_VERSION");
+        $kc = env("REDSYS_KEY");
 
 //        $request = "";
         $params = $miObj->createMerchantParameters();
         $signature = $miObj->createMerchantSignature($kc);
 
-//        $merchantParametersJsonRaw = json_encode([
-//                "DS_MERCHANT_AMOUNT" => "CANTIDAD",
-//                "DS_MERCHANT_CURRENCY" => "978",
-//                "DS_MERCHANT_MERCHANTCODE" => "CANTIDAD",
-//                "DS_MERCHANT_ORDER" => "TEMP",
-//                "DS_MERCHANT_TERMINAL" => "CANTIDAD",
-//                "DS_MERCHANT_TRANSACTIONTYPE" => "CANTIDAD",
-//            ]);
-
         return response()->json([
-            "submitURL" => "https://sis-t.redsys.es:25443/sis/realizarPago",
+            "submitURL" => env("REDSYS_SUBMIT_URL"),
             "formElements" => [
                 [
                     "name" => "Ds_MerchantParameters",
@@ -169,7 +160,7 @@ class PurchaseController extends Controller
 
         $decodec = $redsys->decodeMerchantParameters($datos);
         $responseObj = json_decode($decodec);
-        $kc = 'sq7HjrUOBfKmC576ILgskD5srU870gJ7'; //Llave de ejemplo
+        $kc = env("REDSYS_KEY");
         $firma = $redsys->createMerchantSignatureNotif($kc,$datos);
 
         echo PHP_VERSION."<br/>";
