@@ -17,8 +17,44 @@ function Compra(){
 
     const params = useParams();
 
+    const submitEntradas = (form) => {
+        let obj = {};
+        obj.token = params.token;
+        obj.entradas = buildEntradas(form);
+        console.log(obj);
+        // axios.post(process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + "/api/purchase_details", obj)
+        //     .then(response => {
+        //
+        //     })
+        //     .catch(error => {
+        //         setError(error);
+        //     });
+    }
+
+    const buildEntradas = (e) => {
+        let entradasCopy = JSON.parse(JSON.stringify(operacionCompra.entradas));
+        if (!sesion.isNominativo){
+            e.preventDefault();
+            let data = new FormData(e.target);
+            entradasCopy.forEach((entrada)=>{
+                entrada.emailAsistente=data.get('email');
+            })
+
+        } else {
+            for (let i=0;i<entradasCopy.length;i++){
+                let nombre= document.querySelector("#nombre"+i).value;
+                let apellidos= document.querySelector("#apellidos"+i).value;
+                let email= document.querySelector("#email"+i).value;
+                entradasCopy[i].nombreAsistente = nombre;
+                entradasCopy[i].apellidosAsistente = apellidos;
+                entradasCopy[i].emailAsistente = email;
+            }
+        }
+        return entradasCopy
+    }
+
     useEffect(()=>{
-        axios.get(process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + "/api/purchase/"+params.id)
+        axios.get(process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + "/api/purchase/"+params.token)
             .then(result => {
                 setOperacionCompra(result.data);
                 setSesion(result.data.entradas[0].sesion_numerada ? result.data.entradas[0].sesion_numerada : result.data.entradas[0].tipo_entrada.sesion)
@@ -43,8 +79,16 @@ function Compra(){
 
     return (
         <section className={"container-md"}>
-            <p>{operacionCompra.id}</p>
-            <p>{sesion.id}</p>
+            <div className={"my-3 border-bottom"}>
+                <h2>{sesion.evento.titulo}</h2>
+                <p>
+                    <i className="bi bi-geo-alt" /> {sesion.sala.direccion + ", " + sesion.sala.nombre + ", " + sesion.sala.ciudad.nombre}
+                </p>
+                <p>
+                    <i className="bi bi-calendar3" /> {sesion.fecha_ini}
+                </p>
+            </div>
+
             {
                 operacionCompra.entradas.map(function (item,key){
                     if (item.butaca==null){
@@ -65,7 +109,7 @@ function Compra(){
                         <CardTitle tag={"h5"}>
                             Datos del comprador
                         </CardTitle>
-                        <form action="#" method={"post"}>
+                        <form onSubmit={(event)=>submitEntradas(event)}>
                             <div className={"mb-3"}>
                                 <label className={"form-label"} htmlFor={"email"}>Email</label>
                                 <input className={"form-control"} type="text" id={"email"} name={"email"}/>
@@ -73,7 +117,7 @@ function Compra(){
                             <input className={"btn btn-primary"} type="submit" value={"Finalizar compra"}/>
                         </form>
                     </CardBody>
-                </Card> : <Button className={"mt-3"} color={"primary"}>Finalizar compra</Button>
+                </Card> : <Button onClick={()=>submitEntradas()} className={"mt-3"} color={"primary"}>Finalizar compra</Button>
             }
 
         </section>
