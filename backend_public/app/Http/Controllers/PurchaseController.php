@@ -23,7 +23,8 @@ use Endroid\QrCode\Label\Label;
 use Endroid\QrCode\Logo\Logo;
 use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
 use Endroid\QrCode\Writer\PngWriter;
-
+use PDF;
+use Mail;
 
 class PurchaseController extends Controller
 {
@@ -197,6 +198,8 @@ class PurchaseController extends Controller
 
                 echo "<img src='data:image/png;base64,".$this->generateQR()."'>";
 
+                $this->sendEmail($operacionCompra->entradas->first()->correo_asistente);
+
                 dd($responseObj);
             }
         } else {
@@ -220,5 +223,19 @@ class PurchaseController extends Controller
         $result = $writer->write($qrCode);
 
         return base64_encode($result->getString());
+    }
+
+    private function sendEmail($email){
+        $data["email"] = $email;
+        $data["title"] = "Tus entradas";
+        $data["body"] = "Aquí tienes un PDF con tus entradas";
+
+        $pdf = PDF::loadView('emails.generic', $data);
+
+        Mail::send('emails.generic', $data, function($message)use($data, $pdf) {
+            $message->to($data["email"], $data["email"])
+                ->subject($data["title"])
+                ->attachData($pdf->output(), "text.pdf");
+        });
     }
 }
