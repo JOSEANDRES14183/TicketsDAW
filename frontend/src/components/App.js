@@ -28,7 +28,7 @@ function App() {
                 <Route exact path={"/"} element={<Eventos />} />
                 <Route path={"/:id"} element={<Evento />} />
                 <Route path={"/organizador/:id"} element={<Organizador />} />
-                <Route path={"/purchase/:id"} element={<Compra />}/>
+                <Route path={"/purchase/:token"} element={<Compra />}/>
                 <Route path={"/soporte"} element={<Soporte />}/>
                 <Route path={"/about-us"} element={<SobreNosotros />}/>
             </Routes>
