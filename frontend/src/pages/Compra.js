@@ -41,7 +41,6 @@ function Compra(){
         obj.entradas = buildEntradas(form);
         axios.post(process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + "/api/purchase_details", obj)
             .then(response => {
-                console.log(response)
                 createForm(response.data)
                 submitForm();
             })
