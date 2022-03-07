@@ -16,8 +16,11 @@ class SesionSimplifiedResource extends JsonResource
     {
         return [
             'id'=>$this->id,
+            'fecha_ini' => $this->fecha_ini,
             'sesionNumData' => $this->when($this->isNumerada(), $this->sesionNumData),
-            'isNominativo'=>$this->evento->es_nominativo
+            'isNominativo'=>$this->evento->es_nominativo,
+            'evento' => $this->evento,
+            'sala' => $this->sala
         ];
     }
 }
