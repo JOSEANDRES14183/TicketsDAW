@@ -12,7 +12,7 @@ function EventoCard(props){
 
                     <div className={"row w-100 h-100"}>
                         <div className={"col-6 col-sm-4 col-xl-5 h-100"}>
-                            <img className={"w-100 rounded-25 border-1 border-end"}
+                            <img className={"w-100 rounded-25 border-1 border-end fit-cover"}
                                  src={process.env.REACT_APP_API_PROTOCOL_PREFIX+process.env.REACT_APP_API_HOST + '/api/media/' +props.evento.foto_perfil.nombre_archivo}
                                  alt={props.evento.foto_perfil.nombre_archivo}
                             />

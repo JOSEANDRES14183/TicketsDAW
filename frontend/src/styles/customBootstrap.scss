@@ -97,6 +97,10 @@ header .btn:hover{
   width: 70px;
 }
 
+.fit-cover{
+  object-fit: cover;
+}
+
 @include media-breakpoint-up(md) {
   .seatMap{
     height: 100%;
