@@ -7,7 +7,7 @@ import {
     NavLink,
     Button,
 } from "reactstrap";
-import iesmanacor_logo from "../assets/images/iesmanacor_logo.png"
+import iesmanacor_logo from "../assets/images/iesmanacor_logo.webp"
 import LanguagePicker from "./LanguagePicker";
 import {useTranslation} from "react-i18next";
 import {ThemeContext} from "../contexts/ThemeContext";
