@@ -9,6 +9,7 @@ function SearchFilter(props){
 
     return(
         <input
+            aria-label={t('search')}
             onChange={handleChange}
             className={"col px-3 py-1 rounded-pill mx-2 my-3 m-md-0 border"}
             type="text"

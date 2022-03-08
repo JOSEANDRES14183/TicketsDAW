@@ -6,7 +6,7 @@ function ThemeToggler(props){
     return (
         <ThemeContext.Consumer>
             {(value) => (
-                <Button className={"my-3 my-md-0 me-3 text-" + (value==='light' ? 'dark' : 'light')}
+                <Button aria-label={'cambio de tema'} className={"my-3 my-md-0 me-3 text-" + (value==='light' ? 'dark' : 'light')}
                         onClick={props.toggleTheme}
                         color={value}
                         outline={true}>

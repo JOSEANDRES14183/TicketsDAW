@@ -28,11 +28,16 @@ function CalendarioSesiones(props){
                         <i className="bi bi-calendar3" />
                     </Button>
                     <Offcanvas isOpen={isOpen} toggle={toggle}>
-                        <OffcanvasHeader toggle={toggle}>
+                        <OffcanvasHeader closeAriaLabel={'Close'} toggle={toggle}>
                             {t('calendar')}
                         </OffcanvasHeader>
                         <OffcanvasBody>
-                            <Calendar className={"border-0 shadow-sm p-2"} value={props.date}
+                            <Calendar navigationAriaLabel={t('calendar')}
+                                      nextAriaLabel={'next month'}
+                                      next2AriaLabel={'next year'}
+                                      prevAriaLabel={'previous month'}
+                                      prev2AriaLabel={'previous year'}
+                                      className={"border-0 shadow-sm p-2"} value={props.date}
                                       onChange={(fecha) => {
                                           props.setDate(fecha);
                                           props.getEvents("?date=" + dayjs(fecha).format('YYYY-MM-DD'))
@@ -50,7 +55,12 @@ function CalendarioSesiones(props){
                 </div>
 
                 : <div className={"col-3"}>
-                    <Calendar className={"border-0 shadow-sm p-2"} value={props.date}
+                    <Calendar navigationAriaLabel={t('calendar')}
+                              nextAriaLabel={'next month'}
+                              next2AriaLabel={'next year'}
+                              prevAriaLabel={'previous month'}
+                              prev2AriaLabel={'previous year'}
+                              className={"border-0 shadow-sm p-2"} value={props.date}
                           onChange={(fecha) => {
                               props.setDate(fecha);
                               props.getEvents("?date=" + dayjs(fecha).format('YYYY-MM-DD'))
