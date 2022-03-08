@@ -58,6 +58,36 @@ function copyDataTablesResponsiveJs(){
         .pipe(gulp.dest('src/main/resources/static/js'));
 }
 
+function copyD3(){
+    return gulp.src('node_modules/d3/dist/d3.min.js*')
+        .pipe(gulp.dest('src/main/resources/static/js'));
+}
+
+function copyDataTablesButtonsCss(){
+    return gulp.src('node_modules/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css')
+        .pipe(gulp.dest('src/main/resources/static/css'));
+}
+
+function copyDataTablesButtonsJs(){
+    return gulp.src(['node_modules/datatables.net-buttons/js/dataTables.buttons.min.js*', 'node_modules/datatables.net-buttons/js/buttons.html5.min.js*', 'node_modules/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js*'])
+        .pipe(gulp.dest('src/main/resources/static/js'));
+}
+
+function copyDataTablesButtonsExtraJs(){
+    return gulp.src(['node_modules/jszip/dist/jszip.min.js*', 'node_modules/pdfmake/build/pdfmake.min.js*', 'node_modules/pdfmake/build/vfs_fonts.js*'])
+        .pipe(gulp.dest('src/main/resources/static/js'));
+}
+
+function copyDataTablesSelectCss(){
+    return gulp.src('node_modules/datatables.net-select-bs5/css/select.bootstrap5.min.css')
+        .pipe(gulp.dest('src/main/resources/static/css'));
+}
+
+function copyDataTablesSelectJs(){
+    return gulp.src(['node_modules/datatables.net-select/js/dataTables.select.min.js*'])
+        .pipe(gulp.dest('src/main/resources/static/js'));
+}
+
 exports.compilaSass = buildStyles;
 exports.copy = copyBootstrapFiles;
-exports.build = parallel(buildStyles, copyBootstrapFiles, copyBootstrapIconsCss, copyBootstrapIconsFonts, copyFullCalendarJs, copyFullCalendarCss, copyJQuery, copyDataTablesCss, copyDataTablesJs, copyDataTablesResponsiveCss, copyDataTablesResponsiveJs);
+exports.build = parallel(buildStyles, copyBootstrapFiles, copyBootstrapIconsCss, copyBootstrapIconsFonts, copyFullCalendarJs, copyFullCalendarCss, copyJQuery, copyDataTablesCss, copyDataTablesJs, copyDataTablesResponsiveCss, copyDataTablesResponsiveJs, copyD3, copyDataTablesButtonsCss, copyDataTablesButtonsJs, copyDataTablesButtonsExtraJs, copyDataTablesSelectCss, copyDataTablesSelectJs);

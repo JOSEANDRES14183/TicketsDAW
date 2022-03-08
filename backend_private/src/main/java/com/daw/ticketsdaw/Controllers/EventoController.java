@@ -1,8 +1,10 @@
 package com.daw.ticketsdaw.Controllers;
 
+import com.daw.ticketsdaw.Classes.BarChartInfo;
 import com.daw.ticketsdaw.DTOs.*;
 
 import com.daw.ticketsdaw.Entities.*;
+import com.daw.ticketsdaw.Repositories.OperacionCompraRepository;
 import com.daw.ticketsdaw.Services.*;
 import org.apache.commons.lang3.time.DateUtils;
 import org.modelmapper.ModelMapper;
@@ -17,8 +19,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -42,6 +47,8 @@ public class EventoController {
     private SesionService sesionService;
     @Autowired
     private TipoEntradaService tipoEntradaService;
+    @Autowired
+    private OperacionCompraRepository operacionCompraRepository;
 
     @Autowired
     Environment environment;
@@ -587,6 +594,37 @@ public class EventoController {
 
         boolean savedWithoutOverlap = sesionService.save(sesionNumerada);
         return "redirect:/eventos/" + eventoId + (savedWithoutOverlap ? "" : "?warning=overlap");
+    }
+
+    @GetMapping("/estadisticas")
+    public String showEstadisticas(ModelMap modelMap, HttpSession session){
+        Organizador organizador = getOrganizador(session);
+        Date date = new Date();
+        LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        int month = localDate.getMonthValue();
+        List<OperacionCompra> operacionesCompra = operacionCompraRepository.getAllOfMonth(month);
+        List<BarChartInfo> data = new ArrayList<>();
+        int numberOfEntradas;
+        for (int i = 1; i <= localDate.lengthOfMonth();i++){
+            numberOfEntradas = 0;
+            for (OperacionCompra operacionCompra : operacionesCompra){
+                if (operacionCompra.getFechaCompra().getDayOfMonth()==i){
+                    Entrada primeraEntrada = operacionCompra.getEntradas().get(0);
+                    if (primeraEntrada.getSesionNumerada()!=null){
+                        if (primeraEntrada.getSesionNumerada().getEvento().getOrganizador()==organizador){
+                            numberOfEntradas+=operacionCompra.getEntradas().size();
+                        }
+                    } else {
+                        if (primeraEntrada.getTipoEntrada().getEntitySesion().getEvento().getOrganizador()==organizador){
+                            numberOfEntradas+=operacionCompra.getEntradas().size();
+                        }
+                    }
+                }
+            }
+            data.add(new BarChartInfo(i,numberOfEntradas));
+        }
+        modelMap.addAttribute("data",data);
+        return "eventos/stats";
     }
 
     private boolean checkOrganizador(Evento evento, HttpSession session){

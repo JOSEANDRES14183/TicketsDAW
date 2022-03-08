@@ -7,6 +7,7 @@ import lombok.ToString;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Data
 @Entity
@@ -31,5 +32,8 @@ public class TipoEntrada {
     @NotNull
     @Min(0)
     private float precio;
+
+    @OneToMany(mappedBy = "tipoEntrada")
+    private List<Entrada> entradas;
 
 }

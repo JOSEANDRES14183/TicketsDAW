@@ -45,6 +45,16 @@ build/
 /src/main/resources/static/css/responsive.bootstrap5.min.css
 /src/main/resources/static/font/bootstrap-icons.css
 /src/main/resources/static/font/fonts/*
+/src/main/resources/static/js/d3.min.js
+/src/main/resources/static/css/buttons.bootstrap5.min.css
+/src/main/resources/static/js/buttons.bootstrap5.min.js
+/src/main/resources/static/js/buttons.html5.min.js
+/src/main/resources/static/js/dataTables.buttons.min.js
+/src/main/resources/static/js/jszip.min.js
+/src/main/resources/static/js/vfs_fonts.js
+/src/main/resources/static/js/pdfmake.min.js*
+/src/main/resources/static/css/select.bootstrap5.min.css
+/src/main/resources/static/js/dataTables.select.min.js
 
 /src/main/resources/application-*.properties
 
