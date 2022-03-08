@@ -10,13 +10,24 @@
 
     <link rel="stylesheet" th:href="@{/css/dataTables.bootstrap5.min.css}">
     <link rel="stylesheet" th:href="@{/css/responsive.bootstrap5.min.css}">
+    <link rel="stylesheet" th:href="@{/css/buttons.bootstrap5.min.css}">
+    <link rel="stylesheet" th:href="@{/css/select.bootstrap5.min.css}">
 
+    <script th:src="@{/js/jszip.min.js}"></script>
+    <script th:src="@{/js/pdfmake.min.js}"></script>
+    <script th:src="@{/js/vfs_fonts.js}"></script>
     <script th:src="@{/js/jquery.min.js}"></script>
     <script th:src="@{/js/jquery.dataTables.min.js}"></script>
+
+    <script th:src="@{/js/dataTables.buttons.min.js}"></script>
+    <script th:src="@{/js/buttons.bootstrap5.min.js}"></script>
+    <script th:src="@{/js/buttons.html5.min.js}"></script>
+
     <script th:src="@{/js/dataTables.bootstrap5.min.js}"></script>
     <script th:src="@{/js/dataTables.responsive.min.js}"></script>
     <script th:src="@{/js/responsive.bootstrap5.js}"></script>
 
+    <script th:src="@{/js/dataTables.select.min.js}"></script>
 </head>
 <body>
 <header th:replace="fragments/layout :: header('Salas')"></header>
@@ -70,7 +81,14 @@
 <script>
     $(document).ready(function (){
         $("#dtTable").DataTable(
-            {responsive: true}
+            {
+                select: true,
+                responsive: true,
+                dom: 'Blfrtip',
+                buttons: [
+                    'excel', 'pdf'
+                ]
+            }
         );
     })
 </script>

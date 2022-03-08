@@ -53,6 +53,8 @@ build/
 /src/main/resources/static/js/jszip.min.js
 /src/main/resources/static/js/vfs_fonts.js
 /src/main/resources/static/js/pdfmake.min.js*
+/src/main/resources/static/css/select.bootstrap5.min.css
+/src/main/resources/static/js/dataTables.select.min.js
 
 /src/main/resources/application-*.properties
 
