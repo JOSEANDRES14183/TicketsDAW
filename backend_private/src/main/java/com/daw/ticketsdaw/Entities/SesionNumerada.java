@@ -1,5 +1,6 @@
 package com.daw.ticketsdaw.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -19,6 +20,7 @@ public class SesionNumerada extends Sesion{
     @Min(0)
     private float precio;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "sesionNumerada")
     private List<Entrada> entradas;
 
