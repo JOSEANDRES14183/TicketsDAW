@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\EntradaResource;
 use App\Http\Resources\EventoCollection;
 use App\Http\Resources\EventoResource;
+use App\Models\Entrada;
 use App\Models\Evento;
 use Carbon\Carbon;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Illuminate\Http\Request;
 use phpDocumentor\Reflection\Types\False_;
 
@@ -37,7 +41,25 @@ class EventoController extends Controller
         }
 
         return $evento;
+    }
 
+    public function checkEntrada($token)
+    {
+        try {
+            $idEntrada = JWT::decode($token,new Key(env("APP_TOKEN_SECRET"),'HS256'))->id;
+        } catch (\UnexpectedValueException $e){
+            return response()->json([
+                'success' => false
+            ]);
+        }
+        $entrada = Entrada::find($idEntrada);
+        if ($entrada){
+            $entrada->success=true;
+            return new EntradaResource($entrada);
+        }
+        return response()->json([
+            'success' => false
+        ]);
     }
 
 

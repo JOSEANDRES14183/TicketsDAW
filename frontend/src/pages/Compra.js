@@ -4,6 +4,7 @@ import axios from "axios";
 import Loading from "../components/Loading";
 import Entrada from "../components/Entrada";
 import {Button, Card, CardBody, CardText, CardTitle} from "reactstrap";
+import * as d3 from "d3";
 
 function Compra(){
 
@@ -17,18 +18,35 @@ function Compra(){
 
     const params = useParams();
 
+    const createForm = (data) => {
+        d3.select("#formParent")
+            .append("form")
+            .attr("method", "POST")
+            .attr("action", data.submitURL)
+            .selectAll("input")
+            .data(data.formElements)
+            .enter()
+            .append("input")
+            .attr("name", (d) => d.name)
+            .attr("value", (d) => d.value)
+    }
+
+    const submitForm = () => {
+        document.querySelector("#formParent form").submit();
+    }
+
     const submitEntradas = (form) => {
         let obj = {};
         obj.token = params.token;
         obj.entradas = buildEntradas(form);
-        console.log(obj);
-        // axios.post(process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + "/api/purchase_details", obj)
-        //     .then(response => {
-        //
-        //     })
-        //     .catch(error => {
-        //         setError(error);
-        //     });
+        axios.post(process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST + "/api/purchase_details", obj)
+            .then(response => {
+                createForm(response.data)
+                submitForm();
+            })
+            .catch(error => {
+                console.error(error);
+            });
     }
 
     const buildEntradas = (e) => {
@@ -38,6 +56,8 @@ function Compra(){
             let data = new FormData(e.target);
             entradasCopy.forEach((entrada)=>{
                 entrada.emailAsistente=data.get('email');
+                entrada.nombreAsistente="";
+                entrada.apellidosAsistente="";
             })
 
         } else {
@@ -75,10 +95,9 @@ function Compra(){
         );
     }
 
-    console.log(operacionCompra);
-
     return (
         <section className={"container-md"}>
+            <div id={"formParent"} className={"d-none"}></div>
             <div className={"my-3 border-bottom"}>
                 <h2>{sesion.evento.titulo}</h2>
                 <p>

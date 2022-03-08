@@ -22,8 +22,6 @@ class SesionFullCalendarResource extends JsonResource
             'title' => $this->duracion.' min.',
             'start' => $this->fecha_ini,
             'end' => $date->toDateTimeString(),
-            'backgroundColor' => 'red',
-            'borderColor' => '#E50000',
             'extendedProps'=>[
                 'sesion_id' => $this->id
             ]

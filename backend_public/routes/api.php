@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('eventos', [EventoController::class,'index']);
 Route::get('eventos/{id}', [EventoController::class,'show']);
+Route::post('eventos/check/{token}', [EventoController::class, 'checkEntrada']);
 
 Route::get('sesiones/{id}', [SesionController::class,'show']);
 
@@ -35,3 +36,7 @@ Route::get('organizador/{id}', [OrganizadorController::class,'show']);
 Route::post('purchase', [PurchaseController::class, 'purchase']);
 
 Route::get('purchase/{token}', [PurchaseController::class, 'show']);
+
+Route::post('purchase_details', [PurchaseController::class, 'processDetails']);
+Route::get('finalize_purchase', [PurchaseController::class, 'finalize_purchase']);
+

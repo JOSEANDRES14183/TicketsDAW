@@ -15,6 +15,7 @@ class EntradaResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'success' => $this->when($this->success!=null, $this->success),
             'id' => $this->id,
             'sesion_numerada' => $this->when($this->sesionNumerada!=null, new SesionSimplifiedResource($this->sesionNumerada)),
             'tipo_entrada' => $this->when($this->tipoEntrada()!=null, new TipoEntradaResource($this->tipoEntrada())),

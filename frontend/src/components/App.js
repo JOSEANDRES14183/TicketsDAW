@@ -9,6 +9,7 @@ import Organizador from "../pages/Organizador";
 import React, {useState} from "react";
 import {ThemeContext} from "../contexts/ThemeContext";
 import Compra from "../pages/Compra";
+import {useTranslation} from "react-i18next";
 
 function App() {
 
@@ -17,6 +18,10 @@ function App() {
     const toggleTheme = () => {
         theme==='dark' ? setTheme('light') : setTheme('dark');
     }
+
+    const {t} = useTranslation();
+
+    console.log(t("uwu.turbocucumber"))
 
   return (
     <>
