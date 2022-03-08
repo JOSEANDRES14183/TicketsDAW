@@ -63,6 +63,21 @@ function copyD3(){
         .pipe(gulp.dest('src/main/resources/static/js'));
 }
 
+function copyDataTablesButtonsCss(){
+    return gulp.src('node_modules/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css')
+        .pipe(gulp.dest('src/main/resources/static/css'));
+}
+
+function copyDataTablesButtonsJs(){
+    return gulp.src(['node_modules/datatables.net-buttons/js/dataTables.buttons.min.js*', 'node_modules/datatables.net-buttons/js/buttons.html5.min.js*', 'node_modules/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js*'])
+        .pipe(gulp.dest('src/main/resources/static/js'));
+}
+
+function copyDataTablesButtonsExtraJs(){
+    return gulp.src(['node_modules/jszip/dist/jszip.min.js*', 'node_modules/pdfmake/build/pdfmake.min.js*', 'node_modules/pdfmake/build/vfs_fonts.js*'])
+        .pipe(gulp.dest('src/main/resources/static/js'));
+}
+
 exports.compilaSass = buildStyles;
 exports.copy = copyBootstrapFiles;
-exports.build = parallel(buildStyles, copyBootstrapFiles, copyBootstrapIconsCss, copyBootstrapIconsFonts, copyFullCalendarJs, copyFullCalendarCss, copyJQuery, copyDataTablesCss, copyDataTablesJs, copyDataTablesResponsiveCss, copyDataTablesResponsiveJs, copyD3);
+exports.build = parallel(buildStyles, copyBootstrapFiles, copyBootstrapIconsCss, copyBootstrapIconsFonts, copyFullCalendarJs, copyFullCalendarCss, copyJQuery, copyDataTablesCss, copyDataTablesJs, copyDataTablesResponsiveCss, copyDataTablesResponsiveJs, copyD3, copyDataTablesButtonsCss, copyDataTablesButtonsJs, copyDataTablesButtonsExtraJs);
