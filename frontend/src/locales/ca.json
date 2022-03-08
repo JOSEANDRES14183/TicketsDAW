@@ -8,12 +8,14 @@
     "back" : "Tornar",
     "buy" : "Comprar",
     "category": {
+      "category" : "Categoria",
       "all" : "Totes",
       "teatros" : "Teatres",
       "musical" : "Musical",
       "cine" : "Cinema"
     },
     "sort" : {
+      "sort-by" : "Ordenar per",
       "no-sort" : "Sense ordenar",
       "by-date-asc" : "Ordenar per data (Més recent a menys)",
       "by-date-desc" : "Ordenar per data (Menys recent a més)"

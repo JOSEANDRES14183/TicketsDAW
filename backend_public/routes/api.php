@@ -7,6 +7,7 @@ use App\Http\Controllers\SesionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RecursoMediaController;
+use App\Http\Controllers\MiscController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,4 +40,7 @@ Route::get('purchase/{token}', [PurchaseController::class, 'show']);
 
 Route::post('purchase_details', [PurchaseController::class, 'processDetails']);
 Route::get('finalize_purchase', [PurchaseController::class, 'finalize_purchase']);
+
+Route::get('ciudades',[MiscController::class,'ciudades']);
+Route::get('salas/{idCiudad}',[MiscController::class,'salasByCiudad']);
 
