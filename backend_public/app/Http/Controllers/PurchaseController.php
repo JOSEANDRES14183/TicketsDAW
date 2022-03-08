@@ -183,26 +183,21 @@ class PurchaseController extends Controller
         $kc = env("REDSYS_KEY");
         $firma = $redsys->createMerchantSignatureNotif($kc,$datos);
 
-        echo PHP_VERSION."<br/>";
-        echo $firma."<br/>";
-        echo $signatureRecibida."<br/>";
         if ($firma === $signatureRecibida){
-            echo "FIRMA OK";
-            echo "<br>";
             if($responseObj->Ds_Response >= 0 && $responseObj->Ds_Response <= 99){
-                echo "RESPONSE CODE OK";
                 $transaccion = Transaccion::find($responseObj->Ds_Order);
                 $operacionCompra = $transaccion->operacionCompra;
                 $operacionCompra->esta_finalizada = true;
                 $operacionCompra->save();
 
-                $qrSrc = "data:image/png;base64,".$this->generateQR("Id operacion: ".$operacionCompra->id);
-
                 foreach ($operacionCompra->entradas as $entrada){
-                    $this->sendEmail($entrada->correo_asistente, $qrSrc);
+                    $token = JWT::encode(["id" => $entrada->id],env("APP_TOKEN_SECRET"),'HS256');
+                    $qrSrc = "data:image/png;base64,".$this->generateQR($token);
+                    $this->sendEmail($entrada->correo_asistente, $qrSrc, $entrada);
                 }
 
-                dd($responseObj);
+                header('Location: '.env('APP_REACT_HOSTNAME'));
+
             }
         } else {
             echo "FIRMA KO";
@@ -211,7 +206,6 @@ class PurchaseController extends Controller
 
     private function generateQR($data){
         $writer = new PngWriter();
-
         // Create QR code
         $qrCode = QrCode::create($data)
             ->setEncoding(new Encoding('UTF-8'))
@@ -221,17 +215,16 @@ class PurchaseController extends Controller
             ->setRoundBlockSizeMode(new RoundBlockSizeModeMargin())
             ->setForegroundColor(new Color(55, 136, 216))
             ->setBackgroundColor(new Color(255,255,255, 127));
-
         $result = $writer->write($qrCode);
-
         return base64_encode($result->getString());
     }
 
-    private function sendEmail($email, $qrSrc){
+    private function sendEmail($email, $qrSrc, $entrada){
         $data["email"] = $email;
         $data["title"] = "Tus entradas";
         $data["body"] = "Aquí tienes un PDF con tus entradas";
 
+        $dataPDF["entrada"] = $entrada;
         $dataPDF["imgSrc"] = $qrSrc;
 
         $pdf = PDF::loadView('pdfs.entrada', $dataPDF);
