@@ -70,7 +70,7 @@
 <footer th:replace="fragments/layout :: footer"></footer>
 <script>
     $(document).ready(function (){
-        $("#dtTable").DataTable(
+        let table = $("#dtTable").DataTable(
             {
                 select: true,
                 responsive: true,
@@ -80,6 +80,14 @@
                 ]
             }
         );
+
+        $("#dtTable")
+            .on( 'mouseenter', 'td', function () {
+                var colIdx = table.cell(this).index().column;
+
+                $( table.cells().nodes() ).removeClass( 'highlight' );
+                $( table.column( colIdx ).nodes() ).addClass( 'highlight' );
+            } );
     })
 </script>
 </body>
