@@ -13,6 +13,7 @@ tickets.uploads.path=C:/This/Is/An/Example/
 
 #Mail Properties
 tickets.host=<your-host>
+tickets.mail.from=noreply@example.com
 spring.mail.host=smtp.gmail.com
 spring.mail.port=587
 spring.mail.username=<login user to smtp server>

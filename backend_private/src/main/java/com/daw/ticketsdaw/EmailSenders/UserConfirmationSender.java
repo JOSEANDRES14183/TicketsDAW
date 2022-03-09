@@ -25,7 +25,7 @@ public class UserConfirmationSender {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message,false);
 
-        helper.setFrom("noreply@ticketsdaw.me");
+        helper.setFrom(env.getProperty("tickets.mail.from"));
         helper.setTo(to);
         helper.setSubject("Verifica tu cuenta");
 
