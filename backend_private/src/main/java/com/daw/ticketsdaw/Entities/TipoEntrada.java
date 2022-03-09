@@ -1,6 +1,8 @@
 package com.daw.ticketsdaw.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.ToString;
 
@@ -34,6 +36,7 @@ public class TipoEntrada {
     private float precio;
 
     @OneToMany(mappedBy = "tipoEntrada")
+    @JsonIgnore
     private List<Entrada> entradas;
 
 }
