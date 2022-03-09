@@ -8,12 +8,14 @@
     "back" : "Volver",
     "buy" : "Comprar",
     "category": {
+      "category" : "Categoría",
       "all" : "Todas",
       "teatros" : "Teatros",
       "musical" : "Musical",
       "cine" : "Cine"
     },
     "sort" : {
+      "sort-by" : "Ordenar por",
       "no-sort" : "Sin ordernar",
       "by-date-asc" : "Ordenar por fecha (Más reciente a menos)",
       "by-date-desc" : "Ordenar por fecha (Menos reciente a más)"

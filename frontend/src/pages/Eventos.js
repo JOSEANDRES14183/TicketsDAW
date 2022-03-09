@@ -53,7 +53,7 @@ function Eventos(){
             <section className={"py-3 container-md"}>
                 <div className={"row gap-md-3"}>
                     <div className={"col-md-3 col-6"}>
-                        <select className={"form-select"}
+                        <select className={"form-select"} aria-label={t('categoria.categoria')}
                                 onChange={(event) => setCategory(event.target.value)}>
                             <option value="All">
                                 {t('category.all')}
@@ -70,7 +70,7 @@ function Eventos(){
                         </select>
                     </div>
                     <div className={"col-md-3 col-6"}>
-                        <select className={"form-select"}
+                        <select className={"form-select"} aria-label={t('sort.sort-by')}
                                 onChange={(event) => setDateOrder(event.target.value)}>
                             <option value="noSort">
                                 {t('sort.no-sort')}

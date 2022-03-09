@@ -111,7 +111,7 @@ class PurchaseController extends Controller
         $terminal="001";
         $moneda="978";
         $trans="0";
-        $url=env("APP_REACT_HOSTNAME");
+        $url=env("APP_REACT_URL");
         $urlOKKO=env("APP_URL") . "/api/finalize_purchase";
 
         //Process additional user submission: Name, email...
@@ -196,7 +196,7 @@ class PurchaseController extends Controller
                     $this->sendEmail($entrada->correo_asistente, $qrSrc, $entrada);
                 }
 
-                header('Location: '.env('APP_REACT_HOSTNAME'));
+                header('Location: '.env('APP_REACT_URL'));
 
             }
         } else {

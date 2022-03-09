@@ -7,7 +7,7 @@ import {
     NavLink,
     Button,
 } from "reactstrap";
-import iesmanacor_logo from "../assets/images/iesmanacor_logo.png"
+import iesmanacor_logo from "../assets/images/iesmanacor_logo.webp"
 import LanguagePicker from "./LanguagePicker";
 import {useTranslation} from "react-i18next";
 import {ThemeContext} from "../contexts/ThemeContext";
@@ -47,17 +47,17 @@ function Header(props){
                             <Nav className={"mx-auto"}
                                  navbar>
                                 <NavItem>
-                                    <NavLink href={"/"}>
+                                    <NavLink href={"/"} className={value==="light" ? "text-primary" : "text-white"}>
                                         {t('events')}
                                     </NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink href={"/soporte"}>
+                                    <NavLink href={"/soporte"} className={value==="light" ? "text-primary" : "text-white"}>
                                         {t('support')}
                                     </NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink href={"/about-us"}>
+                                    <NavLink href={"/about-us"} className={value==="light" ? "text-primary" : "text-white"}>
                                         {t('about-us')}
                                     </NavLink>
                                 </NavItem>
