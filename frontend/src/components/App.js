@@ -6,7 +6,7 @@ import Soporte from "../pages/Soporte";
 import SobreNosotros from "../pages/SobreNosotros";
 import Evento from "../pages/Evento";
 import Organizador from "../pages/Organizador";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {ThemeContext} from "../contexts/ThemeContext";
 import Compra from "../pages/Compra";
 import {useTranslation} from "react-i18next";
@@ -22,6 +22,19 @@ function App() {
     const {t} = useTranslation();
 
     console.log(t("uwu.turbocucumber"))
+
+    useEffect(() => {
+        const linkDns = document.createElement("link");
+        linkDns.setAttribute("rel", "dns-prefetch");
+        linkDns.setAttribute("href", process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST)
+
+        const linkPreconnect = document.createElement("link");
+        linkPreconnect.setAttribute("rel", "preconnect");
+        linkPreconnect.setAttribute("href", process.env.REACT_APP_API_PROTOCOL_PREFIX + process.env.REACT_APP_API_HOST)
+
+        document.head.append(linkDns)
+        document.head.append(linkPreconnect)
+    })
 
   return (
     <>
