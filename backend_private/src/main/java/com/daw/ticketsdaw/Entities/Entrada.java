@@ -42,6 +42,7 @@ public class Entrada {
     private SesionNumerada sesionNumerada;
 
     @ManyToOne
+    @ToString.Exclude
     @JoinColumn(name = "id_operacion_compra", referencedColumnName = "id")
     private OperacionCompra operacionCompra;
 
